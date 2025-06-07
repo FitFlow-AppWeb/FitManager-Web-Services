@@ -1,3 +1,5 @@
+using FitManager_Web_Services.Members.Application.Internal.CommandServices;
+using FitManager_Web_Services.Members.Application.Internal.QueryServices;
 using FitManager_Web_Services.Members.Domain.Repositories;
 using FitManager_Web_Services.Members.Domain.Services;
 using FitManager_Web_Services.Members.Infrastructure.Repositories;
@@ -17,6 +19,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 builder.Services.AddScoped<IMemberService, MemberService>();
+
+builder.Services.AddScoped<MemberCommandService>();
+builder.Services.AddScoped<MemberQueryService>();
 
 builder.Services.AddControllers();
 
@@ -43,7 +48,6 @@ using (var scope = app.Services.CreateScope())
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
