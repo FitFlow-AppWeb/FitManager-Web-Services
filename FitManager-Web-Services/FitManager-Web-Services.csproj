@@ -11,4 +11,21 @@
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Members\Application\Internal\CommandServices\" />
+      <Folder Include="Members\Application\Internal\QueryServices\" />
+      <Folder Include="Members\Domain\Model\Aggregates\" />
+      <Folder Include="Members\Domain\Model\Commands\" />
+      <Folder Include="Members\Domain\Model\Queries\" />
+      <Folder Include="Members\Domain\Repositories\" />
+      <Folder Include="Members\Domain\Services\" />
+      <Folder Include="Members\Infrastructure\Repositories\" />
+      <Folder Include="Members\Interfaces\REST\Resources\" />
+      <Folder Include="Members\Interfaces\REST\Transform\" />
+      <Folder Include="Shared\Domain\Repositories\" />
+      <Folder Include="Shared\Infrastructure\Interfaces\ASP\Configuration\Extensions\" />
+      <Folder Include="Shared\Infrastructure\Persistence\EFC\Configuration\Extensions\" />
+      <Folder Include="Shared\Infrastructure\Persistence\EFC\Repositories\" />
+    </ItemGroup>
+
 </Project>
