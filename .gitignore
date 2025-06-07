@@ -1,0 +1,36 @@
+# Rider / JetBrains
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Visual Studio / .NET
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+*.nuspec
+
+# Resharper / Rider specific
+_ReSharper*/
+*.DotSettings.user
+
+# Others
+*.log
+*.tmp
+*.env
+
+# OS-specific
+.DS_Store
+Thumbs.db
