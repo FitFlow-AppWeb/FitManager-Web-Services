@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FitManager_Web_Services.Members.Domain.Model.Aggregates;
 using FitManager_Web_Services.Members.Application.Internal.CommandServices;
 using FitManager_Web_Services.Members.Application.Internal.QueryServices;
+using FitManager_Web_Services.Members.Interfaces.REST.Resources;
 
 namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
 {
@@ -56,15 +57,26 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
             return CreatedAtAction(nameof(GetById), new { id = member.Id }, member);
         }
 
-        // PUT: api/member/{id}
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, Member member)
+        public async Task<ActionResult> Update(int id, UpdateMemberResource resource) 
         {
-            if (id != member.Id)
-                return BadRequest();
+            
+            var existingMember = await _queryService.GetMemberByIdAsync(id); 
+            if (existingMember == null)
+            {
+                return NotFound(); 
+            }
+            existingMember.FirstName = resource.FirstName;
+            existingMember.LastName = resource.LastName;
+            existingMember.Age = resource.Age;
+            existingMember.PhoneNumber = resource.PhoneNumber;
+            existingMember.Address = resource.Address;
+            existingMember.Dni = resource.Dni;
+            existingMember.Email = resource.Email;
 
-            await _commandService.UpdateMemberAsync(member);
-            return NoContent();
+            await _commandService.UpdateMemberAsync(existingMember); 
+
+            return NoContent(); // HTTP 204
         }
 
         // DELETE: api/member/{id}

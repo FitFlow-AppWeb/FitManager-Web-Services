@@ -26,7 +26,6 @@
     <ItemGroup>
         <Folder Include="Members\Domain\Model\Commands\" />
         <Folder Include="Members\Domain\Model\Queries\" />
-        <Folder Include="Members\Interfaces\REST\Resources\" />
         <Folder Include="Members\Interfaces\REST\Transform\" />
         <Folder Include="Shared\Infrastructure\Interfaces\ASP\Configuration\Extensions\" />
         <Folder Include="Shared\Infrastructure\Persistence\EFC\Configuration\Extensions\" />

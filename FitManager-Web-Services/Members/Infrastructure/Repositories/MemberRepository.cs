@@ -34,13 +34,11 @@ public class MemberRepository : IMemberRepository
     public async Task AddAsync(Member member)
     {
         await _context.Members.AddAsync(member);
-        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(Member member)
     {
         _context.Members.Update(member);
-        await _context.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(int id)
@@ -49,7 +47,6 @@ public class MemberRepository : IMemberRepository
         if (member != null)
         {
             _context.Members.Remove(member);
-            await _context.SaveChangesAsync();
         }
     }
 }

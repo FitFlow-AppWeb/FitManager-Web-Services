@@ -3,7 +3,9 @@ using FitManager_Web_Services.Members.Application.Internal.QueryServices;
 using FitManager_Web_Services.Members.Domain.Repositories;
 using FitManager_Web_Services.Members.Domain.Services;
 using FitManager_Web_Services.Members.Infrastructure.Repositories;
+using FitManager_Web_Services.Shared.Domain.Repositories;
 using FitManager_Web_Services.Shared.Infrastructure.Persistence.EFC.Configuration;
+using FitManager_Web_Services.Shared.Infrastructure.Persistence.EFC.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -17,8 +19,8 @@ if (string.IsNullOrEmpty(connectionString))
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL(connectionString));
 
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
-builder.Services.AddScoped<IMemberService, MemberService>();
 
 builder.Services.AddScoped<MemberCommandService>();
 builder.Services.AddScoped<MemberQueryService>();
