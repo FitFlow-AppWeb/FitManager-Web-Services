@@ -1,0 +1,6 @@
+@FitManager_Web_Services_HostAddress = http://localhost:5064
+
+GET {{FitManager_Web_Services_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
