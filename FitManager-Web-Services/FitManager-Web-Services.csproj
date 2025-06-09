@@ -29,6 +29,16 @@
         <Folder Include="Members\Interfaces\REST\Transform\" />
         <Folder Include="Shared\Infrastructure\Interfaces\ASP\Configuration\Extensions\" />
         <Folder Include="Shared\Infrastructure\Persistence\EFC\Configuration\Extensions\" />
+        <Folder Include="Employees\Application\Internal\CommandServices\" />
+        <Folder Include="Employees\Application\Internal\QueryServices\" />
+        <Folder Include="Employees\Domain\Model\Commands\" />
+        <Folder Include="Employees\Domain\Model\Queries\" />
+        <Folder Include="Employees\Domain\Repositories\" />
+        <Folder Include="Employees\Domain\Services\" />
+        <Folder Include="Employees\Infrastructure\Repositories\" />
+        <Folder Include="Employees\Interfaces\REST\Controllers\" />
+        <Folder Include="Employees\Interfaces\REST\Resources\" />
+        <Folder Include="Employees\Interfaces\REST\Transform\" />
     </ItemGroup>
 
 </Project>

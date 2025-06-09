@@ -1,11 +1,14 @@
 using Microsoft.EntityFrameworkCore;
+using FitManager_Web_Services.Employees.Domain.Model.Aggregates;
 using FitManager_Web_Services.Members.Domain.Model.Aggregates;
+
 
 namespace FitManager_Web_Services.Shared.Infrastructure.Persistence.EFC.Configuration;
 
 public class AppDbContext : DbContext
 {
     public DbSet<Member> Members { get; set; }
+    public DbSet<Employee> Employees { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
