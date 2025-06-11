@@ -1,32 +1,32 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FitManager_Web_Services.Members.Domain.Model.Aggregates;
-using FitManager_Web_Services.Members.Domain.Repositories;
+using FitManager_Web_Services.Members.Domain.Services; 
 
 namespace FitManager_Web_Services.Members.Application.Internal.QueryServices
 {
     public class MemberQueryService
     {
-        private readonly IMemberRepository _memberRepository;
+        private readonly IMemberService _memberService; 
 
-        public MemberQueryService(IMemberRepository memberRepository)
+        public MemberQueryService(IMemberService memberService) 
         {
-            _memberRepository = memberRepository;
+            _memberService = memberService;
         }
 
         public async Task<IEnumerable<Member>> GetAllMembersAsync()
         {
-            return await _memberRepository.GetAllAsync();
+            return await _memberService.GetAllAsync(); 
         }
 
         public async Task<Member?> GetMemberByIdAsync(int id)
         {
-            return await _memberRepository.GetByIdAsync(id);
+            return await _memberService.GetByIdAsync(id); 
         }
 
         public async Task<Member?> GetMemberByDniAsync(int dni)
         {
-            return await _memberRepository.GetByDniAsync(dni);
+            return await _memberService.GetByDniAsync(dni); 
         }
     }
 }

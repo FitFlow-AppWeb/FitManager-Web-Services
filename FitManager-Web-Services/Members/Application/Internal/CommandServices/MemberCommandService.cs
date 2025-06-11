@@ -1,38 +1,36 @@
 using System.Threading.Tasks;
 using FitManager_Web_Services.Members.Domain.Model.Aggregates;
-using FitManager_Web_Services.Members.Domain.Repositories;
-using FitManager_Web_Services.Shared.Domain.Repositories;
+using FitManager_Web_Services.Members.Domain.Services; 
+
 
 namespace FitManager_Web_Services.Members.Application.Internal.CommandServices
 {
     public class MemberCommandService
     {
-        private readonly IMemberRepository _memberRepository;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMemberService _memberService; 
 
-        public MemberCommandService(IMemberRepository memberRepository, IUnitOfWork unitOfWork)
+        public MemberCommandService(IMemberService memberService) 
         {
-            _memberRepository = memberRepository;
-            _unitOfWork = unitOfWork;
-
+            _memberService = memberService;
         }
 
         public async Task AddMemberAsync(Member member)
         {
-            await _memberRepository.AddAsync(member);
-            await _unitOfWork.CompleteAsync();
+            
+            await _memberService.AddAsync(member);
+            
         }
 
         public async Task UpdateMemberAsync(Member member)
         {
-            await _memberRepository.UpdateAsync(member);
-            await _unitOfWork.CompleteAsync();
+            
+            await _memberService.UpdateAsync(member); 
         }
 
         public async Task DeleteMemberAsync(int id)
         {
-            await _memberRepository.DeleteAsync(id);
-            await _unitOfWork.CompleteAsync();
+            
+            await _memberService.DeleteAsync(id); 
         }
     }
 }
