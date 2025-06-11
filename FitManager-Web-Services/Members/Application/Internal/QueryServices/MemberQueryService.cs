@@ -1,32 +1,33 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FitManager_Web_Services.Members.Domain.Model.Aggregates;
-using FitManager_Web_Services.Members.Domain.Services; 
+using FitManager_Web_Services.Members.Domain.Repositories; 
+using FitManager_Web_Services.Members.Domain.Model.Queries; 
 
 namespace FitManager_Web_Services.Members.Application.Internal.QueryServices
 {
     public class MemberQueryService
     {
-        private readonly IMemberService _memberService; 
+        private readonly IMemberRepository _memberRepository;
 
-        public MemberQueryService(IMemberService memberService) 
+        public MemberQueryService(IMemberRepository memberRepository)
         {
-            _memberService = memberService;
+            _memberRepository = memberRepository;
         }
 
-        public async Task<IEnumerable<Member>> GetAllMembersAsync()
+        public async Task<IEnumerable<Member>> Handle(GetAllMembersQuery query)
         {
-            return await _memberService.GetAllAsync(); 
+            return await _memberRepository.GetAllAsync();
         }
 
-        public async Task<Member?> GetMemberByIdAsync(int id)
+        public async Task<Member?> Handle(GetMemberByIdQuery query)
         {
-            return await _memberService.GetByIdAsync(id); 
+            return await _memberRepository.GetByIdAsync(query.Id);
         }
 
-        public async Task<Member?> GetMemberByDniAsync(int dni)
+        public async Task<Member?> Handle(GetMemberByDniQuery query)
         {
-            return await _memberService.GetByDniAsync(dni); 
+            return await _memberRepository.GetByDniAsync(query.Dni);
         }
     }
 }
