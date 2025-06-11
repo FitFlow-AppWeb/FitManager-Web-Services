@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore; 
 using FitManager_Web_Services.Members.Domain.Model.Aggregates;
 using FitManager_Web_Services.Members.Domain.Repositories;
 using FitManager_Web_Services.Shared.Infrastructure.Persistence.EFC.Configuration;
@@ -19,22 +19,24 @@ public class MemberRepository : IMemberRepository
     public async Task<IEnumerable<Member>> GetAllAsync()
     {
         return await _context.Members
-            .Include(m => m.MembershipStatus) 
+            .Include(m => m.MembershipStatus)           
+                .ThenInclude(ms => ms.MembershipType)   
             .ToListAsync();
     }
 
     public async Task<Member?> GetByIdAsync(int id)
     {
-        
         return await _context.Members
-            .Include(m => m.MembershipStatus) 
+            .Include(m => m.MembershipStatus)           
+                .ThenInclude(ms => ms.MembershipType)   
             .FirstOrDefaultAsync(m => m.Id == id);
     }
 
     public async Task<Member?> GetByDniAsync(int dni)
     {
         return await _context.Members
-            .Include(m => m.MembershipStatus) 
+            .Include(m => m.MembershipStatus)           
+                .ThenInclude(ms => ms.MembershipType)  
             .FirstOrDefaultAsync(m => m.Dni == dni);
     }
 
@@ -50,6 +52,7 @@ public class MemberRepository : IMemberRepository
 
     public async Task DeleteAsync(int id)
     {
+
         var member = await GetByIdAsync(id); 
         if (member != null)
         {

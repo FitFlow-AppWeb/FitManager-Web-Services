@@ -9,6 +9,7 @@ using FitManager_Web_Services.Shared.Infrastructure.Persistence.EFC.Repositories
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -25,6 +26,8 @@ builder.Services.AddScoped<IMemberService, MemberService>();
 
 builder.Services.AddScoped<MemberCommandService>();
 builder.Services.AddScoped<MemberQueryService>();
+
+
 
 builder.Services.AddControllers();
 
@@ -45,7 +48,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    dbContext.Database.EnsureCreated();
+    dbContext.Database.EnsureCreated(); 
 }
 
 app.UseSwagger();
