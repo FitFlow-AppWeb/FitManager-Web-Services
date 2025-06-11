@@ -22,6 +22,6 @@
             MembershipTypeId = membershipTypeId;
         }
 
-        protected MembershipStatus() { }
+        protected MembershipStatus() { } 
     }
 }
