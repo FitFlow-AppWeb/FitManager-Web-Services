@@ -18,17 +18,24 @@ public class MemberRepository : IMemberRepository
 
     public async Task<IEnumerable<Member>> GetAllAsync()
     {
-        return await _context.Members.ToListAsync();
+        return await _context.Members
+            .Include(m => m.MembershipStatus) 
+            .ToListAsync();
     }
 
     public async Task<Member?> GetByIdAsync(int id)
     {
-        return await _context.Members.FindAsync(id);
+        
+        return await _context.Members
+            .Include(m => m.MembershipStatus) 
+            .FirstOrDefaultAsync(m => m.Id == id);
     }
 
     public async Task<Member?> GetByDniAsync(int dni)
     {
-        return await _context.Members.FirstOrDefaultAsync(m => m.Dni == dni);
+        return await _context.Members
+            .Include(m => m.MembershipStatus) 
+            .FirstOrDefaultAsync(m => m.Dni == dni);
     }
 
     public async Task AddAsync(Member member)
@@ -43,7 +50,7 @@ public class MemberRepository : IMemberRepository
 
     public async Task DeleteAsync(int id)
     {
-        var member = await GetByIdAsync(id);
+        var member = await GetByIdAsync(id); 
         if (member != null)
         {
             _context.Members.Remove(member);
