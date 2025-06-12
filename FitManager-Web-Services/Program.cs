@@ -28,7 +28,8 @@ builder.Services.AddScoped<MemberCommandService>();
 builder.Services.AddScoped<MemberQueryService>();
 
 
-
+builder.Services.AddScoped<IMembershipTypeRepository, MembershipTypeRepository>();
+builder.Services.AddScoped<MembershipTypeQueryService>();
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();

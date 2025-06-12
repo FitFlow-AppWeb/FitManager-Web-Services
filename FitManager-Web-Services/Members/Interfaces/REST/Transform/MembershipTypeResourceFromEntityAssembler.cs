@@ -1,5 +1,8 @@
-using FitManager_Web_Services.Members.Domain.Model.Aggregates;
-using FitManager_Web_Services.Members.Interfaces.REST.Resources;
+
+using System.Collections.Generic;
+using System.Linq;
+using FitManager_Web_Services.Members.Domain.Model.Aggregates; 
+using FitManager_Web_Services.Members.Interfaces.REST.Resources; 
 
 namespace FitManager_Web_Services.Members.Interfaces.REST.Transform
 {
@@ -8,13 +11,17 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Transform
         public static MembershipTypeResource ToResourceFromEntity(MembershipType entity)
         {
             return new MembershipTypeResource(
-                entity.Id,
+                entity.Id, 
                 entity.Name,
-                entity.Description,
-                entity.Price,
-                entity.Duration,
-                entity.Benefits
-            );
+                entity.Description, 
+                entity.Price, 
+                entity.Duration, 
+                entity.Benefits);
+        }
+
+        public static IEnumerable<MembershipTypeResource> ToResourceListFromEntityList(IEnumerable<MembershipType> entityList)
+        {
+            return entityList.Select(ToResourceFromEntity);
         }
     }
 }
