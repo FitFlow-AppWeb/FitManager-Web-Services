@@ -20,14 +20,5 @@ namespace FitManager_Web_Services.Members.Application.Internal.QueryServices
             return await _memberRepository.GetAllAsync();
         }
 
-        public async Task<Member?> Handle(GetMemberByIdQuery query)
-        {
-            return await _memberRepository.GetByIdAsync(query.Id);
-        }
-
-        public async Task<Member?> Handle(GetMemberByDniQuery query)
-        {
-            return await _memberRepository.GetByDniAsync(query.Dni);
-        }
     }
 }

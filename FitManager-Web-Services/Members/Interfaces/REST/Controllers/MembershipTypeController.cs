@@ -30,19 +30,5 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
         }
 
         
-        [HttpGet("{id}")]
-        public async Task<ActionResult<MembershipTypeResource>> GetMembershipTypeById(int id)
-        {
-            var getByIdQuery = new GetMembershipTypeByIdQuery(id);
-            var membershipType = await _membershipTypeQueryService.Handle(getByIdQuery);
-
-            if (membershipType == null)
-            {
-                return NotFound(); 
-            }
-
-            var membershipTypeResource = MembershipTypeResourceFromEntityAssembler.ToResourceFromEntity(membershipType);
-            return Ok(membershipTypeResource);
-        }
     }
 }

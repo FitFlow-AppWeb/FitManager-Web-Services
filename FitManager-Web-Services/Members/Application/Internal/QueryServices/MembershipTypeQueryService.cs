@@ -19,10 +19,6 @@ namespace FitManager_Web_Services.Members.Application.Internal.QueryServices
         {
             return await _membershipTypeRepository.GetAllAsync();
         }
-
-        public async Task<MembershipType?> Handle(GetMembershipTypeByIdQuery query)
-        {
-            return await _membershipTypeRepository.GetByIdAsync(query.Id);
-        }
+        
     }
 }

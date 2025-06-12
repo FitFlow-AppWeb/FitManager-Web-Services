@@ -40,7 +40,7 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
             }
 
             var memberResource = MemberResourceFromEntityAssembler.ToResourceFromEntity(member);
-            return CreatedAtAction(nameof(GetMemberById), new { id = memberResource.Id }, memberResource);
+            return Created(string.Empty, memberResource); 
         }
 
         [HttpGet]
@@ -52,36 +52,8 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
             return Ok(memberResources);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<MemberResource>> GetMemberById(int id)
-        {
-            var getByIdQuery = new GetMemberByIdQuery(id);
-            var member = await _memberQueryService.Handle(getByIdQuery);
-
-            if (member == null)
-            {
-                return NotFound();
-            }
-
-            var memberResource = MemberResourceFromEntityAssembler.ToResourceFromEntity(member);
-            return Ok(memberResource);
-        }
-
-        [HttpGet("dni/{dni}")]
-        public async Task<ActionResult<MemberResource>> GetMemberByDni(int dni)
-        {
-            var getByDniQuery = new GetMemberByDniQuery(dni);
-            var member = await _memberQueryService.Handle(getByDniQuery);
-
-            if (member == null)
-            {
-                return NotFound();
-            }
-
-            var memberResource = MemberResourceFromEntityAssembler.ToResourceFromEntity(member);
-            return Ok(memberResource);
-        }
-
+        
+        
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMember(int id, [FromBody] UpdateMemberResource resource) 
         {
