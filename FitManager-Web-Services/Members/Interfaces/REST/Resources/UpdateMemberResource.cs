@@ -1,14 +1,19 @@
+using System;
 using System.ComponentModel.DataAnnotations; 
 
 namespace FitManager_Web_Services.Members.Interfaces.REST.Resources
 {
-    public record UpdateMemberResource( 
-        [Required] string FirstName, 
+    public record UpdateMemberResource(
+        [Required] string FirstName,
         [Required] string LastName,
-        [Range(1, 150)] int Age,
-        [Required] [Range(1, 999999999)] int Dni, 
-        [Required] [Range(1, 999999999)] int PhoneNumber,
+        [Required] int Age,
+        [Required] int Dni,
+        [Required] int PhoneNumber, 
         [Required] string Address,
-        [Required] [EmailAddress] string Email 
+        [Required] string Email,
+        DateTime? StartDate, 
+        DateTime? EndDate,
+        string? Status,
+        int? MembershipTypeId
     );
 }

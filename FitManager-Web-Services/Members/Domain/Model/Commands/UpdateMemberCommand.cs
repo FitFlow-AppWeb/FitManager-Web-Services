@@ -8,8 +8,12 @@ namespace FitManager_Web_Services.Members.Domain.Model.Commands
         string LastName,
         int Age,
         int Dni,
-        int PhoneNumber,
+        int PhoneNumber, 
         string Address,
-        string Email
+        string Email,
+        DateTime? StartDate,
+        DateTime? EndDate,
+        string? Status,
+        int? MembershipTypeId
     );
 }

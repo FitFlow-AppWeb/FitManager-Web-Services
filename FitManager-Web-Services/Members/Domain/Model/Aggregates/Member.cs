@@ -65,11 +65,37 @@ namespace FitManager_Web_Services.Members.Domain.Model.Aggregates
             Address = address;
             Email = email;
         }
+        
+        public void UpdateMembershipStatus(DateTime? startDate, DateTime? endDate, string? status, int? membershipTypeId)
+        {
+            if (startDate.HasValue)
+            {
+                MembershipStatus.StartDate = startDate.Value;
+            }
+            if (endDate.HasValue)
+            {
+                MembershipStatus.EndDate = endDate.Value;
+            }
+            if (!string.IsNullOrEmpty(status)) 
+            {
+                MembershipStatus.Status = status;
+            }
+            if (membershipTypeId.HasValue)
+            {
+                MembershipStatus.MembershipTypeId = membershipTypeId.Value;
+            }
+        }
 
         public void AssignMembershipStatus(MembershipStatus status)
         {
             if (status == null) throw new ArgumentNullException(nameof(status), "Membership status cannot be null.");
             MembershipStatus = status;
         }
+        
+        public void SetMembershipStatus(MembershipStatus status)
+        {
+            this.MembershipStatus = status;
+        }
+        
     }
 }

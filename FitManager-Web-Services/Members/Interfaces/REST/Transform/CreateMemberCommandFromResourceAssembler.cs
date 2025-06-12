@@ -14,7 +14,11 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Transform
                 resource.Dni,
                 resource.PhoneNumber,
                 resource.Address,
-                resource.Email
+                resource.Email,
+                resource.StartDate,
+                resource.EndDate,
+                resource.Status,
+                resource.MembershipTypeId
             );
         }
     }

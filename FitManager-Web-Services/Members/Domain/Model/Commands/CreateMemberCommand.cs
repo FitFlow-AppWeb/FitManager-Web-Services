@@ -1,4 +1,5 @@
-using System;
+
+using System; 
 
 namespace FitManager_Web_Services.Members.Domain.Model.Commands
 {
@@ -9,6 +10,10 @@ namespace FitManager_Web_Services.Members.Domain.Model.Commands
         int Dni,
         int PhoneNumber,
         string Address,
-        string Email
+        string Email,
+        DateTime StartDate,
+        DateTime EndDate,
+        string Status,
+        int MembershipTypeId
     );
 }

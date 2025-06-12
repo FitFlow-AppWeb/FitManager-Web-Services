@@ -5,17 +5,21 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Transform
 {
     public static class UpdateMemberCommandFromResourceAssembler
     {
-        public static UpdateMemberCommand ToCommandFromResource(int id, UpdateMemberResource resource)
+        public static UpdateMemberCommand ToCommandFromResource(int memberId, UpdateMemberResource resource)
         {
             return new UpdateMemberCommand(
-                id,
+                memberId,
                 resource.FirstName,
                 resource.LastName,
                 resource.Age,
                 resource.Dni,
                 resource.PhoneNumber,
                 resource.Address,
-                resource.Email
+                resource.Email,
+                resource.StartDate,
+                resource.EndDate,
+                resource.Status,
+                resource.MembershipTypeId
             );
         }
     }
