@@ -1,6 +1,5 @@
 using FitManager_Web_Services.Classes.Domain.Model.Aggregates;
-using System.Collections.Generic;
-using System;
+
 
 namespace FitManager_Web_Services.Members.Domain.Model.Aggregates
 {

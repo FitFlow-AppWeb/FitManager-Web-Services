@@ -1,5 +1,4 @@
 
-using System;
 
 namespace FitManager_Web_Services.Members.Interfaces.REST.Resources 
 {

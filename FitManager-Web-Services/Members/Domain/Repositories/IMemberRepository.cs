@@ -1,15 +1,11 @@
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using FitManager_Web_Services.Members.Domain.Model.Aggregates;
+using FitManager_Web_Services.Members.Domain.Model.Aggregates;
+using FitManager_Web_Services.Shared.Domain.Repositories; 
+using System.Threading.Tasks; 
 
-    namespace FitManager_Web_Services.Members.Domain.Repositories;
-
-    public interface IMemberRepository
+namespace FitManager_Web_Services.Members.Domain.Repositories
+{
+    public interface IMemberRepository : IBaseRepository<Member>
     {
-        Task<IEnumerable<Member>> GetAllAsync();
-        Task<Member?> GetByIdAsync(int id);
         Task<Member?> GetByDniAsync(int dni);
-        Task AddAsync(Member member);
-        Task UpdateAsync(Member member);
-        Task DeleteAsync(int id);
     }
+}

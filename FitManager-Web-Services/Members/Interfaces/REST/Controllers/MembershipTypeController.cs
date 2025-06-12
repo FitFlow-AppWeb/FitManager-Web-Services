@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using FitManager_Web_Services.Members.Application.Internal.QueryServices;
 using FitManager_Web_Services.Members.Domain.Model.Queries; 
 using FitManager_Web_Services.Members.Interfaces.REST.Resources; 
 using FitManager_Web_Services.Members.Interfaces.REST.Transform; 
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
 {
@@ -21,6 +20,10 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
 
         
         [HttpGet]
+        [SwaggerOperation(
+            Summary = "Listar todos los Tipos de Membresía",
+            Description = "Obtiene una lista de todos los tipos de membresía disponibles."
+        )]
         public async Task<ActionResult<IEnumerable<MembershipTypeResource>>> GetAllMembershipTypes()
         {
             var getAllQuery = new GetAllMembershipTypesQuery();

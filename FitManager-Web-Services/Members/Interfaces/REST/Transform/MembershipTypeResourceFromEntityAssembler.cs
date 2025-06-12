@@ -1,6 +1,4 @@
 
-using System.Collections.Generic;
-using System.Linq;
 using FitManager_Web_Services.Members.Domain.Model.Aggregates; 
 using FitManager_Web_Services.Members.Interfaces.REST.Resources; 
 
