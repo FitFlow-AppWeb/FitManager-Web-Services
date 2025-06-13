@@ -407,7 +407,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
             .IsRequired()
             .HasMaxLength(50);
 
-        builder.Entity<SupplyPurchase>().Property(sp => sp.CurrencyType)
+        builder.Entity<SupplyPurchase>().Property(sp => sp.Currency)
             .IsRequired()
             .HasMaxLength(20);
 
@@ -453,7 +453,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
             .HasMaxLength(50);
 
         builder.Entity<SalaryPayment>()
-            .Property(sp => sp.CurrencyType)
+            .Property(sp => sp.Currency)
             .IsRequired()
             .HasMaxLength(50);
 
@@ -479,7 +479,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
             .HasMaxLength(50);
 
         builder.Entity<MembershipPayment>()
-            .Property(mp => mp.CurrencyType)
+            .Property(mp => mp.Currency)
             .IsRequired()
             .HasMaxLength(50);
 
