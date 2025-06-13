@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\my myself\\upc\\Aplicaciones Web\\S10\\FitManager-Web-Services\\FitManager-Web-Services\\FitManager-Web-Services.csproj": {}
+    "C:\\Users\\Juanc\\OneDrive\\Documentos\\GitHub\\FitManager-Web-Services\\FitManager-Web-Services\\FitManager-Web-Services.csproj": {}
   },
   "projects": {
-    "D:\\my myself\\upc\\Aplicaciones Web\\S10\\FitManager-Web-Services\\FitManager-Web-Services\\FitManager-Web-Services.csproj": {
+    "C:\\Users\\Juanc\\OneDrive\\Documentos\\GitHub\\FitManager-Web-Services\\FitManager-Web-Services\\FitManager-Web-Services.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\my myself\\upc\\Aplicaciones Web\\S10\\FitManager-Web-Services\\FitManager-Web-Services\\FitManager-Web-Services.csproj",
+        "projectUniqueName": "C:\\Users\\Juanc\\OneDrive\\Documentos\\GitHub\\FitManager-Web-Services\\FitManager-Web-Services\\FitManager-Web-Services.csproj",
         "projectName": "FitManager-Web-Services",
-        "projectPath": "D:\\my myself\\upc\\Aplicaciones Web\\S10\\FitManager-Web-Services\\FitManager-Web-Services\\FitManager-Web-Services.csproj",
-        "packagesPath": "C:\\Users\\cassi\\.nuget\\packages\\",
-        "outputPath": "D:\\my myself\\upc\\Aplicaciones Web\\S10\\FitManager-Web-Services\\FitManager-Web-Services\\obj\\",
+        "projectPath": "C:\\Users\\Juanc\\OneDrive\\Documentos\\GitHub\\FitManager-Web-Services\\FitManager-Web-Services\\FitManager-Web-Services.csproj",
+        "packagesPath": "C:\\Users\\Juanc\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Juanc\\OneDrive\\Documentos\\GitHub\\FitManager-Web-Services\\FitManager-Web-Services\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\cassi\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Juanc\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -36,9 +36,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
+          "auditMode": "all"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -47,6 +47,10 @@
             "EntityFrameworkCore.CreatedUpdatedDate": {
               "target": "Package",
               "version": "[8.0.0, )"
+            },
+            "MediatR": {
+              "target": "Package",
+              "version": "[12.5.0, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -94,7 +98,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\Juanc\\.dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
