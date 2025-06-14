@@ -1,3 +1,7 @@
+using FitManager_Web_Services.Finances.Application.Internal.CommandServices;
+using FitManager_Web_Services.Finances.Application.Internal.QueryServices;
+using FitManager_Web_Services.Finances.Domain.Repositories;
+using FitManager_Web_Services.Finances.Infrastructure.Repositories;
 using FitManager_Web_Services.Members.Application.Internal.CommandServices;
 using FitManager_Web_Services.Members.Application.Internal.QueryServices;
 using FitManager_Web_Services.Members.Domain.Repositories;
@@ -27,6 +31,18 @@ builder.Services.AddScoped<IMemberService, MemberService>();
 builder.Services.AddScoped<MemberCommandService>();
 builder.Services.AddScoped<MemberQueryService>();
 
+//Finances
+builder.Services.AddScoped<IMembershipPaymentRepository, MembershipPaymentRepository>();
+builder.Services.AddScoped<ISupplyPurchaseRepository, SupplyPurchaseRepository>();
+builder.Services.AddScoped<IPurchaseDetailRepository, PurchaseDetailRepository>();
+builder.Services.AddScoped<ISalaryPaymentRepository, SalaryPaymentRepository>();
+
+builder.Services.AddScoped<MembershipPaymentCommandService>();
+builder.Services.AddScoped<MembershipPaymentQueryService>();
+builder.Services.AddScoped<SupplyPurchaseCommandService>();
+builder.Services.AddScoped<PurchaseDetailQueryService>();
+builder.Services.AddScoped<SalaryPaymentCommandService>();
+builder.Services.AddScoped<SalaryPaymentQueryService>();
 
 builder.Services.AddScoped<IMembershipTypeRepository, MembershipTypeRepository>();
 builder.Services.AddScoped<MembershipTypeQueryService>();
