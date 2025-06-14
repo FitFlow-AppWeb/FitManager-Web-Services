@@ -8,7 +8,7 @@ using FitManager_Web_Services.Members.Domain.Model.Queries;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
-{
+{   
     [ApiController]
     [Route("api/v1/[controller]")]
     public class MemberController : ControllerBase
