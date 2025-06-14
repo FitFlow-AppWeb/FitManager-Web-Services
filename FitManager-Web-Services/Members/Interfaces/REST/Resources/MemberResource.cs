@@ -1,7 +1,4 @@
 
-using System;
-using System.Collections.Generic;
-using FitManager_Web_Services.Members.Interfaces.REST.Resources; 
 
 namespace FitManager_Web_Services.Members.Interfaces.REST.Resources
 {

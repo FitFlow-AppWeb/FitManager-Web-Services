@@ -1,8 +1,7 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using FitManager_Web_Services.Members.Domain.Model.Aggregates;
-using FitManager_Web_Services.Members.Domain.Model.Queries; 
-using FitManager_Web_Services.Members.Domain.Repositories; 
+using FitManager_Web_Services.Members.Domain.Model.Queries;
+using FitManager_Web_Services.Members.Domain.Repositories;
+
 
 namespace FitManager_Web_Services.Members.Application.Internal.QueryServices
 {
@@ -20,9 +19,6 @@ namespace FitManager_Web_Services.Members.Application.Internal.QueryServices
             return await _membershipTypeRepository.GetAllAsync();
         }
 
-        public async Task<MembershipType?> Handle(GetMembershipTypeByIdQuery query)
-        {
-            return await _membershipTypeRepository.GetByIdAsync(query.Id);
-        }
+     
     }
 }

@@ -1,5 +1,4 @@
-﻿// Members/Domain/Model/Aggregates/MembershipStatus.cs
-using System; // Para DateTime
+﻿
 
 namespace FitManager_Web_Services.Members.Domain.Model.Aggregates
 {

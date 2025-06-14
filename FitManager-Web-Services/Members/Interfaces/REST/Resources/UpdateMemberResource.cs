@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations; 
 
 namespace FitManager_Web_Services.Members.Interfaces.REST.Resources

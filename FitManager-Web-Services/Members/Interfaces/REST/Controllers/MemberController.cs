@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using FitManager_Web_Services.Members.Application.Internal.CommandServices;
 using FitManager_Web_Services.Members.Application.Internal.QueryServices;
 using FitManager_Web_Services.Members.Interfaces.REST.Resources;
 using FitManager_Web_Services.Members.Interfaces.REST.Transform;
 using FitManager_Web_Services.Members.Domain.Model.Commands;
 using FitManager_Web_Services.Members.Domain.Model.Queries;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
 {
@@ -24,6 +23,10 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
         }
 
         [HttpPost]
+        [SwaggerOperation(
+            Summary = "Añadir Miembro",
+            Description = "Crea un nuevo miembro en el sistema."
+        )]
         public async Task<IActionResult> CreateMember([FromBody] CreateMemberResource resource)
         {
             if (!ModelState.IsValid)
@@ -40,10 +43,14 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
             }
 
             var memberResource = MemberResourceFromEntityAssembler.ToResourceFromEntity(member);
-            return CreatedAtAction(nameof(GetMemberById), new { id = memberResource.Id }, memberResource);
+            return Created(string.Empty, memberResource); 
         }
 
         [HttpGet]
+        [SwaggerOperation(
+            Summary = "Listar todos los Miembros",
+            Description = "Obtiene una lista de todos los miembros registrados en el sistema."
+        )]
         public async Task<ActionResult<IEnumerable<MemberResource>>> GetAllMembers()
         {
             var getAllQuery = new GetAllMembersQuery();
@@ -52,37 +59,13 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
             return Ok(memberResources);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<MemberResource>> GetMemberById(int id)
-        {
-            var getByIdQuery = new GetMemberByIdQuery(id);
-            var member = await _memberQueryService.Handle(getByIdQuery);
-
-            if (member == null)
-            {
-                return NotFound();
-            }
-
-            var memberResource = MemberResourceFromEntityAssembler.ToResourceFromEntity(member);
-            return Ok(memberResource);
-        }
-
-        [HttpGet("dni/{dni}")]
-        public async Task<ActionResult<MemberResource>> GetMemberByDni(int dni)
-        {
-            var getByDniQuery = new GetMemberByDniQuery(dni);
-            var member = await _memberQueryService.Handle(getByDniQuery);
-
-            if (member == null)
-            {
-                return NotFound();
-            }
-
-            var memberResource = MemberResourceFromEntityAssembler.ToResourceFromEntity(member);
-            return Ok(memberResource);
-        }
-
+        
+        
         [HttpPut("{id}")]
+        [SwaggerOperation(
+            Summary = "Actualizar Miembro",
+            Description = "Actualiza los datos de un miembro existente, incluyendo su estado de membresía."
+        )]
         public async Task<IActionResult> UpdateMember(int id, [FromBody] UpdateMemberResource resource) 
         {
             if (!ModelState.IsValid)
@@ -103,6 +86,10 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
         }
 
         [HttpDelete("{id}")]
+        [SwaggerOperation(
+            Summary = "Eliminar Miembro",
+            Description = "Elimina un miembro existente del sistema por su ID."
+        )]
         public async Task<IActionResult> DeleteMember(int id)
         {
             var deleteCommand = new DeleteMemberCommand(id);

@@ -1,62 +1,44 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore; 
+using Microsoft.EntityFrameworkCore;
 using FitManager_Web_Services.Members.Domain.Model.Aggregates;
 using FitManager_Web_Services.Members.Domain.Repositories;
 using FitManager_Web_Services.Shared.Infrastructure.Persistence.EFC.Configuration;
+using FitManager_Web_Services.Shared.Infrastructure.Persistence.EFC.Repositories; 
+using System.Collections.Generic; 
 
 namespace FitManager_Web_Services.Members.Infrastructure.Repositories;
 
-public class MemberRepository : IMemberRepository
+public class MemberRepository : BaseRepository<Member>, IMemberRepository
 {
-    private readonly AppDbContext _context;
 
-    public MemberRepository(AppDbContext context)
-    {
-        _context = context;
-    }
 
-    public async Task<IEnumerable<Member>> GetAllAsync()
+    public MemberRepository(AppDbContext context) : base(context) 
     {
-        return await _context.Members
-            .Include(m => m.MembershipStatus)           
-                .ThenInclude(ms => ms.MembershipType)   
-            .ToListAsync();
-    }
-
-    public async Task<Member?> GetByIdAsync(int id)
-    {
-        return await _context.Members
-            .Include(m => m.MembershipStatus)           
-                .ThenInclude(ms => ms.MembershipType)   
-            .FirstOrDefaultAsync(m => m.Id == id);
     }
 
     public async Task<Member?> GetByDniAsync(int dni)
     {
         return await _context.Members
-            .Include(m => m.MembershipStatus)           
-                .ThenInclude(ms => ms.MembershipType)  
+            .Include(m => m.MembershipStatus)
+                .ThenInclude(ms => ms.MembershipType)
             .FirstOrDefaultAsync(m => m.Dni == dni);
     }
 
-    public async Task AddAsync(Member member)
+  
+    public override async Task<IEnumerable<Member>> GetAllAsync()
     {
-        await _context.Members.AddAsync(member);
+        return await _context.Members
+            .Include(m => m.MembershipStatus)
+                .ThenInclude(ms => ms.MembershipType)
+            .ToListAsync();
     }
 
-    public async Task UpdateAsync(Member member)
+    public override async Task<Member?> GetByIdAsync(int id)
     {
-        _context.Members.Update(member);
+        return await _context.Members
+            .Include(m => m.MembershipStatus)
+                .ThenInclude(ms => ms.MembershipType)
+            .FirstOrDefaultAsync(m => m.Id == id);
     }
 
-    public async Task DeleteAsync(int id)
-    {
-
-        var member = await GetByIdAsync(id); 
-        if (member != null)
-        {
-            _context.Members.Remove(member);
-        }
-    }
+   
 }
