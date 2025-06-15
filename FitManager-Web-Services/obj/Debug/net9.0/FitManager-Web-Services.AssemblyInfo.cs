@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FitManager-Web-Services")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bd7b4f254ef7fcc62c057705a9ec4fc38b600a60")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+130c00edb1878204678320b26e29ab29d412c30f")]
 [assembly: System.Reflection.AssemblyProductAttribute("FitManager-Web-Services")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FitManager-Web-Services")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
