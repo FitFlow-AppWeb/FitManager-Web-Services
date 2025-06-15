@@ -2,6 +2,11 @@
 .idea/
 *.sublime-workspace
 *.sublime-project
+*.iml
+*.ipr
+*.iws
+*.rider/
+*.sln.iml
 
 # Visual Studio / .NET
 .vs/
@@ -9,12 +14,20 @@
 *.suo
 *.userosscache
 *.sln.docstates
+*.csproj.user
 
 # Build results
 bin/
 obj/
+**/bin/
+**/obj/
 [Bb]uild/
 [Ll]og/
+
+# Auto-generated files
+*.AssemblyInfo.cs
+*.AssemblyInfoInputs.cache
+*.project.restore.info
 
 # NuGet
 *.nupkg
