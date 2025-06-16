@@ -4601,24 +4601,26 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\cassi\\.nuget\\packages\\": {}
+    "C:\\Users\\alext\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\my myself\\upc\\Aplicaciones Web\\S10\\FitManager-Web-Services\\FitManager-Web-Services\\FitManager-Web-Services.csproj",
+      "projectUniqueName": "C:\\Users\\alext\\RiderProjects\\FitManager-Web-Services\\FitManager-Web-Services\\FitManager-Web-Services.csproj",
       "projectName": "FitManager-Web-Services",
-      "projectPath": "D:\\my myself\\upc\\Aplicaciones Web\\S10\\FitManager-Web-Services\\FitManager-Web-Services\\FitManager-Web-Services.csproj",
-      "packagesPath": "C:\\Users\\cassi\\.nuget\\packages\\",
-      "outputPath": "D:\\my myself\\upc\\Aplicaciones Web\\S10\\FitManager-Web-Services\\FitManager-Web-Services\\obj\\",
+      "projectPath": "C:\\Users\\alext\\RiderProjects\\FitManager-Web-Services\\FitManager-Web-Services\\FitManager-Web-Services.csproj",
+      "packagesPath": "C:\\Users\\alext\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\alext\\RiderProjects\\FitManager-Web-Services\\FitManager-Web-Services\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\cassi\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\alext\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -4637,7 +4639,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net9.0": {
@@ -4693,7 +4695,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Users\\alext\\.dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
