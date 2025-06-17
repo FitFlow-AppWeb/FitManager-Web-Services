@@ -1,7 +1,5 @@
 ﻿using FitManager_Web_Services.Employees.Domain.Model.Aggregates;
 using FitManager_Web_Services.Employees.Interfaces.REST.Resources;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace FitManager_Web_Services.Employees.Interfaces.REST.Transform
 {
@@ -9,8 +7,8 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Transform
     {
         public static EmployeeResource ToResourceFromEntity(Employee entity)
         {
-            var certifications = entity.Certifications.Select(cert => new CertificationResource(cert.Id, cert.Name, cert.Description)).ToList();
-            var specialties = entity.Specialties.Select(spec => new SpecialtyResource(spec.Id, spec.Name, spec.Description)).ToList();
+            var certifications = entity.Certifications.Select(c => CertificationResourceFromEntityAssembler.ToResourceFromEntity(c));
+            var specialties = entity.Specialties.Select(s => SpecialtyResourceFromEntityAssembler.ToResourceFromEntity(s));
 
             return new EmployeeResource(
                 entity.Id,
@@ -21,6 +19,10 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Transform
                 entity.PhoneNumber,
                 entity.Address,
                 entity.Email,
+                entity.Password,  // Agregar el campo Password
+                entity.Wage,      // Agregar el campo Wage
+                entity.Role,      // Agregar el campo Role
+                entity.WorkHours, // Agregar el campo WorkHours
                 certifications,
                 specialties
             );

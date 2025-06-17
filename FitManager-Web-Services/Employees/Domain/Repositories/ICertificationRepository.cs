@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using FitManager_Web_Services.Employees.Domain.Model.Aggregates;
+﻿using FitManager_Web_Services.Employees.Domain.Model.Aggregates;
+using FitManager_Web_Services.Shared.Domain.Repositories;
 
 namespace FitManager_Web_Services.Employees.Domain.Repositories
 {
-    public interface ICertificationRepository
+    public interface ICertificationRepository : IBaseRepository<Certification>
     {
-        Task<IEnumerable<Certification>> GetAllAsync();  // Esta función debe estar aquí
-        Task<Certification?> GetByIdAsync(int id);
-        Task AddAsync(Certification certification);
+        Task<IEnumerable<Certification>> GetByIdsAsync(IEnumerable<int> ids); // Agregar este método
+
     }
 }

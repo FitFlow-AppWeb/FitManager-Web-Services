@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using FitManager_Web_Services.Employees.Domain.Model.Aggregates;
+﻿using FitManager_Web_Services.Employees.Domain.Model.Aggregates;
 
 namespace FitManager_Web_Services.Employees.Domain.Services
 {

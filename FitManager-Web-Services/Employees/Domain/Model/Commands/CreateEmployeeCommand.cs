@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace FitManager_Web_Services.Employees.Domain.Model.Commands
+﻿namespace FitManager_Web_Services.Employees.Domain.Model.Commands
 {
     public record CreateEmployeeCommand(
         string FirstName,
@@ -11,7 +8,11 @@ namespace FitManager_Web_Services.Employees.Domain.Model.Commands
         int PhoneNumber,
         string Address,
         string Email,
-        List<int> CertificationIds,  // Lista de IDs de certificaciones
-        List<int> SpecialtyIds       // Lista de IDs de especialidades
+        string Password,
+        float Wage,
+        string Role,
+        int WorkHours,
+        int[] CertificationIds, // Asumiendo que un empleado puede tener varias certificaciones
+        int[] SpecialtyIds // Asumiendo que un empleado puede tener varias especialidades
     );
 }

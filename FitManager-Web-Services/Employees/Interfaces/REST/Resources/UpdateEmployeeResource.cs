@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace FitManager_Web_Services.Employees.Interfaces.REST.Resources
 {
@@ -12,11 +10,11 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Resources
         [Required] int PhoneNumber, 
         [Required] string Address,
         [Required] string Email,
-        List<int> CertificationIds,  // Lista de IDs de certificaciones
-        List<int> SpecialtyIds,      // Lista de IDs de especialidades
-        DateTime? StartDate, 
-        DateTime? EndDate,
-        string? Status,
-        int? MembershipTypeId
+        string Password,
+        float Wage,
+        string Role,
+        int WorkHours,
+        int[]? CertificationIds,  // Opcional: actualización de certificaciones
+        int[]? SpecialtyIds  // Opcional: actualización de especialidades
     );
 }

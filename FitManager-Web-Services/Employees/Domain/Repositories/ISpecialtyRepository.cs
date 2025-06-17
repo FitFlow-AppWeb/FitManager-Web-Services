@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using FitManager_Web_Services.Employees.Domain.Model.Aggregates;
+﻿using FitManager_Web_Services.Employees.Domain.Model.Aggregates;
+using FitManager_Web_Services.Shared.Domain.Repositories;
 
 namespace FitManager_Web_Services.Employees.Domain.Repositories
 {
-    public interface ISpecialtyRepository
+    public interface ISpecialtyRepository : IBaseRepository<Specialty>
     {
-        Task<IEnumerable<Specialty>> GetAllAsync();  // Esta función debe estar aquí
-        Task<Specialty?> GetByIdAsync(int id);
-        Task AddAsync(Specialty specialty);
+        Task<IEnumerable<Specialty>> GetByIdsAsync(IEnumerable<int> ids); // Agregar este método
     }
 }

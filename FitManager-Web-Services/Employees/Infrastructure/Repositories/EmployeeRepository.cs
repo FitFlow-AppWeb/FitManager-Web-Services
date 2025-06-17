@@ -1,40 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using FitManager_Web_Services.Employees.Domain.Model.Aggregates;
 using FitManager_Web_Services.Employees.Domain.Repositories;
 using FitManager_Web_Services.Shared.Infrastructure.Persistence.EFC.Configuration;
+using FitManager_Web_Services.Shared.Infrastructure.Persistence.EFC.Repositories;
+using System.Collections.Generic;
 
 namespace FitManager_Web_Services.Employees.Infrastructure.Repositories
 {
-    public class EmployeeRepository : IEmployeeRepository
+    public class EmployeeRepository : BaseRepository<Employee>, IEmployeeRepository
     {
-        private readonly AppDbContext _context;
-
-        public EmployeeRepository(AppDbContext context)
+        public EmployeeRepository(AppDbContext context) : base(context)
         {
-            _context = context;
         }
 
-        // Obtener todos los empleados
-        public async Task<IEnumerable<Employee>> GetAllAsync()
-        {
-            return await _context.Employees
-                .Include(e => e.Certifications)  // Incluir las certificaciones
-                .Include(e => e.Specialties)     // Incluir las especialidades
-                .ToListAsync();
-        }
-
-        // Obtener un empleado por ID
-        public async Task<Employee?> GetByIdAsync(int id)
-        {
-            return await _context.Employees
-                .Include(e => e.Certifications)
-                .Include(e => e.Specialties)
-                .FirstOrDefaultAsync(e => e.Id == id);
-        }
-
-        // Obtener un empleado por DNI
         public async Task<Employee?> GetByDniAsync(int dni)
         {
             return await _context.Employees
@@ -43,26 +21,20 @@ namespace FitManager_Web_Services.Employees.Infrastructure.Repositories
                 .FirstOrDefaultAsync(e => e.Dni == dni);
         }
 
-        // Agregar un nuevo empleado
-        public async Task AddAsync(Employee employee)
+        public override async Task<IEnumerable<Employee>> GetAllAsync()
         {
-            await _context.Employees.AddAsync(employee);
+            return await _context.Employees
+                .Include(e => e.Certifications)
+                .Include(e => e.Specialties)
+                .ToListAsync();
         }
 
-        // Actualizar un empleado existente
-        public async Task UpdateAsync(Employee employee)
+        public override async Task<Employee?> GetByIdAsync(int id)
         {
-            _context.Employees.Update(employee);
-        }
-
-        // Eliminar un empleado por ID
-        public async Task DeleteAsync(int id)
-        {
-            var employee = await GetByIdAsync(id);
-            if (employee != null)
-            {
-                _context.Employees.Remove(employee);
-            }
+            return await _context.Employees
+                .Include(e => e.Certifications)
+                .Include(e => e.Specialties)
+                .FirstOrDefaultAsync(e => e.Id == id);
         }
     }
 }

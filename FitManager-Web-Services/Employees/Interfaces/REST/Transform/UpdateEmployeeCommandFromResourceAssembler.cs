@@ -16,8 +16,12 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Transform
                 resource.PhoneNumber,
                 resource.Address,
                 resource.Email,
-                resource.CertificationIds,  // Ahora pasamos las CertificationIds desde el recurso
-                resource.SpecialtyIds       // Y también las SpecialtyIds
+                resource.Password,
+                resource.Wage,
+                resource.Role,
+                resource.WorkHours,
+                resource.CertificationIds, // Certificaciones actualizadas
+                resource.SpecialtyIds // Especialidades actualizadas
             );
         }
     }

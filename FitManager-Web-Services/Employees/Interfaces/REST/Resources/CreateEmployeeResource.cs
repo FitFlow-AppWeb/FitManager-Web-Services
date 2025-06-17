@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace FitManager_Web_Services.Employees.Interfaces.REST.Resources
+﻿namespace FitManager_Web_Services.Employees.Interfaces.REST.Resources
 {
     public record CreateEmployeeResource(
         string FirstName,
@@ -11,7 +8,11 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Resources
         int PhoneNumber,
         string Address,
         string Email,
-        List<int> CertificationIds,  // Lista de IDs de certificaciones
-        List<int> SpecialtyIds       // Lista de IDs de especialidades
+        string Password,
+        float Wage,
+        string Role,
+        int WorkHours,
+        int[] CertificationIds,  // IDs de certificaciones asociadas al empleado
+        int[] SpecialtyIds  // IDs de especialidades asociadas al empleado
     );
 }
