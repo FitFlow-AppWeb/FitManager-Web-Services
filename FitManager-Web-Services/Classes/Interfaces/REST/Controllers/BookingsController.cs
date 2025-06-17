@@ -33,20 +33,7 @@ public class BookingsController : ControllerBase
             resource.Date);
         
         var bookingResource = BookingResourceFromEntityAssembler.ToResource(result);
-        return CreatedAtAction(nameof(GetBookingById), new { id = bookingResource.Id }, bookingResource);
-    }
-
-    [HttpGet("{id}")]
-    [SwaggerOperation(
-        Summary = "Obtener una Reserva por ID",
-        Description = "Obtiene los detalles de una reserva específica por su ID."
-    )]
-    public async Task<IActionResult> GetBookingById(int id)
-    {
-        var result = await _bookingService.GetBookingByIdAsync(id);
-        if (result == null) return NotFound();
-        var resource = BookingResourceFromEntityAssembler.ToResource(result);
-        return Ok(resource);
+        return Ok(bookingResource);
     }
 
     [HttpGet("class/{classId}")]
