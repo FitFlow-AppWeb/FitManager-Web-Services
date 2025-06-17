@@ -1,4 +1,5 @@
 using System;
+using FitManager_Web_Services.Employees.Interfaces.REST.Resources;
 
 namespace FitManager_Web_Services.Inventory.Interfaces.REST.Resources
 {
@@ -19,9 +20,8 @@ namespace FitManager_Web_Services.Inventory.Interfaces.REST.Resources
         DateTime NextMaintenanceDate,
         string Status,
 
-        // TODO (Inventory): Add EmployeeId and EmployeeResource when Employee module is integrated
-        // int EmployeeId,
-        // EmployeeResource? Employee,
+        int? EmployeeId,
+        EmployeeResource? Employee,
 
         int ItemTypeId,
         ItemTypeResource? ItemType

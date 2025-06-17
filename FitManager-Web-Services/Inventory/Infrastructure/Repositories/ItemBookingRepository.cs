@@ -40,7 +40,7 @@ namespace FitManager_Web_Services.Inventory.Infrastructure.Repositories
         {
             return await _context.ItemBookings
                 .Include(ib => ib.Item)
-                //.Include(ib => ib.Employee)
+                .ThenInclude(ib => ib.Employee)
                 .ToListAsync();
         }
 
@@ -59,7 +59,7 @@ namespace FitManager_Web_Services.Inventory.Infrastructure.Repositories
         {
             return await _context.ItemBookings
                 .Include(ib => ib.Item)
-                //.Include(ib => ib.Employee)
+                .ThenInclude(ib => ib.Employee)
                 .FirstOrDefaultAsync(ib => ib.Id == id);
         }
 

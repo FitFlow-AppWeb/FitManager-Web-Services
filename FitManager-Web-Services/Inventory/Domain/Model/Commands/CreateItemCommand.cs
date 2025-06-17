@@ -15,7 +15,7 @@ namespace FitManager_Web_Services.Inventory.Domain.Model.Commands
         DateTime NextMaintenanceDate,
         string Status,
         int ItemTypeId,
-        // int? EmployeeId = null,
+        int? EmployeeId = null,
         string? UpdatedItemTypeName = null,
         string? UpdatedItemTypeDescription = null
     );

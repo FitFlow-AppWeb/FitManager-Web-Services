@@ -2,6 +2,8 @@ using FitManager_Web_Services.Inventory.Domain.Model.Aggregates;
 using FitManager_Web_Services.Inventory.Interfaces.REST.Resources;
 using System.Collections.Generic;
 using System.Linq;
+using FitManager_Web_Services.Employees.Interfaces.REST.Resources;
+using FitManager_Web_Services.Employees.Interfaces.REST.Transform;
 
 namespace FitManager_Web_Services.Inventory.Interfaces.REST.Transform
 {
@@ -25,22 +27,19 @@ namespace FitManager_Web_Services.Inventory.Interfaces.REST.Transform
             {
                 itemTypeResource = ItemTypeResourceFromEntityAssembler.ToResourceFromEntity(entity.ItemType);
             }
-
-            // TODO (Inventory): Awaiting Employee module support
-
-            // EmployeeResource? employeeResource = null;
-            // if (entity.Employee != null)
-            // {
-            //     employeeResource = EmployeeResourceFromEntityAssembler.ToResourceFromEntity(entity.Employee);
-            // }
+            EmployeeResource? employeeResource = null;
+            if (entity.Employee != null)
+            {
+                 employeeResource = EmployeeResourceFromEntityAssembler.ToResourceFromEntity(entity.Employee);
+            }
 
             return new ItemResource(
                 entity.Id,
                 entity.LastMaintenanceDate,
                 entity.NextMaintenanceDate,
                 entity.Status,
-                // entity.EmployeeId,
-                // employeeResource,
+                entity.EmployeeId,
+                employeeResource,
                 entity.ItemTypeId,
                 itemTypeResource
             );
