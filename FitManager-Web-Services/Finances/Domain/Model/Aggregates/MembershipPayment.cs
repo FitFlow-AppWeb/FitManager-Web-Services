@@ -12,18 +12,18 @@ namespace FitManager_Web_Services.Finances.Domain.Model.Aggregates
 
         public string Method { get; set; }
 
-        public string CurrencyType { get; set; }
+        public string Currency { get; set; }
 
         public int MemberId { get; set; }
 
         public Member Member { get; set; }
 
-        public MembershipPayment(DateTime date, float amount, string method, string currencyType, int memberId)
+        public MembershipPayment(DateTime date, float amount, string method, string currency, int memberId)
         {
             Date = date;
             Amount = amount;
             Method = method;
-            CurrencyType = currencyType;
+            Currency = currency;
             MemberId = memberId;
         }
 

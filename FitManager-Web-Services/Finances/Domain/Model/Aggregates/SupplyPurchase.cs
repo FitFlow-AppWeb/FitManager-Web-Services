@@ -7,17 +7,17 @@
         public DateTime Date { get; set; }
         public float Amount { get; set; }
         public string Method { get; set; }
-        public string CurrencyType { get; set; }
+        public string Currency { get; set; }
         public string VendorName { get; set; }
 
         public ICollection<PurchaseDetail> PurchaseDetails { get; set; } = new List<PurchaseDetail>();
 
-        public SupplyPurchase(DateTime date, float amount, string method, string currencyType, string vendorName)
+        public SupplyPurchase(DateTime date, float amount, string method, string currency, string vendorName)
         {
             Date = date;
             Amount = amount;
             Method = method;
-            CurrencyType = currencyType;
+            Currency = currency;
             VendorName = vendorName;
         }
 

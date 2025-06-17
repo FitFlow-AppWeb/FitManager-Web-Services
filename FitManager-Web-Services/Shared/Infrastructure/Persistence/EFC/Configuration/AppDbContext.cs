@@ -352,18 +352,38 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
             .IsRequired()
             .ValueGeneratedOnAdd();
 
-        builder.Entity<Item>().Property(i => i.Name)
-            .IsRequired()
-            .HasMaxLength(100);
+        builder.Entity<Item>().Property(i => i.LastMaintenanceDate)
+            .IsRequired();
 
-        builder.Entity<Item>().Property(i => i.Description)
-            .HasMaxLength(300);
+        builder.Entity<Item>().Property(i => i.NextMaintenanceDate)
+            .IsRequired();
+
+        builder.Entity<Item>().Property(i => i.Status)
+            .IsRequired()
+            .HasMaxLength(50);
+        
+        // TODO (Inventory): Awaiting Employee module support
+        
+        /*builder.Entity<Item>().Property(i => i.EmployeeId)
+            .IsRequired();
+
+        builder.Entity<Item>()
+            .HasOne(i => i.Employee)
+            .WithMany()
+            .HasForeignKey(i => i.EmployeeId);*/
+
+        builder.Entity<Item>().Property(i => i.ItemTypeId)
+            .IsRequired();
 
         builder.Entity<Item>()
             .HasOne(i => i.ItemType)
             .WithMany(it => it.Items)
-            .HasForeignKey(i => i.ItemTypeId)
-            .IsRequired();
+            .HasForeignKey(i => i.ItemTypeId);
+
+        builder.Entity<Item>()
+            .HasMany(i => i.ItemBookings)
+            .WithOne(ib => ib.Item)
+            .HasForeignKey(ib => ib.ItemId);
         
         // item booking
         builder.Entity<ItemBooking>().HasKey(ib => ib.Id);
@@ -387,7 +407,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
             .HasOne(ib => ib.Item)
             .WithMany(i => i.ItemBookings)
             .HasForeignKey(ib => ib.ItemId);
-        
+
         // Finances Context
         
         // supply purchase
@@ -407,7 +427,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
             .IsRequired()
             .HasMaxLength(50);
 
-        builder.Entity<SupplyPurchase>().Property(sp => sp.CurrencyType)
+        builder.Entity<SupplyPurchase>().Property(sp => sp.Currency)
             .IsRequired()
             .HasMaxLength(20);
 
@@ -453,7 +473,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
             .HasMaxLength(50);
 
         builder.Entity<SalaryPayment>()
-            .Property(sp => sp.CurrencyType)
+            .Property(sp => sp.Currency)
             .IsRequired()
             .HasMaxLength(50);
 
@@ -479,7 +499,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
             .HasMaxLength(50);
 
         builder.Entity<MembershipPayment>()
-            .Property(mp => mp.CurrencyType)
+            .Property(mp => mp.Currency)
             .IsRequired()
             .HasMaxLength(50);
 
