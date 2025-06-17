@@ -8,93 +8,93 @@ using FitManager_Web_Services.Shared.Infrastructure.Persistence.EFC.Configuratio
 namespace FitManager_Web_Services.Inventory.Infrastructure.Repositories
 {
     /// <summary>
-    /// Implements the <see cref="IItemBookingRepository"/> interface, providing concrete data access operations for <see cref="ItemBooking"/> aggregates.
+    /// Implements the <see cref="IItemRepository"/> interface, providing concrete data access operations for <see cref="Item"/> aggregates.
     /// This repository interacts with the database using Entity Framework Core and resides in the Infrastructure layer,
     /// encapsulating data persistence details.
     /// </summary>
-    public class ItemBookingRepository : IItemBookingRepository
+    public class ItemRepository : IItemRepository
     {
         private readonly AppDbContext _context;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ItemBookingRepository"/> class.
+        /// Initializes a new instance of the <see cref="ItemRepository"/> class.
         /// </summary>
         /// <param name="context">The application's database context.</param>
-        public ItemBookingRepository(AppDbContext context)
+        public ItemRepository(AppDbContext context)
         {
             _context = context;
         }
 
         /// <summary>
-        /// Asynchronously retrieves all item bookings from the database.
+        /// Asynchronously retrieves all items from the database.
         /// </summary>
         /// <remarks>
         /// This method eagerly loads the associated <see cref="Item"/> and <see cref="Employee"/>
-        /// entities to ensure complete booking details are available.
+        /// entities to ensure complete item details are available.
         /// </remarks>
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous operation.
-        /// The task result contains an enumerable collection of <see cref="ItemBooking"/> objects.
+        /// The task result contains an enumerable collection of <see cref="Item"/> objects.
         /// </returns>
-        public async Task<IEnumerable<ItemBooking>> GetAllAsync()
+        public async Task<IEnumerable<Item>> GetAllAsync()
         {
-            return await _context.ItemBookings
-                .Include(ib => ib.Item)
-                //.Include(ib => ib.Employee)
+            return await _context.Items
+                .Include(it => it.ItemType)
+                //.Include(i => i.Employee)
                 .ToListAsync();
         }
 
         /// <summary>
-        /// Asynchronously retrieves an <see cref="ItemBooking"/> by its unique identifier.
+        /// Asynchronously retrieves an <see cref="Item"/> by its unique identifier.
         /// </summary>
         /// <remarks>
         /// Includes the related <see cref="Item"/> and <see cref="Employee"/> data.
         /// </remarks>
-        /// <param name="id">The unique identifier of the booking.</param>
+        /// <param name="id">The unique identifier of the item.</param>
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous operation.
-        /// The task result contains the <see cref="ItemBooking"/> if found; otherwise, null.
+        /// The task result contains the <see cref="Item"/> if found; otherwise, null.
         /// </returns>
-        public async Task<ItemBooking?> GetByIdAsync(int id)
+        public async Task<Item?> GetByIdAsync(int id)
         {
-            return await _context.ItemBookings
-                .Include(ib => ib.Item)
-                //.Include(ib => ib.Employee)
-                .FirstOrDefaultAsync(ib => ib.Id == id);
+            return await _context.Items
+                .Include(it => it.ItemType)
+                //.Include(i => i.Employee)
+                .FirstOrDefaultAsync(i => i.Id == id);
         }
 
         /// <summary>
-        /// Asynchronously adds a new item booking to the database.
+        /// Asynchronously adds a new item to the database.
         /// </summary>
-        /// <param name="booking">The <see cref="ItemBooking"/> to add.</param>
+        /// <param name="item">The <see cref="Item"/> to add.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public async Task AddAsync(ItemBooking booking)
+        public async Task AddAsync(Item item)
         {
-            await _context.ItemBookings.AddAsync(booking);
+            await _context.Items.AddAsync(item);
         }
 
         /// <summary>
-        /// Updates an existing item booking in the database.
+        /// Updates an existing item in the database.
         /// </summary>
-        /// <param name="booking">The <see cref="ItemBooking"/> to update.</param>
+        /// <param name="item">The <see cref="Item"/> to update.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public Task UpdateAsync(ItemBooking booking)
+        public Task UpdateAsync(Item item)
         {
-            _context.ItemBookings.Update(booking);
+            _context.Items.Update(item);
             return Task.CompletedTask;
         }
 
         /// <summary>
-        /// Asynchronously deletes an item booking by its unique identifier.
+        /// Asynchronously deletes an item by its unique identifier.
         /// </summary>
-        /// <param name="id">The ID of the booking to delete.</param>
+        /// <param name="id">The ID of the item to delete.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public async Task DeleteAsync(int id)
         {
-            var booking = await GetByIdAsync(id);
-            if (booking != null)
+            var item = await GetByIdAsync(id);
+            if (item != null)
             {
-                _context.ItemBookings.Remove(booking);
+                _context.Items.Remove(item);
             }
         }
     }
