@@ -10,6 +10,11 @@ using FitManager_Web_Services.Members.Infrastructure.Repositories;
 using FitManager_Web_Services.Shared.Domain.Repositories;
 using FitManager_Web_Services.Shared.Infrastructure.Persistence.EFC.Configuration;
 using FitManager_Web_Services.Shared.Infrastructure.Persistence.EFC.Repositories;
+using FitManager_Web_Services.Employees.Application.Internal.CommandServices;
+using FitManager_Web_Services.Employees.Application.Internal.QueryServices;
+using FitManager_Web_Services.Employees.Domain.Repositories;
+using FitManager_Web_Services.Employees.Domain.Services;
+using FitManager_Web_Services.Employees.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -25,6 +30,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL(connectionString));
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<ICertificationRepository, CertificationRepository>();
+builder.Services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
+
+builder.Services.AddScoped<EmployeeCommandService>();
+builder.Services.AddScoped<EmployeeQueryService>();
+
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 builder.Services.AddScoped<IMemberService, MemberService>();
 
