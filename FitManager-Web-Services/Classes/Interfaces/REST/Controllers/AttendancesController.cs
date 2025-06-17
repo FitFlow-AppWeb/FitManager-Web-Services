@@ -5,6 +5,7 @@ using FitManager_Web_Services.Classes.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace FitManager_Web_Services.Classes.Interfaces.REST.Controllers;
 
@@ -20,6 +21,10 @@ public class AttendancesController : ControllerBase
     }
 
     [HttpPost]
+    [SwaggerOperation(
+        Summary = "Registrar Asistencia",
+        Description = "Registra la asistencia de un miembro a una clase específica."
+    )]
     public async Task<IActionResult> RegisterAttendance([FromBody] CreateAttendanceResource resource)
     {
         var result = await _attendanceService.RegisterAttendanceAsync(
@@ -29,42 +34,19 @@ public class AttendancesController : ControllerBase
             resource.ClassId);
         
         var attendanceResource = AttendanceResourceFromEntityAssembler.ToResource(result);
-        return CreatedAtAction(nameof(GetAttendanceById), new { id = attendanceResource.Id }, attendanceResource);
+        return Ok(attendanceResource);
     }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetAttendanceById(int id)
-    {
-        var result = await _attendanceService.GetAttendanceByIdAsync(id);
-        if (result == null) return NotFound();
-        var resource = AttendanceResourceFromEntityAssembler.ToResource(result);
-        return Ok(resource);
-    }
-
+    
     [HttpGet("class/{classId}")]
+    [SwaggerOperation(
+        Summary = "Listar Asistencias por Clase",
+        Description = "Obtiene una lista de todas las asistencias registradas para una clase específica."
+    )]
     public async Task<IActionResult> GetAttendancesByClass(int classId)
     {
         var results = await _attendanceService.GetAttendancesByClassAsync(classId);
         var resources = results.Select(AttendanceResourceFromEntityAssembler.ToResource);
         return Ok(resources);
     }
-
-    [HttpGet("member/{memberId}")]
-    public async Task<IActionResult> GetAttendancesByMember(int memberId)
-    {
-        var results = await _attendanceService.GetAttendancesByMemberAsync(memberId);
-        var resources = results.Select(AttendanceResourceFromEntityAssembler.ToResource);
-        return Ok(resources);
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateAttendance(int id, [FromBody] UpdateAttendanceResource resource)
-    {
-        await _attendanceService.UpdateAttendanceAsync(
-            id,
-            resource.EntryTime,
-            resource.ExitTime);
-        
-        return NoContent();
-    }
+    
 }

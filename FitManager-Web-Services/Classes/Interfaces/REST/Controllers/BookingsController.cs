@@ -5,6 +5,7 @@ using FitManager_Web_Services.Classes.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace FitManager_Web_Services.Classes.Interfaces.REST.Controllers;
 
@@ -20,6 +21,10 @@ public class BookingsController : ControllerBase
     }
 
     [HttpPost]
+    [SwaggerOperation(
+        Summary = "Crear una nueva Reserva",
+        Description = "Crea una nueva reserva para un miembro en una clase específica."
+    )]
     public async Task<IActionResult> CreateBooking([FromBody] CreateBookingResource resource)
     {
         var result = await _bookingService.CreateBookingAsync(
@@ -32,6 +37,10 @@ public class BookingsController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [SwaggerOperation(
+        Summary = "Obtener una Reserva por ID",
+        Description = "Obtiene los detalles de una reserva específica por su ID."
+    )]
     public async Task<IActionResult> GetBookingById(int id)
     {
         var result = await _bookingService.GetBookingByIdAsync(id);
@@ -40,15 +49,11 @@ public class BookingsController : ControllerBase
         return Ok(resource);
     }
 
-    [HttpGet("member/{memberId}")]
-    public async Task<IActionResult> GetBookingsByMember(int memberId)
-    {
-        var results = await _bookingService.GetBookingsByMemberAsync(memberId);
-        var resources = results.Select(BookingResourceFromEntityAssembler.ToResource);
-        return Ok(resources);
-    }
-
     [HttpGet("class/{classId}")]
+    [SwaggerOperation(
+        Summary = "Listar Reservas por Clase",
+        Description = "Obtiene una lista de todas las reservas realizadas para una clase específica."
+    )]
     public async Task<IActionResult> GetBookingsByClass(int classId)
     {
         var results = await _bookingService.GetBookingsByClassAsync(classId);
@@ -57,6 +62,10 @@ public class BookingsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [SwaggerOperation(
+        Summary = "Cancelar una Reserva",
+        Description = "Cancela una reserva existente por su ID."
+    )]
     public async Task<IActionResult> CancelBooking(int id)
     {
         await _bookingService.CancelBookingAsync(id);

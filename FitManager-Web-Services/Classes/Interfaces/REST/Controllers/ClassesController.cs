@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FitManager_Web_Services.Members.Interfaces.REST.Transform;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace FitManager_Web_Services.Classes.Interfaces.REST.Controllers;
 
@@ -22,6 +23,10 @@ public class ClassesController : ControllerBase
     }
 
     [HttpPost]
+    [SwaggerOperation(
+        Summary = "Crear una nueva Clase",
+        Description = "Crea una nueva clase con los detalles proporcionados."
+    )]
     public async Task<IActionResult> CreateClass([FromBody] CreateClassResource resource)
     {
         var command = CreateClassCommandFromResourceAssembler.ToCommand(resource);
@@ -36,19 +41,14 @@ public class ClassesController : ControllerBase
             command.EmployeeId);
         
         var classResource = ClassResourceFromEntityAssembler.ToResource(result);
-        return CreatedAtAction(nameof(GetClassById), new { id = classResource.Id }, classResource);
+        return  Ok(classResource);
     }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetClassById(int id)
-    {
-        var result = await _classService.GetClassByIdAsync(id);
-        if (result == null) return NotFound();
-        var resource = ClassResourceFromEntityAssembler.ToResource(result);
-        return Ok(resource);
-    }
-
+    
     [HttpGet]
+    [SwaggerOperation(
+        Summary = "Listar todas las Clases",
+        Description = "Obtiene una lista de todas las clases disponibles."
+    )]
     public async Task<IActionResult> GetAllClasses()
     {
         var results = await _classService.GetAllClassesAsync();
@@ -56,15 +56,12 @@ public class ClassesController : ControllerBase
         return Ok(resources);
     }
 
-    [HttpGet("type/{type}")]
-    public async Task<IActionResult> GetClassesByType(string type)
-    {
-        var results = await _classService.GetClassesByTypeAsync(type);
-        var resources = results.Select(ClassResourceFromEntityAssembler.ToResource);
-        return Ok(resources);
-    }
-
     [HttpPut("{id}")]
+    [SwaggerOperation(
+        Summary = "Actualizar una Clase",
+        Description = "Actualiza los detalles de una clase existente."
+    )]
+    
     public async Task<IActionResult> UpdateClass(int id, [FromBody] UpdateClassResource resource)
     {
         await _classService.UpdateClassAsync(
@@ -82,20 +79,14 @@ public class ClassesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [SwaggerOperation(
+        Summary = "Eliminar una Clase",
+        Description = "Elimina una clase existente por su ID."
+    )]
     public async Task<IActionResult> DeleteClass(int id)
     {
         await _classService.DeleteClassAsync(id);
         return NoContent();
     }
-
-    [HttpGet("{id}/members")]
-    public async Task<IActionResult> GetClassMembers(int id)
-    {
-        var classMembers = await _classService.GetClassMembersAsync(id);
-        var memberResources = classMembers
-            .Select(cm => MemberResourceFromEntityAssembler.ToResourceFromEntity(cm.Member))
-            .ToList();
     
-        return Ok(memberResources);
-    }
 }
