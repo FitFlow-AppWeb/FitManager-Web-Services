@@ -5,6 +5,6 @@ public record AttendanceWithMemberResource(
     DateTime EntryTime,
     DateTime ExitTime,
     int MemberId,
-    string MemberName,  // Nombre del miembro
+    string MemberName,
     int ClassId,
-    string ClassName);  // Nombre de la clase
+    string ClassName);

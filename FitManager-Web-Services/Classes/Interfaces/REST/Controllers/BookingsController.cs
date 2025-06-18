@@ -20,22 +20,6 @@ public class BookingsController : ControllerBase
         _bookingService = bookingService;
     }
 
-    [HttpPost]
-    [SwaggerOperation(
-        Summary = "Crear una nueva Reserva",
-        Description = "Crea una nueva reserva para un miembro en una clase específica."
-    )]
-    public async Task<IActionResult> CreateBooking([FromBody] CreateBookingResource resource)
-    {
-        var result = await _bookingService.CreateBookingAsync(
-            resource.MemberId,
-            resource.ClassId,
-            resource.Date);
-        
-        var bookingResource = BookingResourceFromEntityAssembler.ToResource(result);
-        return Ok(bookingResource);
-    }
-
     [HttpGet("class/{classId}")]
     [SwaggerOperation(
         Summary = "Listar Reservas por Clase",
@@ -47,15 +31,5 @@ public class BookingsController : ControllerBase
         var resources = results.Select(BookingResourceFromEntityAssembler.ToResource);
         return Ok(resources);
     }
-
-    [HttpDelete("{id}")]
-    [SwaggerOperation(
-        Summary = "Cancelar una Reserva",
-        Description = "Cancela una reserva existente por su ID."
-    )]
-    public async Task<IActionResult> CancelBooking(int id)
-    {
-        await _bookingService.CancelBookingAsync(id);
-        return NoContent();
-    }
+    
 }

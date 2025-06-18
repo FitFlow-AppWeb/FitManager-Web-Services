@@ -46,8 +46,7 @@ public class ClassCommandService : IClassService
         
         await _classRepository.DeleteAsync(existingClass);
     }
-
-    // Métodos de consulta implementados
+    
     public async Task<IEnumerable<Class>> GetAllClassesAsync()
     {
         return await _classRepository.ListAsync();

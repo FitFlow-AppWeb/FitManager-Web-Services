@@ -13,7 +13,7 @@ public interface IClassRepository
     Task UpdateAsync(Class fitnessClass);
     Task DeleteAsync(Class fitnessClass);
     
-    // Relaciones
+
     Task<IEnumerable<ClassMember>> GetMembersByClassIdAsync(int classId);
     Task<IEnumerable<Booking>> GetBookingsByClassIdAsync(int classId);
 }
