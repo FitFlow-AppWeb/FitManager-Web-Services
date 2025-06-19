@@ -24,8 +24,8 @@ public class ClassesController : ControllerBase
 
     [HttpPost]
     [SwaggerOperation(
-        Summary = "Crear una nueva Clase",
-        Description = "Crea una nueva clase con los detalles proporcionados."
+        Summary = "Create a New Class",
+        Description = "Creates a new class with the provided details."
     )]
     public async Task<IActionResult> CreateClass([FromBody] CreateClassResource resource)
     {
@@ -46,8 +46,8 @@ public class ClassesController : ControllerBase
     
     [HttpGet]
     [SwaggerOperation(
-        Summary = "Listar todas las Clases",
-        Description = "Obtiene una lista de todas las clases disponibles."
+        Summary = "List All Classes",
+        Description = "Retrieves a list of all available classes."
     )]
     public async Task<IActionResult> GetAllClasses()
     {
@@ -58,8 +58,8 @@ public class ClassesController : ControllerBase
 
     [HttpPut("{id}")]
     [SwaggerOperation(
-        Summary = "Actualizar una Clase",
-        Description = "Actualiza los detalles de una clase existente."
+        Summary = "Update a Class",
+        Description = "Updates the details of an existing class."
     )]
     
     public async Task<IActionResult> UpdateClass(int id, [FromBody] UpdateClassResource resource)
@@ -80,8 +80,8 @@ public class ClassesController : ControllerBase
 
     [HttpDelete("{id}")]
     [SwaggerOperation(
-        Summary = "Eliminar una Clase",
-        Description = "Elimina una clase existente por su ID."
+        Summary = "Delete a Class",
+        Description = "Deletes an existing class by its ID."
     )]
     public async Task<IActionResult> DeleteClass(int id)
     {

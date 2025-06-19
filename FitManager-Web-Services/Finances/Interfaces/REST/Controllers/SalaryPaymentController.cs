@@ -22,8 +22,8 @@ public class SalaryPaymentController : ControllerBase
 
     [HttpPost]
     [SwaggerOperation(
-        Summary = "Registrar un pago de salario",
-        Description = "Registra un nuevo pago de salario a un empleado"
+        Summary = "Register Salary Payment",
+        Description = "Registers a new salary payment to an employee."
     )]
     public async Task<IActionResult> Create([FromBody] CreateSalaryPaymentResource resource)
     {
@@ -52,8 +52,8 @@ public class SalaryPaymentController : ControllerBase
     
     [HttpGet]
     [SwaggerOperation(
-        Summary = "Listar pagos de salario",
-        Description = "Obtiene todos los pagos realizados a empleados"
+        Summary = "List Salary Payments",
+        Description = "Retrieves all payments made to employees."
     )]
     public async Task<ActionResult<IEnumerable<SalaryPaymentResource>>> GetAll()
     {

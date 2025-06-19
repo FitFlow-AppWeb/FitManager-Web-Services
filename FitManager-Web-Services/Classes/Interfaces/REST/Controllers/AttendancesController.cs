@@ -22,8 +22,8 @@ public class AttendancesController : ControllerBase
 
     [HttpPost]
     [SwaggerOperation(
-        Summary = "Registrar Asistencia",
-        Description = "Registra la asistencia de un miembro a una clase específica."
+        Summary = "Register Attendance",
+        Description = "Registers a member's attendance for a specific class."
     )]
     public async Task<IActionResult> RegisterAttendance([FromBody] CreateAttendanceResource resource)
     {
@@ -39,8 +39,8 @@ public class AttendancesController : ControllerBase
     
     [HttpGet("class/{classId}")]
     [SwaggerOperation(
-        Summary = "Listar Asistencias por Clase",
-        Description = "Obtiene una lista de todas las asistencias registradas para una clase específica."
+        Summary = "List Attendances by Class",
+        Description = "Retrieves a list of all attendances registered for a specific class."
     )]
     public async Task<IActionResult> GetAttendancesByClass(int classId)
     {

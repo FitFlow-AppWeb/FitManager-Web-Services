@@ -22,8 +22,8 @@ public class BookingsController : ControllerBase
 
     [HttpGet("class/{classId}")]
     [SwaggerOperation(
-        Summary = "Listar Reservas por Clase",
-        Description = "Obtiene una lista de todas las reservas realizadas para una clase específica."
+        Summary = "List Attendances by Class",
+        Description = "Retrieves a list of all attendances registered for a specific class."
     )]
     public async Task<IActionResult> GetBookingsByClass(int classId)
     {

@@ -24,8 +24,8 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
 
         [HttpPost]
         [SwaggerOperation(
-            Summary = "Añadir Empleado",
-            Description = "Crea un nuevo empleado en el sistema."
+            Summary = "Add Employee",
+            Description = "Creates a new employee in the system."
         )]
         public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeResource resource)
         {
@@ -48,8 +48,8 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
 
         [HttpGet]
         [SwaggerOperation(
-            Summary = "Listar todos los Empleados",
-            Description = "Obtiene una lista de todos los empleados registrados en el sistema."
+            Summary = "List All Employees",
+            Description = "Retrieves a list of all employees registered in the system."
         )]
         public async Task<ActionResult<IEnumerable<EmployeeResource>>> GetAllEmployees()
         {
@@ -61,8 +61,8 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
 
         [HttpPut("{id}")]
         [SwaggerOperation(
-            Summary = "Actualizar Empleado",
-            Description = "Actualiza los datos de un empleado existente."
+            Summary = "Update Employee",
+            Description = "Updates the data of an existing employee."
         )]
         public async Task<IActionResult> UpdateEmployee(int id, [FromBody] UpdateEmployeeResource resource) 
         {
@@ -85,8 +85,8 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
 
         [HttpDelete("{id}")]
         [SwaggerOperation(
-            Summary = "Eliminar Empleado",
-            Description = "Elimina un empleado existente del sistema por su ID."
+            Summary = "Delete Employee",
+            Description = "Deletes an existing employee from the system by their ID."
         )]
         public async Task<IActionResult> DeleteEmployee(int id)
         {

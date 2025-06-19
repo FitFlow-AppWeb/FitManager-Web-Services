@@ -5,6 +5,8 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>FitManager_Web_Services</RootNamespace>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);1591</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
@@ -22,11 +24,6 @@
 
         <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.4" />
         <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="8.1.4" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="Shared\Infrastructure\Interfaces\ASP\Configuration\Extensions\" />
-        <Folder Include="Shared\Infrastructure\Persistence\EFC\Configuration\Extensions\" />
     </ItemGroup>
 
 </Project>

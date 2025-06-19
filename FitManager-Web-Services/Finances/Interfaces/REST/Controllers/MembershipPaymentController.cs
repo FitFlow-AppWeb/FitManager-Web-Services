@@ -25,8 +25,8 @@ public class MembershipPaymentController : ControllerBase
 
     [HttpPost]
     [SwaggerOperation(
-        Summary = "Registrar un pago de membresia",
-        Description = "Registrar un nuevo pago realizado por un miembro"
+        Summary = "Register Membership Payment",
+        Description = "Registers a new payment made by a member."
     )]
     public async Task<IActionResult> Create([FromBody] CreateMembershipPaymentResource resource)
     {
@@ -52,8 +52,8 @@ public class MembershipPaymentController : ControllerBase
     
     [HttpGet]
     [SwaggerOperation(
-        Summary = "Listar pagos de membresía",
-        Description = "Obtiene todos los pagos de membresía registrados."
+        Summary = "List Membership Payments",
+        Description = "Retrieves all registered membership payments."
     )]
     public async Task<ActionResult<IEnumerable<MembershipPaymentResource>>> GetAll()
     {

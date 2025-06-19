@@ -22,8 +22,8 @@ public class PurchaseDetailController : ControllerBase
 
     [HttpGet]
     [SwaggerOperation(
-        Summary = "Listar detalles de compras",
-        Description = "Obtiene todos los detalles de compras de insumos"
+        Summary = "List Purchase Details",
+        Description = "Retrieves all supply purchase details."
     )]
     public async Task<ActionResult<IEnumerable<PurchaseDetailResource>>> GetAll()
     {
@@ -35,8 +35,8 @@ public class PurchaseDetailController : ControllerBase
     
     [HttpGet("by-purchase/{purchaseId}")]
     [SwaggerOperation(
-        Summary = "Listar detalles por ID de compra",
-        Description = "Obtiene todos los detalles de una compra específica"
+        Summary = "List Details by Purchase ID",
+        Description = "Retrieves all details for a specific purchase."
     )]
     public async Task<ActionResult<IEnumerable<PurchaseDetailResource>>> GetByPurchaseId(int purchaseId)
     {
@@ -47,8 +47,8 @@ public class PurchaseDetailController : ControllerBase
     
     [HttpPost]
     [SwaggerOperation(
-        Summary = "Registrar un detalle de compra",
-        Description = "Registra un nuevo detalle dentro de una compra de insumos"
+        Summary = "Register Purchase Detail",
+        Description = "Registers a new detail within a supply purchase."
     )]
     public async Task<IActionResult> Create([FromBody] CreatePurchaseDetailResource resource)
     {

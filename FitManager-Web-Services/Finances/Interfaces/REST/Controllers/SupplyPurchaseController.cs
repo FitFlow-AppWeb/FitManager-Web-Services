@@ -22,8 +22,8 @@ public class SupplyPurchaseController : ControllerBase
 
     [HttpPost]
     [SwaggerOperation(
-        Summary = "Registrar una compra de insumos",
-        Description = "Registra una nueva compra realizada por el gimnasio"
+        Summary = "Register Supply Purchase",
+        Description = "Registers a new purchase made by the gym."
     )]
     public async Task<IActionResult> Create([FromBody] CreateSupplyPurchaseResource resource)
     {
@@ -44,8 +44,8 @@ public class SupplyPurchaseController : ControllerBase
     
     [HttpGet]
     [SwaggerOperation(
-        Summary = "Listar compras de insumos",
-        Description = "Obtiene todas las compras de insumos registradas en el sistema."
+        Summary = "List Supply Purchases",
+        Description = "Retrieves all supply purchases registered in the system."
     )]
     public async Task<ActionResult<IEnumerable<SupplyPurchaseResource>>> GetAll()
     {

@@ -1,3 +1,8 @@
+using FitManager_Web_Services.Classes.Application.Internal.CommandServices;
+using FitManager_Web_Services.Classes.Application.Internal.QueryServices;
+using FitManager_Web_Services.Classes.Domain.Repositories;
+using FitManager_Web_Services.Classes.Domain.Services;
+using FitManager_Web_Services.Classes.Infrastructure.Repositories;
 using FitManager_Web_Services.Finances.Application.Internal.CommandServices;
 using FitManager_Web_Services.Finances.Application.Internal.QueryServices;
 using FitManager_Web_Services.Finances.Domain.Repositories;
@@ -13,18 +18,15 @@ using FitManager_Web_Services.Shared.Infrastructure.Persistence.EFC.Repositories
 using FitManager_Web_Services.Employees.Application.Internal.CommandServices;
 using FitManager_Web_Services.Employees.Application.Internal.QueryServices;
 using FitManager_Web_Services.Employees.Domain.Repositories;
-using FitManager_Web_Services.Employees.Domain.Services;
 using FitManager_Web_Services.Employees.Infrastructure.Repositories;
 using FitManager_Web_Services.Inventory.Application.Internal.CommandServices;
 using FitManager_Web_Services.Inventory.Application.Internal.QueryServices;
 using FitManager_Web_Services.Inventory.Domain.Repositories;
-using FitManager_Web_Services.Inventory.Domain.Services;
 using FitManager_Web_Services.Inventory.Infrastructure.Repositories;
-using FitManager_Web_Services.Classes.Application.Internal.CommandServices;
-using FitManager_Web_Services.Classes.Application.Internal.QueryServices;
-using FitManager_Web_Services.Classes.Domain.Repositories;
-using FitManager_Web_Services.Classes.Domain.Services;
-using FitManager_Web_Services.Classes.Infrastructure.Repositories;
+using FitManager_Web_Services.Notifications.Application.Internal.CommandServices;
+using FitManager_Web_Services.Notifications.Application.Internal.QueryServices;
+using FitManager_Web_Services.Notifications.Domain.Repositories;
+using FitManager_Web_Services.Notifications.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -40,7 +42,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL(connectionString));
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddControllers(); 
 
+// =====================================================================
+// Employee Bounded Context Registrations
+// =====================================================================
 // Inventory
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<IItemBookingRepository, ItemBookingRepository>();
@@ -54,15 +60,18 @@ builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<ICertificationRepository, CertificationRepository>();
 builder.Services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
 
-builder.Services.AddScoped<EmployeeCommandService>();
-builder.Services.AddScoped<EmployeeQueryService>();
+builder.Services.AddScoped<EmployeeCommandService>(); 
+builder.Services.AddScoped<EmployeeQueryService>();   
 
+// =====================================================================
+// Member Bounded Context Registrations
+// =====================================================================
 // Members
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
-builder.Services.AddScoped<IMemberService, MemberService>();
+builder.Services.AddScoped<IMemberService, MemberService>(); // This looks like a domain service, not app service. Make sure it's used correctly.
 
-builder.Services.AddScoped<MemberCommandService>();
-builder.Services.AddScoped<MemberQueryService>();
+builder.Services.AddScoped<MemberCommandService>(); 
+builder.Services.AddScoped<MemberQueryService>();   
 
 // Classes
 builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
@@ -80,6 +89,9 @@ builder.Services.AddScoped<ClassCommandService>();
 builder.Services.AddScoped<ClassQueryService>();
 
 // Finances
+// =====================================================================
+// Finances Bounded Context Registrations
+// =====================================================================
 builder.Services.AddScoped<IMembershipPaymentRepository, MembershipPaymentRepository>();
 builder.Services.AddScoped<ISupplyPurchaseRepository, SupplyPurchaseRepository>();
 builder.Services.AddScoped<IPurchaseDetailRepository, PurchaseDetailRepository>();
@@ -94,7 +106,25 @@ builder.Services.AddScoped<SalaryPaymentQueryService>();
     
 builder.Services.AddScoped<IMembershipTypeRepository, MembershipTypeRepository>();
 builder.Services.AddScoped<MembershipTypeQueryService>();
-builder.Services.AddControllers();
+
+// =====================================================================
+// >>>>>>>>>>>>>>>>> Notifications Bounded Context Registrations <<<<<<<<<<<<<<<<<
+// =====================================================================
+
+// Repositories
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<IMemberNotificationRepository, MemberNotificationRepository>();
+builder.Services.AddScoped<IEmployeeNotificationRepository, EmployeeNotificationRepository>();
+
+// Application Services (Command and Query Handlers)
+builder.Services.AddScoped<IMemberNotificationCommandService, MemberNotificationCommandService>();
+builder.Services.AddScoped<IMemberNotificationQueryService, MemberNotificationQueryService>();
+builder.Services.AddScoped<IEmployeeNotificationCommandService, EmployeeNotificationCommandService>();
+builder.Services.AddScoped<IEmployeeNotificationQueryService, EmployeeNotificationQueryService>();
+
+// =====================================================================
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -106,6 +136,9 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1",
         Description = "API for Gym Member Management"
     });
+    
+    var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(System.IO.Path.Combine(System.AppContext.BaseDirectory, xmlFilename));
 });
 
 var app = builder.Build();
