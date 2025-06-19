@@ -7,16 +7,12 @@ namespace FitManager_Web_Services.Inventory.Domain.Model.Commands
     /// <param name="NextMaintenanceDate">The scheduled date for the next maintenance.</param>
     /// <param name="Status">The current operational status of the item (e.g., "Operational", "Out of Service").</param>
     /// <param name="ItemTypeId">The ID representing the type/category of the item.</param>
-    /// <param name="EmployeeId">Optional ID of the employee responsible for this item.</param>
-    /// <param name="UpdatedItemTypeName">Optional new name for the item type.</param>
-    /// <param name="UpdatedItemTypeDescription">Optional new description for the item type.</param>
+    /// <param name="EmployeeId">The ID of the employee responsible for this item.</param>
     public record CreateItemCommand(
         DateTime LastMaintenanceDate,
         DateTime NextMaintenanceDate,
         string Status,
         int ItemTypeId,
-        int? EmployeeId = null,
-        string? UpdatedItemTypeName = null,
-        string? UpdatedItemTypeDescription = null
+        int EmployeeId
     );
 }

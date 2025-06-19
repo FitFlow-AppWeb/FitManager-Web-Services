@@ -88,7 +88,9 @@ builder.Services.AddScoped<ISalaryPaymentRepository, SalaryPaymentRepository>();
 builder.Services.AddScoped<MembershipPaymentCommandService>();
 builder.Services.AddScoped<MembershipPaymentQueryService>();
 builder.Services.AddScoped<SupplyPurchaseCommandService>();
+builder.Services.AddScoped<SupplyPurchaseQueryService>();
 builder.Services.AddScoped<PurchaseDetailQueryService>();
+builder.Services.AddScoped<PurchaseDetailCommandService>();
 builder.Services.AddScoped<SalaryPaymentCommandService>();
 builder.Services.AddScoped<SalaryPaymentQueryService>();
     
