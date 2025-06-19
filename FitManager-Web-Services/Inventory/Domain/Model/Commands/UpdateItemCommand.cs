@@ -18,7 +18,7 @@ namespace FitManager_Web_Services.Inventory.Domain.Model.Commands
         DateTime LastMaintenanceDate,
         DateTime NextMaintenanceDate,
         string Status,
-        int ItemTypeId
-        // int EmployeeId // TODO (Inventory): Awaiting Employee module support
+        int ItemTypeId,
+        int? EmployeeId = null
     );
 }

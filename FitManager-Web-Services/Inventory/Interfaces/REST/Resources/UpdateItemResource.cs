@@ -15,8 +15,8 @@ namespace FitManager_Web_Services.Inventory.Interfaces.REST.Resources
     public record UpdateItemResource(
         [Required] DateTime LastMaintenanceDate,
         [Required] DateTime NextMaintenanceDate,
-        [Required] string Status,
-        // [Required] int EmployeeId, // TODO (Inventory): Awaiting Employee module support
+        [Required] string Status, 
+        [Required] int EmployeeId,
         [Required] int ItemTypeId
     );
 }

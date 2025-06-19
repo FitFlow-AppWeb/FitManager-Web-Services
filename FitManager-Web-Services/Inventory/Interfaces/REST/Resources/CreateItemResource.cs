@@ -15,8 +15,7 @@ namespace FitManager_Web_Services.Inventory.Interfaces.REST.Resources
         [Required] DateTime LastMaintenanceDate,
         [Required] DateTime NextMaintenanceDate,
         [Required] string Status,
-
-        // TODO (Inventory): Add [Required] int EmployeeId when Employee module is integrated
+        [Required] int EmployeeId,
         [Required] int ItemTypeId
     );
 }

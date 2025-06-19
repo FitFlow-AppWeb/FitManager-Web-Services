@@ -38,8 +38,8 @@ namespace FitManager_Web_Services.Inventory.Application.Internal.CommandServices
                 command.LastMaintenanceDate,
                 command.NextMaintenanceDate,
                 command.Status,
-                command.ItemTypeId
-                // command.EmployeeId
+                command.ItemTypeId,
+                command.EmployeeId
             );
 
             await _itemRepository.AddAsync(item);
@@ -69,10 +69,10 @@ namespace FitManager_Web_Services.Inventory.Application.Internal.CommandServices
 
             existingItem.ChangeItemType(command.ItemTypeId);
 
-            /*if (command.EmployeeId.HasValue)
+            if (command.EmployeeId.HasValue)
             {
                 existingItem.AssignEmployee(command.EmployeeId.Value);
-            }*/
+            }
 
             await _itemRepository.UpdateAsync(existingItem);
             await _unitOfWork.CompleteAsync();

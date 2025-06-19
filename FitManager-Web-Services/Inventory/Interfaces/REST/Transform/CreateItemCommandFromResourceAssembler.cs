@@ -20,8 +20,8 @@ namespace FitManager_Web_Services.Inventory.Interfaces.REST.Transform
             return new CreateItemCommand(
                 resource.LastMaintenanceDate,
                 resource.NextMaintenanceDate,
-                resource.Status,
-                // resource.EmployeeId, // TODO (Inventory): Awaiting Employee module support
+                resource.Status, 
+                resource.EmployeeId,
                 resource.ItemTypeId
             );
         }

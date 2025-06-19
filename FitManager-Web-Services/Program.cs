@@ -15,6 +15,11 @@ using FitManager_Web_Services.Employees.Application.Internal.QueryServices;
 using FitManager_Web_Services.Employees.Domain.Repositories;
 using FitManager_Web_Services.Employees.Domain.Services;
 using FitManager_Web_Services.Employees.Infrastructure.Repositories;
+using FitManager_Web_Services.Inventory.Application.Internal.CommandServices;
+using FitManager_Web_Services.Inventory.Application.Internal.QueryServices;
+using FitManager_Web_Services.Inventory.Domain.Repositories;
+using FitManager_Web_Services.Inventory.Domain.Services;
+using FitManager_Web_Services.Inventory.Infrastructure.Repositories;
 using FitManager_Web_Services.Classes.Application.Internal.CommandServices;
 using FitManager_Web_Services.Classes.Application.Internal.QueryServices;
 using FitManager_Web_Services.Classes.Domain.Repositories;
@@ -36,6 +41,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+// Inventory
+builder.Services.AddScoped<IItemRepository, ItemRepository>();
+builder.Services.AddScoped<IItemBookingRepository, ItemBookingRepository>();
+builder.Services.AddScoped<IItemTypeRepository, ItemTypeRepository>();
+
+builder.Services.AddScoped<ItemCommandService>();
+builder.Services.AddScoped<ItemQueryService>();
 
 // Employees
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
@@ -79,7 +91,7 @@ builder.Services.AddScoped<SupplyPurchaseCommandService>();
 builder.Services.AddScoped<PurchaseDetailQueryService>();
 builder.Services.AddScoped<SalaryPaymentCommandService>();
 builder.Services.AddScoped<SalaryPaymentQueryService>();
-
+    
 builder.Services.AddScoped<IMembershipTypeRepository, MembershipTypeRepository>();
 builder.Services.AddScoped<MembershipTypeQueryService>();
 builder.Services.AddControllers();
