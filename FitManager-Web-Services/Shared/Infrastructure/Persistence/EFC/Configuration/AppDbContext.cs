@@ -510,7 +510,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         
         // Notifications Context
         
-        // notification
+        /// notification
         builder.Entity<Notification>().HasKey(n => n.Id);
 
         builder.Entity<Notification>().Property(n => n.Id)
@@ -533,9 +533,9 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
 
         builder.Entity<EmployeeNotification>()
             .HasOne(en => en.Notification)
-            .WithMany()
+            .WithMany(n => n.EmployeeNotifications) 
             .HasForeignKey(en => en.NotificationId);
-
+        
         builder.Entity<EmployeeNotification>()
             .HasOne(en => en.Employee)
             .WithMany()
@@ -546,9 +546,9 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
 
         builder.Entity<MemberNotification>()
             .HasOne(mn => mn.Notification)
-            .WithMany()
+            .WithMany(n => n.MemberNotifications) 
             .HasForeignKey(mn => mn.NotificationId);
-
+        
         builder.Entity<MemberNotification>()
             .HasOne(mn => mn.Member)
             .WithMany()
