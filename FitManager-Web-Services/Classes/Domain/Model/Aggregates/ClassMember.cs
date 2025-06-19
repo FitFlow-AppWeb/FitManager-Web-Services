@@ -6,8 +6,7 @@ namespace FitManager_Web_Services.Classes.Domain.Model.Aggregates
     {
         public int MemberId { get; set; }
         public int ClassId { get; set; }
-
-        // Propiedades de navegación
+        
         public Member Member { get; set; }
         public Class Class { get; set; }
 

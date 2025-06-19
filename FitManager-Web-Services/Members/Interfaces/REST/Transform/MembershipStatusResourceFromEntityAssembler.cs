@@ -32,8 +32,7 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Transform
                 entity.StartDate,
                 entity.EndDate,
                 entity.Status,
-                entity.MembershipTypeId,
-                membershipTypeResource 
+                entity.MembershipTypeId
             );
         }
     }

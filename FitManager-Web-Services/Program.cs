@@ -15,6 +15,11 @@ using FitManager_Web_Services.Employees.Application.Internal.QueryServices;
 using FitManager_Web_Services.Employees.Domain.Repositories;
 using FitManager_Web_Services.Employees.Domain.Services;
 using FitManager_Web_Services.Employees.Infrastructure.Repositories;
+using FitManager_Web_Services.Classes.Application.Internal.CommandServices;
+using FitManager_Web_Services.Classes.Application.Internal.QueryServices;
+using FitManager_Web_Services.Classes.Domain.Repositories;
+using FitManager_Web_Services.Classes.Domain.Services;
+using FitManager_Web_Services.Classes.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -31,6 +36,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+
+// Employees
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<ICertificationRepository, CertificationRepository>();
 builder.Services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
@@ -38,13 +45,29 @@ builder.Services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
 builder.Services.AddScoped<EmployeeCommandService>();
 builder.Services.AddScoped<EmployeeQueryService>();
 
+// Members
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 builder.Services.AddScoped<IMemberService, MemberService>();
 
 builder.Services.AddScoped<MemberCommandService>();
 builder.Services.AddScoped<MemberQueryService>();
 
-//Finances
+// Classes
+builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IClassMemberRepository, ClassMemberRepository>();
+builder.Services.AddScoped<IClassRepository, ClassRepository>();
+
+builder.Services.AddScoped<IAttendanceService, AttendanceService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<IClassService, ClassService>();
+
+builder.Services.AddScoped<AttendanceCommandService>();
+builder.Services.AddScoped<AttendanceQueryService>();
+builder.Services.AddScoped<ClassCommandService>();
+builder.Services.AddScoped<ClassQueryService>();
+
+// Finances
 builder.Services.AddScoped<IMembershipPaymentRepository, MembershipPaymentRepository>();
 builder.Services.AddScoped<ISupplyPurchaseRepository, SupplyPurchaseRepository>();
 builder.Services.AddScoped<IPurchaseDetailRepository, PurchaseDetailRepository>();
