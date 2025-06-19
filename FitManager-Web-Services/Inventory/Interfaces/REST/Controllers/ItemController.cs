@@ -1,19 +1,21 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+// Asegúrate de que los using son correctos para tu proyecto
 using FitManager_Web_Services.Inventory.Application.Internal.CommandServices;
 using FitManager_Web_Services.Inventory.Application.Internal.QueryServices;
 using FitManager_Web_Services.Inventory.Interfaces.REST.Resources;
 using FitManager_Web_Services.Inventory.Interfaces.REST.Transform;
-using FitManager_Web_Services.Inventory.Domain.Model.Commands;
-using FitManager_Web_Services.Inventory.Domain.Model.Queries;
+using FitManager_Web_Services.Inventory.Domain.Model.Commands; // Mantener si DeleteItemCommand se usa
+using FitManager_Web_Services.Inventory.Domain.Model.Queries;   // Mantener si GetAllItemsQuery se usa
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace FitManager_Web_Services.Inventory.Interfaces.REST.Controllers
 {
     /// <summary>
     /// REST API controller for managing items.
-    /// Exposes endpoints for creating, retrieving, updating, and deleting inventory items.
+    /// Exposes endpoints for retrieving, updating, and deleting inventory items.
+    /// Creation is now handled via SupplyPurchase.
     /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
@@ -26,28 +28,6 @@ namespace FitManager_Web_Services.Inventory.Interfaces.REST.Controllers
         {
             _itemCommandService = itemCommandService;
             _itemQueryService = itemQueryService;
-        }
-
-        /// <summary>
-        /// Creates a new item in the inventory.
-        /// </summary>
-        /// <param name="resource">The resource containing the data for the new item.</param>
-        /// <returns>Returns 201 Created with the item data, or 400 Bad Request.</returns>
-        [HttpPost]
-        [SwaggerOperation(Summary = "Crear Ítem", Description = "Crea un nuevo ítem en el sistema de inventario.")]
-        public async Task<IActionResult> CreateItem([FromBody] CreateItemResource resource)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var createCommand = CreateItemCommandFromResourceAssembler.ToCommandFromResource(resource);
-            var item = await _itemCommandService.Handle(createCommand);
-
-            if (item == null)
-                return BadRequest("No se pudo crear el ítem debido a un error interno.");
-
-            var itemResource = ItemResourceFromEntityAssembler.ToResourceFromEntity(item);
-            return StatusCode(201, itemResource); // 201 Created without CreatedAtAction
         }
 
         /// <summary>

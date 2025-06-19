@@ -1,5 +1,7 @@
 using FitManager_Web_Services.Finances.Domain.Model.Aggregates;
 using FitManager_Web_Services.Finances.Interfaces.REST.Resources;
+using System.Collections.Generic; 
+using System.Linq;
 
 namespace FitManager_Web_Services.Finances.Interfaces.REST.Transform;
 
@@ -13,7 +15,8 @@ public static class SupplyPurchaseToResourceAssembler
             entity.Amount,
             entity.Method,
             entity.Currency,
-            entity.VendorName
+            entity.VendorName,
+            PurchaseDetailToResourceAssembler.ToResourceListFromEntityList(entity.PurchaseDetails ?? new List<PurchaseDetail>()).ToList()
         );
     }
 

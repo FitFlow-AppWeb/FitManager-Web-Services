@@ -1,41 +1,45 @@
 using FitManager_Web_Services.Finances.Domain.Model.Aggregates;
 using FitManager_Web_Services.Finances.Domain.Repositories;
-using FitManager_Web_Services.Inventory.Domain.Repositories;
+using FitManager_Web_Services.Inventory.Domain.Repositories; // Puede que no necesites este aquí si solo es para ItemType
 using FitManager_Web_Services.Shared.Domain.Repositories;
+using System.Threading.Tasks; // Para Task
 
-namespace FitManager_Web_Services.Finances.Application.Internal.CommandServices;
-
-public class PurchaseDetailCommandService
+namespace FitManager_Web_Services.Finances.Application.Internal.CommandServices
 {
-    private readonly IPurchaseDetailRepository _purchaseDetailRepository;
-    private readonly ISupplyPurchaseRepository _supplyPurchaseRepository;
-    private readonly IItemTypeRepository _itemTypeRepository;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public PurchaseDetailCommandService(
-        IPurchaseDetailRepository purchaseDetailRepository,
-        ISupplyPurchaseRepository supplyPurchaseRepository,
-        IItemTypeRepository itemTypeRepository,
-        IUnitOfWork unitOfWork)
+    public class PurchaseDetailCommandService
     {
-        _purchaseDetailRepository = purchaseDetailRepository;
-        _supplyPurchaseRepository = supplyPurchaseRepository;
-        _itemTypeRepository = itemTypeRepository;
-        _unitOfWork = unitOfWork;
-    }
+        private readonly IPurchaseDetailRepository _purchaseDetailRepository;
+        private readonly ISupplyPurchaseRepository _supplyPurchaseRepository; // Usado para GetByIdAsync
+        private readonly IItemTypeRepository _itemTypeRepository; // Usado para GetByIdAsync
+        private readonly IUnitOfWork _unitOfWork;
 
-    public async Task<PurchaseDetail?> CreateAsync(int supplyPurchaseId, int itemTypeId, float unitPrice, int quantity)
-    {
-        var supplyPurchase = await _supplyPurchaseRepository.GetByIdAsync(supplyPurchaseId);
-        var itemType = await _itemTypeRepository.GetByIdAsync(itemTypeId);
+        public PurchaseDetailCommandService(
+            IPurchaseDetailRepository purchaseDetailRepository,
+            ISupplyPurchaseRepository supplyPurchaseRepository,
+            IItemTypeRepository itemTypeRepository,
+            IUnitOfWork unitOfWork)
+        {
+            _purchaseDetailRepository = purchaseDetailRepository;
+            _supplyPurchaseRepository = supplyPurchaseRepository;
+            _itemTypeRepository = itemTypeRepository;
+            _unitOfWork = unitOfWork;
+        }
 
-        if (supplyPurchase == null || itemType == null)
-            return null;
+        public async Task<PurchaseDetail?> CreateAsync(int supplyPurchaseId, int itemTypeId, float unitPrice, int quantity)
+        {
+            // Puedes quitar estas validaciones si el controlador ya las hace,
+            // o si prefieres que los servicios de comando sean robustos por sí mismos.
+            var supplyPurchase = await _supplyPurchaseRepository.GetByIdAsync(supplyPurchaseId);
+            var itemType = await _itemTypeRepository.GetByIdAsync(itemTypeId);
 
-        var detail = new PurchaseDetail(supplyPurchaseId, itemTypeId, unitPrice, quantity);
-        await _purchaseDetailRepository.AddAsync(detail);
-        await _unitOfWork.CompleteAsync();
+            if (supplyPurchase == null || itemType == null)
+                return null; // O lanzar una excepción específica
 
-        return detail;
+            var detail = new PurchaseDetail(supplyPurchaseId, itemTypeId, unitPrice, quantity);
+            await _purchaseDetailRepository.AddAsync(detail);
+            await _unitOfWork.CompleteAsync();
+
+            return detail;
+        }
     }
 }

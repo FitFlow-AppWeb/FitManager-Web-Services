@@ -362,15 +362,13 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
             .IsRequired()
             .HasMaxLength(50);
         
-        // TODO (Inventory): Awaiting Employee module support
-        
-        /*builder.Entity<Item>().Property(i => i.EmployeeId)
+        builder.Entity<Item>().Property(i => i.EmployeeId)
             .IsRequired();
 
         builder.Entity<Item>()
             .HasOne(i => i.Employee)
             .WithMany()
-            .HasForeignKey(i => i.EmployeeId);*/
+            .HasForeignKey(i => i.EmployeeId);
 
         builder.Entity<Item>().Property(i => i.ItemTypeId)
             .IsRequired();
