@@ -27,13 +27,11 @@ namespace FitManager_Web_Services.Finances.Application.Internal.CommandServices
 
         public async Task<PurchaseDetail?> CreateAsync(int supplyPurchaseId, int itemTypeId, float unitPrice, int quantity)
         {
-            // Puedes quitar estas validaciones si el controlador ya las hace,
-            // o si prefieres que los servicios de comando sean robustos por sí mismos.
             var supplyPurchase = await _supplyPurchaseRepository.GetByIdAsync(supplyPurchaseId);
             var itemType = await _itemTypeRepository.GetByIdAsync(itemTypeId);
 
             if (supplyPurchase == null || itemType == null)
-                return null; // O lanzar una excepción específica
+                return null;
 
             var detail = new PurchaseDetail(supplyPurchaseId, itemTypeId, unitPrice, quantity);
             await _purchaseDetailRepository.AddAsync(detail);

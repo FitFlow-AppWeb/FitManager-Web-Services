@@ -6,4 +6,5 @@ namespace FitManager_Web_Services.Finances.Domain.Repositories;
 public interface ISalaryPaymentRepository : IBaseRepository<SalaryPayment>
 {
     Task<IEnumerable<SalaryPayment>> GetByMonthYearAsync(int month, int year);
+    Task<IEnumerable<SalaryPayment>> GetByEmployeeIdAsync(int employeeId);
 }
