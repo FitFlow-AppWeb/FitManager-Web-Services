@@ -22,6 +22,7 @@ public class ClassRepository : IClassRepository
     {
         return await _context.Classes
             .Include(c => c.ClassMembers)
+                .ThenInclude(cm => cm.Member)
             .Include(c => c.Bookings)
             .Include(c => c.Attendances)
             .FirstOrDefaultAsync(c => c.Id == id);
@@ -31,6 +32,8 @@ public class ClassRepository : IClassRepository
     {
         return await _context.Classes
             .Include(c => c.Employee)
+            .Include(c => c.ClassMembers)
+                .ThenInclude(cm => cm.Member)
             .ToListAsync();
     }
 
@@ -39,6 +42,8 @@ public class ClassRepository : IClassRepository
         return await _context.Classes
             .Where(c => c.Type == type)
             .Include(c => c.Employee)
+            .Include(c => c.ClassMembers)
+                .ThenInclude(cm => cm.Member)
             .ToListAsync();
     }
 
