@@ -96,6 +96,7 @@ builder.Services.AddScoped<IMembershipPaymentRepository, MembershipPaymentReposi
 builder.Services.AddScoped<ISupplyPurchaseRepository, SupplyPurchaseRepository>();
 builder.Services.AddScoped<IPurchaseDetailRepository, PurchaseDetailRepository>();
 builder.Services.AddScoped<ISalaryPaymentRepository, SalaryPaymentRepository>();
+builder.Services.AddScoped<IMembershipTypeRepository, MembershipTypeRepository>();
 
 builder.Services.AddScoped<MembershipPaymentCommandService>();
 builder.Services.AddScoped<MembershipPaymentQueryService>();
@@ -105,8 +106,6 @@ builder.Services.AddScoped<PurchaseDetailQueryService>();
 builder.Services.AddScoped<PurchaseDetailCommandService>();
 builder.Services.AddScoped<SalaryPaymentCommandService>();
 builder.Services.AddScoped<SalaryPaymentQueryService>();
-    
-builder.Services.AddScoped<IMembershipTypeRepository, MembershipTypeRepository>();
 builder.Services.AddScoped<MembershipTypeQueryService>();
 
 // =====================================================================

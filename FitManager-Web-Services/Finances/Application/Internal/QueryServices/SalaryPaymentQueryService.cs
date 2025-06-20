@@ -16,4 +16,9 @@ public class SalaryPaymentQueryService
     {
         return await _repository.GetAllAsync();
     }
+    
+    public async Task<IEnumerable<SalaryPayment>> GetByEmployeeIdAsync(int employeeId)
+    {
+        return await _repository.GetByEmployeeIdAsync(employeeId);
+    }
 }

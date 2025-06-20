@@ -16,4 +16,10 @@ public class SalaryPaymentRepository : BaseRepository<SalaryPayment>, ISalaryPay
             .Where(p => p.Date.Month == month && p.Date.Year == year)
             .ToListAsync();
     }
+    public async Task<IEnumerable<SalaryPayment>> GetByEmployeeIdAsync(int employeeId)
+    {
+        return await _context.SalaryPayments
+            .Where(sp => sp.EmployeeId == employeeId)
+            .ToListAsync();
+    }
 }
