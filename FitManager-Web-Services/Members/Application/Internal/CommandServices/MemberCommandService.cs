@@ -5,7 +5,7 @@ using FitManager_Web_Services.Members.Domain.Model.Commands;
 using FitManager_Web_Services.Members.Domain.Repositories;
 using FitManager_Web_Services.Shared.Domain.Repositories;
 using System.Threading.Tasks;
-using System.Collections.Generic; // Asegúrate de tenerlo si usas IEnumerable en algún lugar
+using System.Collections.Generic;
 
 namespace FitManager_Web_Services.Members.Application.Internal.CommandServices
 {
