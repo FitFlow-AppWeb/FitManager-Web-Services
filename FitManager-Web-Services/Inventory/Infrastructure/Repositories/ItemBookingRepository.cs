@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using FitManager_Web_Services.Inventory.Domain.Model.Aggregates;
 using FitManager_Web_Services.Inventory.Domain.Repositories;

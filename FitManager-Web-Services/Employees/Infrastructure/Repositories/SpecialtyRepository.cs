@@ -1,6 +1,5 @@
 ﻿// Employees/Infrastructure/Repositories/SpecialtyRepository.cs
 
-
 using FitManager_Web_Services.Employees.Domain.Model.Aggregates;
 using FitManager_Web_Services.Employees.Domain.Repositories;
 using FitManager_Web_Services.Shared.Infrastructure.Persistence.EFC.Configuration;
