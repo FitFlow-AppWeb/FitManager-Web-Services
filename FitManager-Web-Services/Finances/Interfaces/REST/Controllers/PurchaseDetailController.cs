@@ -21,7 +21,7 @@ public class PurchaseDetailController : ControllerBase
     }
 
     [HttpGet]
-    [SwaggerOperation(Summary = "Listar detalles de compras", Description = "Obtiene todos los detalles de compras de insumos")]
+    [SwaggerOperation(Summary = "List Purchase Details", Description = "Retrieves all supply purchase details.")]
     public async Task<ActionResult<IEnumerable<PurchaseDetailResource>>> GetAll()
     {
         var entities = await _queryService.GetAllAsync();
@@ -30,7 +30,7 @@ public class PurchaseDetailController : ControllerBase
     }
 
     [HttpGet("by-purchase/{purchaseId}")]
-    [SwaggerOperation(Summary = "Listar detalles por ID de compra", Description = "Obtiene los detalles para una compra específica")]
+    [SwaggerOperation(Summary = "List Details by Purchase ID", Description = "Retrieves details for a specific purchase.")]
     public async Task<ActionResult<IEnumerable<PurchaseDetailResource>>> GetByPurchaseId(int purchaseId)
     {
         var entities = await _queryService.GetByPurchaseIdAsync(purchaseId);
@@ -39,7 +39,7 @@ public class PurchaseDetailController : ControllerBase
     }
 
     [HttpPost]
-    [SwaggerOperation(Summary = "Registrar un detalle de compra", Description = "Crea un nuevo detalle de compra asociado a una compra de insumos")]
+    [SwaggerOperation(Summary = "Register Purchase Detail", Description = "Creates a new purchase detail associated with a supply purchase.")]
     public async Task<IActionResult> Create([FromBody] CreatePurchaseDetailResource resource)
     {
         if (!ModelState.IsValid)
