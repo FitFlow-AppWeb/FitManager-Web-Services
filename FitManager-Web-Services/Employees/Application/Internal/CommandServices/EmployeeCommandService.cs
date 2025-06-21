@@ -27,16 +27,9 @@ namespace FitManager_Web_Services.Employees.Application.Internal.CommandServices
 
         public async Task<Employee?> Handle(CreateEmployeeCommand command)
         {
-            // Obtener certificaciones y especialidades por sus IDs
-            var certifications = await _certificationRepository.GetByIdsAsync(command.CertificationIds);
-            var specialties = await _specialtyRepository.GetByIdsAsync(command.SpecialtyIds);
+            
 
-            if (certifications == null || specialties == null)
-            {
-                return null; 
-            }
-
-            // Crear el nuevo Employee
+            
             var employee = new Employee(
                 command.FirstName,
                 command.LastName,
@@ -45,15 +38,11 @@ namespace FitManager_Web_Services.Employees.Application.Internal.CommandServices
                 command.PhoneNumber,
                 command.Address,
                 command.Email,
-                command.Password,  // Incluir la contraseña
-                command.Wage,      // Incluir el salario
-                command.Role,      // Incluir el rol
-                command.WorkHours  // Incluir las horas de trabajo
+                command.Password,  
+                command.Wage,      
+                command.Role,      
+                command.WorkHours  
             );
-
-            // Asignar certificaciones y especialidades
-            employee.AssignCertifications(certifications);
-            employee.AssignSpecialties(specialties);
 
             // Guardar el Employee en el repositorio
             await _employeeRepository.AddAsync(employee);
@@ -83,19 +72,7 @@ namespace FitManager_Web_Services.Employees.Application.Internal.CommandServices
                 command.WorkHours  // Incluir las horas de trabajo
             );
 
-            // Si hay cambios en las certificaciones y especialidades, actualizar
-            if (command.CertificationIds != null)
-            {
-                var certifications = await _certificationRepository.GetByIdsAsync(command.CertificationIds);
-                existingEmployee.AssignCertifications(certifications);
-            }
-
-            if (command.SpecialtyIds != null)
-            {
-                var specialties = await _specialtyRepository.GetByIdsAsync(command.SpecialtyIds);
-                existingEmployee.AssignSpecialties(specialties);
-            }
-
+            
             // Guardar los cambios
             await _employeeRepository.UpdateAsync(existingEmployee);
             await _unitOfWork.CompleteAsync();

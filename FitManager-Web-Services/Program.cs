@@ -61,7 +61,11 @@ builder.Services.AddScoped<ICertificationRepository, CertificationRepository>();
 builder.Services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
 
 builder.Services.AddScoped<EmployeeCommandService>(); 
-builder.Services.AddScoped<EmployeeQueryService>();   
+builder.Services.AddScoped<ICertificationCommandService, CertificationCommandService>();
+builder.Services.AddScoped<ISpecialtyCommandService, SpecialtyCommandService>();
+builder.Services.AddScoped<EmployeeQueryService>();  
+builder.Services.AddScoped<ICertificationQueryService, CertificationQueryService>();
+builder.Services.AddScoped<ISpecialtyQueryService, SpecialtyQueryService>();
 
 // =====================================================================
 // Member Bounded Context Registrations

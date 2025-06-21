@@ -11,8 +11,6 @@
         string Password,
         float Wage,
         string Role,
-        int WorkHours,
-        int[] CertificationIds,  // IDs de certificaciones asociadas al empleado
-        int[] SpecialtyIds  // IDs de especialidades asociadas al empleado
+        int WorkHours
     );
 }

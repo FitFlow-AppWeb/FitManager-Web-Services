@@ -1,8 +1,11 @@
-﻿namespace FitManager_Web_Services.Employees.Interfaces.REST.Resources
+﻿// Employees/Interfaces/REST/Resources/CertificationResource.cs
+
+namespace FitManager_Web_Services.Employees.Interfaces.REST.Resources
 {
     public record CertificationResource(
         int Id,
         string Name,
-        string Description
+        string Description,
+        int EmployeeId 
     );
 }

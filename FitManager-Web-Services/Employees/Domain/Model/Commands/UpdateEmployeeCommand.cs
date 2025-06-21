@@ -12,8 +12,6 @@
         string Password,
         float Wage,
         string Role,
-        int WorkHours,
-        int[] CertificationIds, // Nuevos IDs de certificación a actualizar
-        int[] SpecialtyIds // Nuevos IDs de especialidad a actualizar
+        int WorkHours
     );
 }
