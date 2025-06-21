@@ -1,7 +1,5 @@
 using FitManager_Web_Services.Inventory.Domain.Model.Aggregates;
 using FitManager_Web_Services.Inventory.Interfaces.REST.Resources;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace FitManager_Web_Services.Inventory.Interfaces.REST.Transform
 {

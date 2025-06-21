@@ -1,13 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-// Asegúrate de que los using son correctos para tu proyecto
 using FitManager_Web_Services.Inventory.Application.Internal.CommandServices;
 using FitManager_Web_Services.Inventory.Application.Internal.QueryServices;
 using FitManager_Web_Services.Inventory.Interfaces.REST.Resources;
 using FitManager_Web_Services.Inventory.Interfaces.REST.Transform;
-using FitManager_Web_Services.Inventory.Domain.Model.Commands; // Mantener si DeleteItemCommand se usa
-using FitManager_Web_Services.Inventory.Domain.Model.Queries;   // Mantener si GetAllItemsQuery se usa
+using FitManager_Web_Services.Inventory.Domain.Model.Commands;
+using FitManager_Web_Services.Inventory.Domain.Model.Queries;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace FitManager_Web_Services.Inventory.Interfaces.REST.Controllers

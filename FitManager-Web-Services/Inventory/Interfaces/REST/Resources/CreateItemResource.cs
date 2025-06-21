@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace FitManager_Web_Services.Inventory.Interfaces.REST.Resources

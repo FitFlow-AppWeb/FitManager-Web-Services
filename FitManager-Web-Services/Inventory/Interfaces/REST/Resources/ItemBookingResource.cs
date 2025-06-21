@@ -1,5 +1,3 @@
-using System;
-
 namespace FitManager_Web_Services.Inventory.Interfaces.REST.Resources
 {
     /// <summary>

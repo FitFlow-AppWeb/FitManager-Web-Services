@@ -1,4 +1,3 @@
-using System;
 using FitManager_Web_Services.Employees.Interfaces.REST.Resources;
 
 namespace FitManager_Web_Services.Inventory.Interfaces.REST.Resources
