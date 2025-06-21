@@ -4,10 +4,15 @@ using FitManager_Web_Services.Finances.Interfaces.REST.Resources;
 using FitManager_Web_Services.Finances.Interfaces.REST.Transform;
 using FitManager_Web_Services.Finances.Application.Internal.CommandServices;
 using FitManager_Web_Services.Finances.Application.Internal.QueryServices;
-// Asegúrate de tener FitManager_Web_Services.Finances.Interfaces.REST.Requests si usas CreateMembershipPaymentResource en FromBody
 
 namespace FitManager_Web_Services.Finances.Interfaces.REST.Controllers;
 
+/// <summary>
+/// API controller for managing membership payments.
+/// </summary>
+/// <remarks>
+/// Provides RESTful endpoints for registering new membership payments and retrieving existing ones.
+/// </remarks>
 [ApiController]
 [Route("api/v1/[controller]")]
 public class MembershipPaymentController : ControllerBase
@@ -15,6 +20,11 @@ public class MembershipPaymentController : ControllerBase
     private readonly MembershipPaymentCommandService _commandService;
     private readonly MembershipPaymentQueryService _queryService;
     
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MembershipPaymentController"/> class.
+    /// </summary>
+    /// <param name="commandService">The command service for membership payment operations.</param>
+    /// <param name="queryService">The query service for membership payment retrieval.</param>
     public MembershipPaymentController(
         MembershipPaymentCommandService commandService,
         MembershipPaymentQueryService queryService
@@ -24,11 +34,23 @@ public class MembershipPaymentController : ControllerBase
         _queryService = queryService;
     }
 
+    /// <summary>
+    /// Registers a new payment made by a member.
+    /// </summary>
+    /// <param name="resource">The resource containing details for the new membership payment.</param>
+    /// <returns>
+    /// An <see cref="IActionResult"/> representing the result of the registration operation.
+    /// Returns 201 Created with the created membership payment resource on success,
+    /// 400 BadRequest if validation fails, or 404 NotFound if the member is not found.
+    /// </returns>
     [HttpPost]
     [SwaggerOperation(
         Summary = "Register Membership Payment",
         Description = "Registers a new payment made by a member."
     )]
+    [SwaggerResponse(201, "The membership payment was registered successfully.", typeof(MembershipPaymentResource))]
+    [SwaggerResponse(400, "Invalid input data.")]
+    [SwaggerResponse(404, "Member not found.")]
     public async Task<IActionResult> Create([FromBody] CreateMembershipPaymentResource resource)
     {
         if (!ModelState.IsValid)
@@ -36,7 +58,8 @@ public class MembershipPaymentController : ControllerBase
             return BadRequest(ModelState);
         }
         
-        var entity = MembershipPaymentFromResourceAssembler.ToEntityFromResource(resource);
+        var entity = MembershipPaymentFromResourceAssembler.ToEntityFromResource(resource); 
+        
         var result = await _commandService.CreateAsync(
             entity.Date,
             entity.Amount,
@@ -46,40 +69,28 @@ public class MembershipPaymentController : ControllerBase
         );
 
         if (result == null)
-            return NotFound("Miembro no encontrado.");
-
-        // --- ¡MODIFICACIÓN CLAVE AQUÍ! ---
-        // 1. Mapea la entidad 'result' (MembershipPayment) a tu DTO simplificado.
+            return NotFound("Miembro no encontrado."); 
+        
         var createdPaymentResource = MembershipPaymentToResourceAssembler.ToResourceFromEntity(result);
-
-        // 2. Devuelve un 201 Created.
-        //    Puedes construir la URI de ubicación manualmente si es necesario,
-        //    o simplemente devolver un Created con el objeto y una URI vacía.
-        //    La ruta recomendada es devolver la URI del recurso recién creado.
+        
         var resourceUri = Url.Action(null, "MembershipPayment", new { id = createdPaymentResource.Id }, Request.Scheme);
         
-        // Opción A: Ideal - Devuelve 201 Created con URI de ubicación y el objeto
-        // Necesitarías que el nombre del controlador sin "Controller" sea "MembershipPayment"
-        // y que el método GET por ID, si existiera, se llamara GetById.
-        // Como no tienes GetById, creamos la URI manualmente o usamos una alternativa.
-        
-        // Opción B: Más simple si no tienes GetById y no necesitas una URI perfecta
-        // Esto devolverá un 201 OK con el objeto en el cuerpo, pero sin la cabecera Location.
-        // return StatusCode(201, createdPaymentResource); 
-        
-        // Opción C: Construyendo la URI si no hay GetById
-        // Esto es lo más cercano a CreatedAtAction sin tener GetById explícito.
-        // Asume que tu endpoint de GET para un solo item sería /api/v1/MembershipPayment/{id}
-        // y que el nombre de tu controlador es "MembershipPaymentController"
-        // (Url.Action infiere esto de los atributos [Route] del controlador).
         return Created(resourceUri ?? $"api/v1/membershippayment/{createdPaymentResource.Id}", createdPaymentResource);
     }
     
+    /// <summary>
+    /// Retrieves all registered membership payments.
+    /// </summary>
+    /// <returns>
+    /// An <see cref="ActionResult{T}"/> containing an enumerable of <see cref="MembershipPaymentResource"/> objects.
+    /// Returns 200 OK with the list of membership payments.
+    /// </returns>
     [HttpGet]
     [SwaggerOperation(
         Summary = "List Membership Payments",
         Description = "Retrieves all registered membership payments."
     )]
+    [SwaggerResponse(200, "A list of membership payments was retrieved successfully.", typeof(IEnumerable<MembershipPaymentResource>))]
     public async Task<ActionResult<IEnumerable<MembershipPaymentResource>>> GetAll()
     {
         var payments = await _queryService.GetAllAsync();
