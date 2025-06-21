@@ -23,8 +23,6 @@
     /// <param name="Wage">The updated wage (salary) of the employee.</param>
     /// <param name="Role">The updated role of the employee.</param>
     /// <param name="WorkHours">The updated standard work hours per week for the employee.</param>
-    /// <param name="CertificationIds">An array of unique identifiers for the certifications. This array represents the *new, complete* set of certifications for the employee, replacing any previous ones.</param>
-    /// <param name="SpecialtyIds">An array of unique identifiers for the specialties. This array represents the *new, complete* set of specialties for the employee, replacing any previous ones.</param>
     public record UpdateEmployeeCommand(
         int Id,
         string FirstName,
@@ -37,8 +35,6 @@
         string Password,
         float Wage,
         string Role,
-        int WorkHours,
-        int[] CertificationIds,
-        int[] SpecialtyIds
+        int WorkHours
     );
 }

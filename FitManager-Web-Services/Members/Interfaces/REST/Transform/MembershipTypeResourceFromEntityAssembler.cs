@@ -1,41 +1,35 @@
 // Members/Interfaces/REST/Transform/MembershipTypeResourceFromEntityAssembler.cs
 
-using FitManager_Web_Services.Members.Domain.Model.Aggregates; 
-using FitManager_Web_Services.Members.Interfaces.REST.Resources; 
+using FitManager_Web_Services.Members.Domain.Model.Aggregates;
+using FitManager_Web_Services.Members.Interfaces.REST.Resources;
+using System.Collections.Generic;
+using System.Linq; // Necesario para el método Select
 
 namespace FitManager_Web_Services.Members.Interfaces.REST.Transform
 {
     /// <summary>
-    /// Assembler responsible for transforming <see cref="MembershipType"/> domain entities into <see cref="MembershipTypeResource"/> DTOs.
-    /// This static class encapsulates the mapping logic from the internal domain representation
-    /// to the external REST API representation, ensuring a clean separation of concerns.
+    /// Static class for transforming MembershipType entities into MembershipTypeResource DTOs.
     /// </summary>
     public static class MembershipTypeResourceFromEntityAssembler
     {
         /// <summary>
         /// Converts a single <see cref="MembershipType"/> entity to a <see cref="MembershipTypeResource"/>.
         /// </summary>
-        /// <param name="entity">The <see cref="MembershipType"/> entity to convert.</param>
-        /// <returns>A new instance of <see cref="MembershipTypeResource"/> populated with data from the entity.</returns>
+        /// <param name="entity">The MembershipType entity to convert.</param>
+        /// <returns>A new <see cref="MembershipTypeResource"/> instance.</returns>
         public static MembershipTypeResource ToResourceFromEntity(MembershipType entity)
         {
-            return new MembershipTypeResource(
-                entity.Id, 
-                entity.Name,
-                entity.Description, 
-                entity.Price, 
-                entity.Duration, 
-                entity.Benefits);
+            return new MembershipTypeResource(entity.Id, entity.Name, entity.Description, entity.Price, entity.Duration, entity.Benefits);
         }
 
         /// <summary>
         /// Converts a collection of <see cref="MembershipType"/> entities to an enumerable collection of <see cref="MembershipTypeResource"/>.
         /// </summary>
-        /// <param name="entityList">The enumerable collection of <see cref="MembershipType"/> entities to convert.</param>
-        /// <returns>An enumerable collection of <see cref="MembershipTypeResource"/> objects.</returns>
-        public static IEnumerable<MembershipTypeResource> ToResourceListFromEntityList(IEnumerable<MembershipType> entityList)
+        /// <param name="entities">The collection of MembershipType entities to convert.</param>
+        /// <returns>An enumerable collection of <see cref="MembershipTypeResource"/> instances.</returns>
+        public static IEnumerable<MembershipTypeResource> ToResourceFromEntities(IEnumerable<MembershipType> entities) // <-- NUEVO MÉTODO
         {
-            return entityList.Select(ToResourceFromEntity);
+            return entities.Select(ToResourceFromEntity);
         }
     }
 }

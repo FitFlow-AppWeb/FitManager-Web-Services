@@ -32,10 +32,6 @@ public class SalaryPaymentController : ControllerBase
 
         var entity = SalaryPaymentFromResourceAssembler.ToEntityFromResource(resource);
 
-        // TODO: Validar existencia del Employee cuando el BC esté disponible
-        // var employee = await _employeeRepository.GetByIdAsync(entity.EmployeeId);
-        // if (employee == null) return NotFound("Empleado no encontrado");
-
         var result = await _commandService.CreateAsync(
             entity.Date,
             entity.Amount,
@@ -58,6 +54,18 @@ public class SalaryPaymentController : ControllerBase
     public async Task<ActionResult<IEnumerable<SalaryPaymentResource>>> GetAll()
     {
         var payments = await _queryService.GetAllAsync();
+        var resources = SalaryPaymentToResourceAssembler.ToResourceListFromEntityList(payments);
+        return Ok(resources);
+    }
+    
+    [HttpGet("by-employee/{employeeId}")]
+    [SwaggerOperation(
+        Summary = "List Payments by Employee",
+        Description = "Retrieves all salary payments made to a specific employee."
+    )]
+    public async Task<IActionResult> GetByEmployeeId(int employeeId)
+    {
+        var payments = await _queryService.GetByEmployeeIdAsync(employeeId);
         var resources = SalaryPaymentToResourceAssembler.ToResourceListFromEntityList(payments);
         return Ok(resources);
     }

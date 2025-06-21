@@ -18,9 +18,7 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Transform
                 resource.Password,
                 resource.Wage,
                 resource.Role,
-                resource.WorkHours,
-                resource.CertificationIds, // Certificaciones asociadas
-                resource.SpecialtyIds // Especialidades asociadas
+                resource.WorkHours
                 
             );
         }

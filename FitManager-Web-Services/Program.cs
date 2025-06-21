@@ -61,16 +61,21 @@ builder.Services.AddScoped<ICertificationRepository, CertificationRepository>();
 builder.Services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
 
 builder.Services.AddScoped<EmployeeCommandService>(); 
-builder.Services.AddScoped<EmployeeQueryService>();   
+builder.Services.AddScoped<ICertificationCommandService, CertificationCommandService>();
+builder.Services.AddScoped<ISpecialtyCommandService, SpecialtyCommandService>();
+builder.Services.AddScoped<EmployeeQueryService>();  
+builder.Services.AddScoped<ICertificationQueryService, CertificationQueryService>();
+builder.Services.AddScoped<ISpecialtyQueryService, SpecialtyQueryService>();
 
 // =====================================================================
 // Member Bounded Context Registrations
 // =====================================================================
 // Members
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
-builder.Services.AddScoped<IMemberService, MemberService>(); // This looks like a domain service, not app service. Make sure it's used correctly.
+builder.Services.AddScoped<IMemberService, MemberService>(); 
 
-builder.Services.AddScoped<MemberCommandService>(); 
+builder.Services.AddScoped<MemberCommandService>();
+builder.Services.AddScoped<IMembershipTypeCommandService, MembershipTypeCommandService>(); 
 builder.Services.AddScoped<MemberQueryService>();   
 
 // Classes
@@ -96,6 +101,7 @@ builder.Services.AddScoped<IMembershipPaymentRepository, MembershipPaymentReposi
 builder.Services.AddScoped<ISupplyPurchaseRepository, SupplyPurchaseRepository>();
 builder.Services.AddScoped<IPurchaseDetailRepository, PurchaseDetailRepository>();
 builder.Services.AddScoped<ISalaryPaymentRepository, SalaryPaymentRepository>();
+builder.Services.AddScoped<IMembershipTypeRepository, MembershipTypeRepository>();
 
 builder.Services.AddScoped<MembershipPaymentCommandService>();
 builder.Services.AddScoped<MembershipPaymentQueryService>();
@@ -105,8 +111,6 @@ builder.Services.AddScoped<PurchaseDetailQueryService>();
 builder.Services.AddScoped<PurchaseDetailCommandService>();
 builder.Services.AddScoped<SalaryPaymentCommandService>();
 builder.Services.AddScoped<SalaryPaymentQueryService>();
-    
-builder.Services.AddScoped<IMembershipTypeRepository, MembershipTypeRepository>();
 builder.Services.AddScoped<MembershipTypeQueryService>();
 
 // =====================================================================

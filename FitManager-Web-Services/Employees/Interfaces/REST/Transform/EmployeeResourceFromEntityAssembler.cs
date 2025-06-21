@@ -19,10 +19,10 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Transform
                 entity.PhoneNumber,
                 entity.Address,
                 entity.Email,
-                entity.Password,  // Agregar el campo Password
-                entity.Wage,      // Agregar el campo Wage
-                entity.Role,      // Agregar el campo Role
-                entity.WorkHours, // Agregar el campo WorkHours
+                entity.Password,  
+                entity.Wage,      
+                entity.Role,      
+                entity.WorkHours, 
                 certifications,
                 specialties
             );

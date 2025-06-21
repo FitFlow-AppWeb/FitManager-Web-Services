@@ -42,8 +42,8 @@ namespace FitManager_Web_Services.Finances.Interfaces.REST.Controllers
 
         [HttpPost]
         [SwaggerOperation(
-            Summary = "Registrar una compra de insumos",
-            Description = "Registra una nueva compra de suministros, sus detalles (PurchaseDetails) y crea los ítems de inventario asociados."
+            Summary = "Register Supply Purchase",
+            Description = "Registers a new supply purchase, its details (PurchaseDetails), and creates the associated inventory items."
         )]
         public async Task<IActionResult> Create([FromBody] CreateSupplyPurchaseResource resource)
         {
@@ -110,8 +110,8 @@ namespace FitManager_Web_Services.Finances.Interfaces.REST.Controllers
         
         [HttpGet]
         [SwaggerOperation(
-            Summary = "Listar compras de insumos",
-            Description = "Obtiene todas las compras de insumos registradas en el sistema."
+            Summary = "List Supply Purchases",
+            Description = "Retrieves all supply purchases registered in the system."
         )]
         public async Task<ActionResult<IEnumerable<SupplyPurchaseResource>>> GetAll()
         {

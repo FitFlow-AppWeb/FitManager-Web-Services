@@ -20,8 +20,6 @@
     /// <param name="Wage">The wage (salary) of the employee.</param>
     /// <param name="Role">The role of the employee (e.g., "Trainer", "Administrator").</param>
     /// <param name="WorkHours">The standard work hours per week for the employee.</param>
-    /// <param name="CertificationIds">An array of unique identifiers for the certifications to be associated with this employee.</param>
-    /// <param name="SpecialtyIds">An array of unique identifiers for the specialties to be associated with this employee.</param>
     public record CreateEmployeeCommand(
         string FirstName,
         string LastName,
@@ -33,8 +31,6 @@
         string Password,
         float Wage,
         string Role,
-        int WorkHours,
-        int[] CertificationIds,
-        int[] SpecialtyIds
+        int WorkHours
     );
 }

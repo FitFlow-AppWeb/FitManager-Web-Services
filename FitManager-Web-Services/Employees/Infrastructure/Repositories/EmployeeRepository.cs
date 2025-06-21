@@ -36,5 +36,21 @@ namespace FitManager_Web_Services.Employees.Infrastructure.Repositories
                 .Include(e => e.Specialties)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
+        public async Task<IEnumerable<Employee>> GetAllWithCertificationsAndSpecialtiesAsync()
+        {
+            return await _context.Employees
+                .Include(e => e.Certifications)
+                .Include(e => e.Specialties)
+                .ToListAsync();
+        }
+
+        public async Task<Employee?> GetByIdWithCertificationsAndSpecialtiesAsync(int employeeId)
+        {
+            return await _context.Employees
+                .Where(e => e.Id == employeeId)
+                .Include(e => e.Certifications)
+                .Include(e => e.Specialties)
+                .FirstOrDefaultAsync();
+        }
     }
 }

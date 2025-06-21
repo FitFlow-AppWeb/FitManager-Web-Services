@@ -37,4 +37,9 @@ namespace FitManager_Web_Services.Finances.Application.Internal.QueryServices
             return await _repository.GetAllAsync();
         }
     }
+    
+    public async Task<IEnumerable<SalaryPayment>> GetByEmployeeIdAsync(int employeeId)
+    {
+        return await _repository.GetByEmployeeIdAsync(employeeId);
+    }
 }
