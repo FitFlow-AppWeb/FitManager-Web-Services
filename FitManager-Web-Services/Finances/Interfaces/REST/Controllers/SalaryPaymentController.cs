@@ -60,8 +60,8 @@ public class SalaryPaymentController : ControllerBase
     
     [HttpGet("by-employee/{employeeId}")]
     [SwaggerOperation(
-        Summary = "Listar pagos por empleado",
-        Description = "Obtiene todos los pagos de salario hechos a un empleado específico"
+        Summary = "List Payments by Employee",
+        Description = "Retrieves all salary payments made to a specific employee."
     )]
     public async Task<IActionResult> GetByEmployeeId(int employeeId)
     {
