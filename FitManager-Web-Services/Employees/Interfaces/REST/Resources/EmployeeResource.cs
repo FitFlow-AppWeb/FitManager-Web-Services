@@ -9,11 +9,11 @@
         int PhoneNumber,
         string Address,
         string Email,
-        string Password,  // Agregar el campo Password
-        float Wage,       // Agregar el campo Wage
-        string Role,      // Agregar el campo Role
-        int WorkHours,    // Agregar el campo WorkHours
-        IEnumerable<CertificationResource>? Certifications,  // Certificaciones asociadas
-        IEnumerable<SpecialtyResource>? Specialties         // Especialidades asociadas
+        string Password,  
+        float Wage,       
+        string Role,       
+        int WorkHours,    
+        IEnumerable<CertificationResource>? Certifications,  
+        IEnumerable<SpecialtyResource>? Specialties         
     );
 }

@@ -61,16 +61,21 @@ builder.Services.AddScoped<ICertificationRepository, CertificationRepository>();
 builder.Services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
 
 builder.Services.AddScoped<EmployeeCommandService>(); 
-builder.Services.AddScoped<EmployeeQueryService>();   
+builder.Services.AddScoped<ICertificationCommandService, CertificationCommandService>();
+builder.Services.AddScoped<ISpecialtyCommandService, SpecialtyCommandService>();
+builder.Services.AddScoped<EmployeeQueryService>();  
+builder.Services.AddScoped<ICertificationQueryService, CertificationQueryService>();
+builder.Services.AddScoped<ISpecialtyQueryService, SpecialtyQueryService>();
 
 // =====================================================================
 // Member Bounded Context Registrations
 // =====================================================================
 // Members
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
-builder.Services.AddScoped<IMemberService, MemberService>(); // This looks like a domain service, not app service. Make sure it's used correctly.
+builder.Services.AddScoped<IMemberService, MemberService>(); 
 
-builder.Services.AddScoped<MemberCommandService>(); 
+builder.Services.AddScoped<MemberCommandService>();
+builder.Services.AddScoped<IMembershipTypeCommandService, MembershipTypeCommandService>(); 
 builder.Services.AddScoped<MemberQueryService>();   
 
 // Classes

@@ -13,8 +13,6 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Resources
         string Password,
         float Wage,
         string Role,
-        int WorkHours,
-        int[]? CertificationIds,  // Opcional: actualización de certificaciones
-        int[]? SpecialtyIds  // Opcional: actualización de especialidades
+        int WorkHours
     );
 }
