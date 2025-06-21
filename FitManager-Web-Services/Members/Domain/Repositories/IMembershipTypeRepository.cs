@@ -1,19 +1,16 @@
 // Members/Domain/Repositories/IMembershipTypeRepository.cs
 
 using FitManager_Web_Services.Members.Domain.Model.Aggregates;
-using FitManager_Web_Services.Shared.Domain.Repositories; // Required for IBaseRepository
-
+using FitManager_Web_Services.Shared.Domain.Repositories; 
 namespace FitManager_Web_Services.Members.Domain.Repositories
 {
     /// <summary>
-    /// Defines the contract for a repository that manages <see cref="MembershipType"/> aggregates.
-    /// This interface extends <see cref="IBaseRepository{TEntity}"/> to provide common CRUD operations.
-    /// It resides in the Domain layer, acting as an abstraction over data persistence.
-    /// No specific methods beyond the base repository are currently defined here, as all necessary
-    /// operations for MembershipType are handled by the generic base implementation.
+    /// Defines the contract for repository operations specific to the MembershipType aggregate root.
+    /// Inherits common CRUD operations from <see cref="IBaseRepository{TEntity}"/>.
     /// </summary>
     public interface IMembershipTypeRepository : IBaseRepository<MembershipType>
     {
-       
+        // No necesitas agregar métodos específicos aquí a menos que tengas necesidades adicionales
+        // que no estén cubiertas por IBaseRepository.
     }
 }

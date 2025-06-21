@@ -68,9 +68,10 @@ builder.Services.AddScoped<EmployeeQueryService>();
 // =====================================================================
 // Members
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
-builder.Services.AddScoped<IMemberService, MemberService>(); // This looks like a domain service, not app service. Make sure it's used correctly.
+builder.Services.AddScoped<IMemberService, MemberService>(); 
 
-builder.Services.AddScoped<MemberCommandService>(); 
+builder.Services.AddScoped<MemberCommandService>();
+builder.Services.AddScoped<IMembershipTypeCommandService, MembershipTypeCommandService>(); 
 builder.Services.AddScoped<MemberQueryService>();   
 
 // Classes

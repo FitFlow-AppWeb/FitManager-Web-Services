@@ -1,5 +1,6 @@
 ﻿// Members/Domain/Model/Aggregates/MembershipType.cs
 
+using System.Collections.Generic;
 
 namespace FitManager_Web_Services.Members.Domain.Model.Aggregates
 {
@@ -14,31 +15,31 @@ namespace FitManager_Web_Services.Members.Domain.Model.Aggregates
         /// Gets the unique identifier for the membership type.
         /// </summary>
         public int Id { get; private set; }
-        
+
         /// <summary>
-        /// Gets or sets the name of the membership type (e.g., "Premium", "Basic", "Annual").
+        /// Gets the name of the membership type (e.g., "Premium", "Basic", "Annual").
         /// </summary>
-        public string Name { get; set; }
-        
+        public string Name { get; private set; } // Cambiado a private set
+
         /// <summary>
-        /// Gets or sets a detailed description of the membership type.
+        /// Gets a detailed description of the membership type.
         /// </summary>
-        public string Description { get; set; }
-        
+        public string Description { get; private set; } // Cambiado a private set
+
         /// <summary>
-        /// Gets or sets the price of the membership type.
+        /// Gets the price of the membership type.
         /// </summary>
-        public int Price { get; set; }
-        
+        public int Price { get; private set; } // Cambiado a private set
+
         /// <summary>
-        /// Gets or sets the duration of the membership (e.g., "1 Month", "3 Months", "1 Year").
+        /// Gets the duration of the membership (e.g., "1 Month", "3 Months", "1 Year").
         /// </summary>
-        public string Duration { get; set; }
-        
+        public string Duration { get; private set; } // Cambiado a private set
+
         /// <summary>
-        /// Gets or sets the benefits included with this membership type.
+        /// Gets the benefits included with this membership type.
         /// </summary>
-        public string Benefits { get; set; }
+        public string Benefits { get; private set; } // Cambiado a private set
 
         /// <summary>
         /// Gets or sets the collection of membership statuses associated with this membership type.
@@ -56,7 +57,6 @@ namespace FitManager_Web_Services.Members.Domain.Model.Aggregates
         /// <param name="benefits">The benefits included with the membership.</param>
         public MembershipType(string name, string description, int price, string duration, string benefits)
         {
-            // Consider adding validations here (e.g., name not empty, price >= 0).
             Name = name;
             Description = description;
             Price = price;
@@ -69,5 +69,22 @@ namespace FitManager_Web_Services.Members.Domain.Model.Aggregates
         /// Used by the ORM to materialize entities from the database.
         /// </summary>
         protected MembershipType() { }
+
+        /// <summary>
+        /// Updates the details of the membership type.
+        /// </summary>
+        /// <param name="name">The new name for the membership type.</param>
+        /// <param name="description">The new description for the membership type.</param>
+        /// <param name="price">The new price for the membership type.</param>
+        /// <param name="duration">The new duration for the membership type.</param>
+        /// <param name="benefits">The new benefits for the membership type.</param>
+        public void Update(string name, string description, int price, string duration, string benefits)
+        {
+            Name = name;
+            Description = description;
+            Price = price;
+            Duration = duration;
+            Benefits = benefits;
+        }
     }
 }
