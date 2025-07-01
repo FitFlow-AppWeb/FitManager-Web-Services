@@ -28,7 +28,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
     public DbSet<ItemType> ItemTypes { get; set; }
     public DbSet<Item> Items { get; set; }
     public DbSet<ItemBooking> ItemBookings { get; set; }
-    // Fincances Context
+    // Finances Context
     public DbSet<SupplyPurchase> SupplyPurchases { get; set; }
     public DbSet<PurchaseDetail> PurchaseDetails { get; set; }
     public DbSet<SalaryPayment> SalaryPayments { get; set; }

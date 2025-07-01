@@ -40,6 +40,20 @@ if (string.IsNullOrEmpty(connectionString))
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL(connectionString));
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontendLocalhost", policy =>
+    {
+        policy.WithOrigins(
+                "https://fitmanager-f6e6e.firebaseapp.com",
+                "https://fitmanager-f6e6e.web.app"
+                )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
+
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddControllers(); 
@@ -155,6 +169,8 @@ using (var scope = app.Services.CreateScope())
     dbContext.Database.EnsureCreated(); 
 }
 
+
+app.UseCors("AllowFrontendProd");
 app.UseSwagger();
 app.UseSwaggerUI();
 
