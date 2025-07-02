@@ -44,10 +44,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontendLocalhost", policy =>
     {
-        policy.WithOrigins(
-                "https://fitmanager-f6e6e.firebaseapp.com",
-                "https://fitmanager-f6e6e.web.app"
-                )
+        policy.WithOrigins("http://localhost:5173")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -170,7 +167,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 
-app.UseCors("AllowFrontendProd");
+app.UseCors("AllowFrontendLocalhost");
 app.UseSwagger();
 app.UseSwaggerUI();
 

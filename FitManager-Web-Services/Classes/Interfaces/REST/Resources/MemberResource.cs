@@ -1,3 +1,6 @@
+using FitManager_Web_Services.Members.Interfaces.REST.Resources;
+
+
 /// <summary>
 /// Represents the resource for a member, used for data transfer objects (DTOs) in RESTful APIs.
 /// </summary>

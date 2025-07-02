@@ -28,11 +28,12 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Transform
             }
 
             return new MembershipStatusResource(
-                entity.Id, 
-                entity.StartDate,
-                entity.EndDate,
-                entity.Status,
-                entity.MembershipTypeId
+                    entity.Id, 
+                    entity.StartDate,
+                    entity.EndDate,
+                    entity.Status.ToString(), 
+                    entity.MembershipTypeId,
+                    membershipTypeResource 
             );
         }
     }

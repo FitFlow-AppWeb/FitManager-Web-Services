@@ -1,5 +1,8 @@
 ﻿// Members/Domain/Model/Aggregates/MembershipStatus.cs
 
+using FitManager_Web_Services.Members.Domain.Model.ValueObjects; // ¡NUEVA LÍNEA! Importa tu enum
+using System; // Necesario para DateTime y Enum
+// using FitManager_Web_Services.Shared.Domain.Exceptions; // Descomenta si creas una excepción personalizada
 
 namespace FitManager_Web_Services.Members.Domain.Model.Aggregates
 {
@@ -37,7 +40,8 @@ namespace FitManager_Web_Services.Members.Domain.Model.Aggregates
         /// <summary>
         /// Gets or sets the current status of the membership (e.g., "Active", "Expired", "Suspended").
         /// </summary>
-        public string Status { get; set; }
+        // CAMBIO: El tipo de Status ahora es EMembershipStatus, y el set es privado para controlar la asignación
+        public EMembershipStatus Status { get; private set; }
 
         /// <summary>
         /// Gets or sets the foreign key to the associated Member.
@@ -63,18 +67,43 @@ namespace FitManager_Web_Services.Members.Domain.Model.Aggregates
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MembershipStatus"/> class.
-        /// This constructor sets the initial state of the membership status.
+        /// This constructor sets the initial state of the membership status, expecting a string for the status.
         /// </summary>
         /// <param name="startDate">The start date of the membership.</param>
         /// <param name="endDate">The end date of the membership.</param>
-        /// <param name="status">The status of the membership.</param>
+        /// <param name="statusString">The status of the membership as a string (e.g., "Active", "Inactive", "Pending").</param>
         /// <param name="membershipTypeId">The ID of the associated membership type.</param>
-        public MembershipStatus(DateTime startDate, DateTime endDate, string status, int membershipTypeId)
+        // CAMBIO: Constructor que recibe 'statusString' y realiza la validación
+        public MembershipStatus(DateTime startDate, DateTime endDate, string statusString, int membershipTypeId)
         {
-            // Consider adding validations here (e.g., startDate < endDate, status not empty).
+            // Validar y parsear el string del estado
+            // true en TryParse hace que sea insensible a mayúsculas/minúsculas
+            if (!Enum.TryParse(statusString, true, out EMembershipStatus parsedStatus))
+            {
+                // Puedes usar una excepción de dominio más específica si la has creado
+                // throw new InvalidMembershipStatusException(statusString);
+                throw new InvalidOperationException($"Invalid membership status '{statusString}'. Must be 'Active', 'Inactive', or 'Pending'.");
+            }
+            
             StartDate = startDate;
             EndDate = endDate;
-            Status = status;
+            Status = parsedStatus; // Asignación del enum validado
+            MembershipTypeId = membershipTypeId;
+        }
+
+        /// <summary>
+        /// Constructor sobrecargado para uso interno o cuando el estado ya es un enum.
+        /// </summary>
+        /// <param name="startDate">The start date of the membership.</param>
+        /// <param name="endDate">The end date of the membership.</param>
+        /// <param name="status">The status of the membership as EMembershipStatus enum.</param>
+        /// <param name="membershipTypeId">The ID of the associated membership type.</param>
+        // NUEVO: Constructor que acepta directamente el enum
+        public MembershipStatus(DateTime startDate, DateTime endDate, EMembershipStatus status, int membershipTypeId)
+        {
+            StartDate = startDate;
+            EndDate = endDate;
+            Status = status; // Asignación directa del enum
             MembershipTypeId = membershipTypeId;
         }
 
@@ -87,14 +116,20 @@ namespace FitManager_Web_Services.Members.Domain.Model.Aggregates
         /// <summary>
         /// Updates the status, end date, and optionally the start date and membership type of the membership.
         /// </summary>
-        /// <param name="newStatus">The new status of the membership.</param>
+        /// <param name="newStatusString">The new status of the membership (as string).</param>
         /// <param name="newEndDate">The new end date of the membership.</param>
         /// <param name="newMembershipTypeId">The new ID of the associated membership type.</param>
         /// <param name="newStartDate">Optional new start date of the membership.</param>
-        public void UpdateStatus(string newStatus, DateTime newEndDate, int newMembershipTypeId, DateTime? newStartDate = null)
+        // CAMBIO: El método UpdateStatus ahora recibe un string para el estado y lo valida
+        public void UpdateStatus(string newStatusString, DateTime newEndDate, int newMembershipTypeId, DateTime? newStartDate = null)
         {
-            // Consider adding validations here as well (e.g., newStatus not empty, newStartDate < newEndDate).
-            Status = newStatus;
+            // Validar y parsear el string del nuevo estado
+            if (!Enum.TryParse(newStatusString, true, out EMembershipStatus parsedStatus))
+            {
+                throw new InvalidOperationException($"Invalid membership status '{newStatusString}'. Must be 'Active', 'Inactive', or 'Pending'.");
+            }
+
+            Status = parsedStatus; // Asignación del enum validado
             EndDate = newEndDate;
             MembershipTypeId = newMembershipTypeId;
             if (newStartDate.HasValue)

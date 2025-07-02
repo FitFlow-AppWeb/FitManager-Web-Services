@@ -1,6 +1,7 @@
 // Members/Domain/Model/Aggregates/Member.cs
 
 using FitManager_Web_Services.Classes.Domain.Model.Aggregates; // Assuming ClassMember, Booking, Attendance are in this namespace
+using System; // Necesario para DateTime y ArgumentNullException, etc.
 
 namespace FitManager_Web_Services.Members.Domain.Model.Aggregates
 {
@@ -157,39 +158,30 @@ namespace FitManager_Web_Services.Members.Domain.Model.Aggregates
         
         /// <summary>
         /// Updates the membership status details of the member.
-        /// This method allows for partial updates of the MembershipStatus value object.
+        /// This method delegates the update to the MembershipStatus value object itself.
         /// </summary>
         /// <param name="startDate">Optional new start date for the membership.</param>
         /// <param name="endDate">Optional new end date for the membership.</param>
-        /// <param name="status">Optional new status string for the membership.</param>
+        /// <param name="statusString">Optional new status string for the membership.</param>
         /// <param name="membershipTypeId">Optional new ID of the associated membership type.</param>
-        public void UpdateMembershipStatus(DateTime? startDate, DateTime? endDate, string? status, int? membershipTypeId)
+        // CAMBIO: Ahora llama al método UpdateStatus del MembershipStatus
+        public void UpdateMembershipStatus(DateTime? startDate, DateTime? endDate, string? statusString, int? membershipTypeId)
         {
             // Ensure MembershipStatus object exists before attempting to update its properties.
-            // This implicitly assumes MembershipStatus is already assigned when this method is called.
             if (MembershipStatus == null) 
             {
-                // This scenario should ideally be prevented by ensuring a MembershipStatus is set upon Member creation.
-                // Or by throwing an exception if update is attempted on a null status.
-                throw new InvalidOperationException("MembershipStatus has not been assigned to this member.");
+                throw new InvalidOperationException("MembershipStatus has not been assigned to this member. Cannot update.");
             }
 
-            if (startDate.HasValue)
-            {
-                MembershipStatus.StartDate = startDate.Value;
-            }
-            if (endDate.HasValue)
-            {
-                MembershipStatus.EndDate = endDate.Value;
-            }
-            if (!string.IsNullOrEmpty(status)) 
-            {
-                MembershipStatus.Status = status;
-            }
-            if (membershipTypeId.HasValue)
-            {
-                MembershipStatus.MembershipTypeId = membershipTypeId.Value;
-            }
+            // Aquí llamamos al método UpdateStatus del objeto MembershipStatus
+            // El método UpdateStatus en MembershipStatus ya maneja la validación del string 'statusString'.
+            // También toma los otros parámetros para una actualización completa.
+            MembershipStatus.UpdateStatus(
+                statusString ?? MembershipStatus.Status.ToString(), // Pasa el nuevo status o el actual si es nulo
+                endDate ?? MembershipStatus.EndDate,                 // Pasa la nueva fecha de fin o la actual
+                membershipTypeId ?? MembershipStatus.MembershipTypeId, // Pasa el nuevo ID o el actual
+                startDate                                            // Pasa la nueva fecha de inicio (si tiene valor)
+            );
         }
 
         /// <summary>
@@ -198,6 +190,7 @@ namespace FitManager_Web_Services.Members.Domain.Model.Aggregates
         /// </summary>
         /// <param name="status">The <see cref="MembershipStatus"/> value object to assign.</param>
         /// <exception cref="ArgumentNullException">Thrown if the provided status is null.</exception>
+        // Este método está bien tal cual, ya que recibe un MembershipStatus ya construido y validado
         public void AssignMembershipStatus(MembershipStatus status)
         {
             if (status == null) throw new ArgumentNullException(nameof(status), "Membership status cannot be null.");

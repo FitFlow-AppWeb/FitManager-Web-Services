@@ -3,7 +3,7 @@
 using FitManager_Web_Services.Members.Domain.Model.Aggregates;
 using FitManager_Web_Services.Members.Interfaces.REST.Resources;
 using System.Collections.Generic;
-using System.Linq; // Necesario para el método Select
+using System.Linq;
 
 namespace FitManager_Web_Services.Members.Interfaces.REST.Transform
 {
@@ -19,7 +19,14 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Transform
         /// <returns>A new <see cref="MembershipTypeResource"/> instance.</returns>
         public static MembershipTypeResource ToResourceFromEntity(MembershipType entity)
         {
-            return new MembershipTypeResource(entity.Id, entity.Name, entity.Description, entity.Price, entity.Duration, entity.Benefits);
+            return new MembershipTypeResource(
+                entity.Id,
+                entity.Name,
+                entity.Description,
+                (decimal)entity.Price, 
+                entity.Duration,
+                entity.Benefits
+            );
         }
 
         /// <summary>
@@ -27,7 +34,7 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Transform
         /// </summary>
         /// <param name="entities">The collection of MembershipType entities to convert.</param>
         /// <returns>An enumerable collection of <see cref="MembershipTypeResource"/> instances.</returns>
-        public static IEnumerable<MembershipTypeResource> ToResourceFromEntities(IEnumerable<MembershipType> entities) // <-- NUEVO MÉTODO
+        public static IEnumerable<MembershipTypeResource> ToResourceFromEntities(IEnumerable<MembershipType> entities)
         {
             return entities.Select(ToResourceFromEntity);
         }
