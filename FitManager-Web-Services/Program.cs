@@ -42,9 +42,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL(connectionString));
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontendLocalhost", policy =>
+    options.AddPolicy("AllowFrontendProd", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins(
+                "https://fitmanager-f6e6e.firebaseapp.com",
+                "https://fitmanager-f6e6e.web.app"
+            )
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -167,7 +170,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 
-app.UseCors("AllowFrontendLocalhost");
+app.UseCors("AllowFrontendProd");
 app.UseSwagger();
 app.UseSwaggerUI();
 
