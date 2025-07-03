@@ -163,9 +163,6 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Employee>().Property(e => e.Dni)
             .IsRequired();
 
-        builder.Entity<Employee>().HasIndex(e => e.Dni)
-            .IsUnique();
-
         builder.Entity<Employee>().Property(e => e.PhoneNumber)
             .IsRequired();
 
@@ -175,9 +172,6 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Employee>().Property(e => e.Email)
             .IsRequired()
             .HasMaxLength(150);
-
-        builder.Entity<Employee>().HasIndex(e => e.Email)
-            .IsUnique();
 
         builder.Entity<Employee>().Property(e => e.Password)
             .IsRequired()
