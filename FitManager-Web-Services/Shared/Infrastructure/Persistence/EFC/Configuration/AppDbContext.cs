@@ -6,6 +6,7 @@ using FitManager_Web_Services.Classes.Domain.Model.Aggregates;
 using FitManager_Web_Services.Finances.Domain.Model.Aggregates;
 using FitManager_Web_Services.Inventory.Domain.Model.Aggregates;
 using FitManager_Web_Services.Notifications.Domain.Model.Aggregates;
+using FitManager_Web_Services.Users.Domain.Model;
 
 namespace FitManager_Web_Services.Shared.Infrastructure.Persistence.EFC.Configuration;
 
@@ -37,6 +38,9 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<EmployeeNotification> EmployeeNotifications { get; set; }
     public DbSet<MemberNotification> MemberNotifications { get; set; }
+
+    // Users Context
+    public DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder builder)
     {
