@@ -29,6 +29,8 @@ using FitManager_Web_Services.Notifications.Domain.Repositories;
 using FitManager_Web_Services.Notifications.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -56,7 +58,13 @@ builder.Services.AddCors(options =>
 
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddControllers(); 
+builder.Services.AddLocalization();
+var localizationOptions = new RequestLocalizationOptions();
+
+builder.Services.AddControllers()
+    .AddDataAnnotationsLocalization()
+    .AddViewLocalization();
+
 
 // =====================================================================
 // Employee Bounded Context Registrations
@@ -169,11 +177,28 @@ using (var scope = app.Services.CreateScope())
     dbContext.Database.EnsureCreated(); 
 }
 
+var supportedCultures = new[]
+{
+    new CultureInfo("en"),
+    new CultureInfo("es"),
+};
+localizationOptions.SupportedCultures = supportedCultures;
+localizationOptions.SupportedUICultures = supportedCultures;
+localizationOptions.SetDefaultCulture("en-US");
+localizationOptions.ApplyCurrentCultureToResponseHeaders = true;
+
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("en"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+});
 
 app.UseCors("AllowFrontendProd");
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseRequestLocalization();
 
 app.UseAuthorization();
 

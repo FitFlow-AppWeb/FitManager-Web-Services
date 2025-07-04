@@ -1,9 +1,11 @@
 using FitManager_Web_Services.Classes.Domain.Services;
 using FitManager_Web_Services.Classes.Interfaces.REST.Resources;
 using FitManager_Web_Services.Classes.Interfaces.REST.Transform;
+using FitManager_Web_Services.Resources;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-
+using Microsoft.Extensions.Localization;
+    
 namespace FitManager_Web_Services.Classes.Interfaces.REST.Controllers;
 
 /// <summary>
@@ -17,14 +19,18 @@ namespace FitManager_Web_Services.Classes.Interfaces.REST.Controllers;
 public class BookingsController : ControllerBase
 {
     private readonly IBookingService _bookingService;
+    private readonly IStringLocalizer<SharedResource> _localizer;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BookingsController"/> class.
     /// </summary>
     /// <param name="bookingService">The booking domain service.</param>
-    public BookingsController(IBookingService bookingService)
+    public BookingsController(
+        IBookingService bookingService,
+        IStringLocalizer<SharedResource> localizer)
     {
         _bookingService = bookingService;
+        _localizer = localizer;
     }
 
     /// <summary>
@@ -43,8 +49,20 @@ public class BookingsController : ControllerBase
     public async Task<IActionResult> GetBookingsByClass(int classId)
     {
         var results = await _bookingService.GetBookingsByClassAsync(classId);
-        var resources = results.Select(BookingResourceFromEntityAssembler.ToResource); 
-        return Ok(resources);
+        var resources = results.Select(BookingResourceFromEntityAssembler.ToResource);
+
+        var message = _localizer["BookingsRetrieved"];
+
+        return Ok(new
+        {
+            message = new
+            {
+                name = "BookingsRetrieved",
+                value = message.Value,
+                resourceNotFound = message.ResourceNotFound,
+                searchedLocation = message.SearchedLocation
+            },
+            data = resources
+        }); 
     }
-    
 }

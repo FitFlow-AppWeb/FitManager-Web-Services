@@ -26,4 +26,13 @@
         <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="8.1.4" />
     </ItemGroup>
 
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\SharedResource.en-US.resx">
+        <DependentUpon>SharedResource.cs</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\SharedResource.es-ES.resx">
+        <DependentUpon>SharedResource.cs</DependentUpon>
+      </EmbeddedResource>
+    </ItemGroup>
+
 </Project>
