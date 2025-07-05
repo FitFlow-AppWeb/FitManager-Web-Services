@@ -191,4 +191,7 @@
     <data name="EmployeeNotificationCreated" xml:space="preserve">
         <value>Notificación al empleado creada correctamente</value>
     </data>
+    <data name="BookingFailed" xml:space="preserve">
+        <value>No se pudo completar la reserva. Verifique que el miembro y la clase existan.</value>
+    </data>
 </root>

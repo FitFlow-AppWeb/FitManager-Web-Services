@@ -230,6 +230,9 @@
   <data name="ItemCreationWarning" xml:space="preserve">
 <value>Warning: Could not create item (unit {0}) of type {1} for purchase {2}.</value>
 </data>
+  <data name="BookingFailed" xml:space="preserve">
+  <value>Booking could not be completed. Member or Class not found.</value>
+</data>
 
 
 

@@ -191,4 +191,7 @@
     <data name="UnableToCreateSpecialty" xml:space="preserve">
         <value>Unable to create specialty. Make sure the employee exists.</value>
     </data>
+    <data name="BookingFailed" xml:space="preserve">
+        <value>Booking could not be completed. Member or Class not found.</value>
+    </data>
 </root>

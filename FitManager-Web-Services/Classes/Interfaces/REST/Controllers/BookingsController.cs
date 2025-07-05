@@ -32,6 +32,27 @@ public class BookingsController : ControllerBase
         _bookingService = bookingService;
         _localizer = localizer;
     }
+    [HttpPost]
+    [SwaggerOperation(
+        Summary = "Create Booking",
+        Description = "Registers a new booking for a class by a member."
+    )]
+    public async Task<IActionResult> CreateBooking([FromBody] CreateBookingResource resource)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var booking = await _bookingService.CreateBookingAsync(resource.MemberId, resource.ClassId, resource.Date);
+
+        if (booking == null)
+        {
+            return NotFound(_localizer["BookingFailed"]);
+        }
+
+        var bookingResource = BookingResourceFromEntityAssembler.ToResource(booking);
+
+        return CreatedAtAction(nameof(GetBookingsByClass), new { classId = resource.ClassId }, bookingResource);
+    }
 
     /// <summary>
     /// Retrieves a list of all bookings registered for a specific class.
