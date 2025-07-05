@@ -194,4 +194,25 @@
     <data name="BookingFailed" xml:space="preserve">
         <value>Booking could not be completed. Member or Class not found.</value>
     </data>
+    <data name="UserAlreadyExists" xml:space="preserve">
+        <value>A user with this email already exists.</value>
+    </data>
+    <data name="UserNotFound" xml:space="preserve">
+        <value>User not found.</value>
+    </data>
+    <data name="UserCreated" xml:space="preserve">
+        <value>User created successfully.</value>
+    </data>
+    <data name="UserRetrieved" xml:space="preserve">
+        <value>User retrieved successfully.</value>
+    </data>
+    <data name="UsersRetrieved" xml:space="preserve">
+        <value>Users retrieved successfully.</value>
+    </data>
+    <data name="UserSignedIn" xml:space="preserve">
+        <value>User signed in successfully.</value>
+    </data>
+    <data name="UserSignedUp" xml:space="preserve">
+        <value>User registered successfully.</value>
+    </data>
 </root>

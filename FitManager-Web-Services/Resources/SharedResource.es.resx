@@ -194,4 +194,25 @@
     <data name="BookingFailed" xml:space="preserve">
         <value>No se pudo completar la reserva. Verifique que el miembro y la clase existan.</value>
     </data>
+    <data name="UserAlreadyExists" xml:space="preserve">
+        <value>Ya existe un usuario con este correo.</value>
+    </data>
+    <data name="UserCreated" xml:space="preserve">
+        <value>Usuario creado correctamente.</value>
+    </data>
+    <data name="UserNotFound" xml:space="preserve">
+        <value>Usuario no encontrado.</value>
+    </data>
+    <data name="UserRetrieved" xml:space="preserve">
+        <value>Usuario recuperado correctamente.</value>
+    </data>
+    <data name="UsersRetrieved" xml:space="preserve">
+        <value>Usuarios recuperados correctamente.</value>
+    </data>
+    <data name="UserSignedIn" xml:space="preserve">
+        <value>Usuario inició sesión correctamente.</value>
+    </data>
+    <data name="UserSignedUp" xml:space="preserve">
+        <value>Usuario registrado correctamente.</value>
+    </data>
 </root>

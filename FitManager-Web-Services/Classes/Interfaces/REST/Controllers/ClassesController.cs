@@ -6,6 +6,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using FitManager_Web_Services.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Localization;
+using FitManager_Web_Services.Resources;
 
 namespace FitManager_Web_Services.Classes.Interfaces.REST.Controllers;
 
@@ -21,6 +22,7 @@ public class ClassesController : ControllerBase
 {
     private readonly IClassService _classService;
     private readonly IStringLocalizer<SharedResource> _localizer;
+    
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ClassesController"/> class.

@@ -10,6 +10,8 @@ using System.Linq;
 using FitManager_Web_Services.IAM.Interfaces.REST.Resources;
 using FitManager_Web_Services.IAM.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Authorization;
+using FitManager_Web_Services.Resources;
+using Microsoft.Extensions.Localization;
 
 namespace FitManager_Web_Services.IAM.Interfaces.REST.Controllers
 {
@@ -19,11 +21,16 @@ namespace FitManager_Web_Services.IAM.Interfaces.REST.Controllers
     {
         private readonly UserCommandService _commandService;
         private readonly UserQueryService _queryService;
+        private readonly IStringLocalizer<SharedResource> _localizer;
 
-        public UsersController(UserCommandService commandService, UserQueryService queryService)
+        public UsersController(
+            UserCommandService commandService,
+            UserQueryService queryService,
+            IStringLocalizer<SharedResource> localizer)
         {
             _commandService = commandService;
             _queryService = queryService;
+            _localizer = localizer;
         }
 
         [HttpPost]
@@ -32,15 +39,23 @@ namespace FitManager_Web_Services.IAM.Interfaces.REST.Controllers
             Summary = "Create user",
             Description = "Creates a new user in the system."
         )]
-        public async Task<ActionResult<UserResource>> Create([FromBody] CreateUserCommand command)
+        public async Task<ActionResult> Create([FromBody] CreateUserCommand command)
         {
             var user = await _commandService.Handle(command);
             if (user == null)
             {
-                return BadRequest("User with the same email already exists.");
+                return BadRequest(new
+                {
+                    message = _localizer["UserAlreadyExists"]
+                });
             }
+
             var resource = UserTransformer.ToResource(user);
-            return CreatedAtAction(nameof(GetById), new { id = resource.Id }, resource);
+            return CreatedAtAction(nameof(GetById), new { id = resource.Id }, new
+            {
+                message = _localizer["UserCreated"],
+                data = resource
+            });
         }
 
         [HttpGet]
@@ -49,11 +64,15 @@ namespace FitManager_Web_Services.IAM.Interfaces.REST.Controllers
             Summary = "List users",
             Description = "Retrieves a list of all existing users."
         )]
-        public async Task<ActionResult<IEnumerable<UserResource>>> GetAll()
+        public async Task<ActionResult> GetAll()
         {
             var users = await _queryService.Handle(new GetAllUsersQuery());
-            var resources = users.Select(u => UserTransformer.ToResource(u));
-            return Ok(resources);
+            var resources = users.Select(UserTransformer.ToResource);
+            return Ok(new
+            {
+                message = _localizer["UsersRetrieved"],
+                data = resources
+            });
         }
 
         [HttpGet("{id}")]
@@ -62,13 +81,23 @@ namespace FitManager_Web_Services.IAM.Interfaces.REST.Controllers
             Summary = "Get user",
             Description = "Retrieves the details of a user by their ID."
         )]
-        public async Task<ActionResult<UserResource>> GetById(int id)
+        public async Task<ActionResult> GetById(int id)
         {
             var user = await _queryService.Handle(new GetUserByIdQuery(id));
             if (user == null)
-                return NotFound();
+            {
+                return NotFound(new
+                {
+                    message = _localizer["UserNotFound"]
+                });
+            }
+
             var resource = UserTransformer.ToResource(user);
-            return Ok(resource);
+            return Ok(new
+            {
+                message = _localizer["UserRetrieved"],
+                data = resource
+            });
         }
     }
 }
