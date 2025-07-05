@@ -3,6 +3,8 @@ using FitManager_Web_Services.Classes.Interfaces.REST.Resources;
 using FitManager_Web_Services.Classes.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using FitManager_Web_Services.Resources;
+using Microsoft.Extensions.Localization;
 
 namespace FitManager_Web_Services.Classes.Interfaces.REST.Controllers;
 
@@ -17,14 +19,16 @@ namespace FitManager_Web_Services.Classes.Interfaces.REST.Controllers;
 public class ClassesController : ControllerBase
 {
     private readonly IClassService _classService;
+    private readonly IStringLocalizer<SharedResource> _localizer;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ClassesController"/> class.
     /// </summary>
     /// <param name="classService">The class domain service.</param>
-    public ClassesController(IClassService classService)
+    public ClassesController(IClassService classService, IStringLocalizer<SharedResource> localizer)
     {
         _classService = classService;
+        _localizer = localizer;
     }
 
     /// <summary>
@@ -54,7 +58,11 @@ public class ClassesController : ControllerBase
             command.EmployeeId);
         
         var classResource = ClassResourceFromEntityAssembler.ToResource(result);
-        return  Ok(classResource);
+        return Ok(new
+        {
+            message = _localizer["ClassCreated"],
+            data = classResource
+        });
     }
     
     /// <summary>
@@ -73,8 +81,14 @@ public class ClassesController : ControllerBase
     {
         var results = await _classService.GetAllClassesAsync();
         var resources = results.Select(ClassResourceFromEntityAssembler.ToResource);
-        return Ok(resources);
+
+        return Ok(new
+        {
+            message = _localizer["ClassesRetrieved"],
+            data = resources
+        });
     }
+
 
     /// <summary>
     /// Updates the details of an existing class.
@@ -102,9 +116,13 @@ public class ClassesController : ControllerBase
             resource.Duration,
             resource.Status,
             resource.EmployeeId);
-        
-        return NoContent();
+
+        return Ok(new
+        {
+            message = _localizer["ClassUpdated"]
+        });
     }
+
 
     /// <summary>
     /// Deletes an existing class by its ID.
@@ -121,8 +139,23 @@ public class ClassesController : ControllerBase
     )]
     public async Task<IActionResult> DeleteClass(int id)
     {
-        await _classService.DeleteClassAsync(id);
-        return NoContent();
+        try
+        {
+            await _classService.DeleteClassAsync(id);
+
+            return Ok(new
+            {
+                message = _localizer["ClassDeleted"]
+            });
+        }
+        catch (Exception ex) when (ex.Message == "Class not found")
+        {
+            return NotFound(new
+            {
+                message = _localizer["ClassNotFound"]
+            });
+        }
     }
+
     
 }

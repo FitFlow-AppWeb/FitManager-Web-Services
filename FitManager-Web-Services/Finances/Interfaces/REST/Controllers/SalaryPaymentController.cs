@@ -4,6 +4,8 @@ using FitManager_Web_Services.Finances.Application.Internal.CommandServices;
 using FitManager_Web_Services.Finances.Application.Internal.QueryServices;
 using FitManager_Web_Services.Finances.Interfaces.REST.Resources;
 using FitManager_Web_Services.Finances.Interfaces.REST.Transform;
+using Microsoft.Extensions.Localization;
+using FitManager_Web_Services.Resources;
 
 namespace FitManager_Web_Services.Finances.Interfaces.REST.Controllers;
 
@@ -20,16 +22,21 @@ public class SalaryPaymentController : ControllerBase
 {
     private readonly SalaryPaymentCommandService _commandService;
     private readonly SalaryPaymentQueryService _queryService;
+    private readonly IStringLocalizer<SharedResource> _localizer;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SalaryPaymentController"/> class.
     /// </summary>
     /// <param name="commandService">The command service for salary payment operations.</param>
     /// <param name="queryService">The query service for salary payment retrieval.</param>
-    public SalaryPaymentController(SalaryPaymentCommandService commandService, SalaryPaymentQueryService queryService)
+    public SalaryPaymentController(
+        SalaryPaymentCommandService commandService,
+        SalaryPaymentQueryService queryService,
+        IStringLocalizer<SharedResource> localizer)
     {
-        _queryService = queryService;
         _commandService = commandService;
+        _queryService = queryService;
+        _localizer = localizer;
     }
 
     /// <summary>
@@ -49,7 +56,7 @@ public class SalaryPaymentController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateSalaryPaymentResource resource)
     {
         if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+            return BadRequest(new { message = _localizer["InvalidData"] });
 
         var entity = SalaryPaymentFromResourceAssembler.ToEntityFromResource(resource);
 
@@ -62,9 +69,11 @@ public class SalaryPaymentController : ControllerBase
         );
 
         if (result == null)
-            return NotFound("Empleado no encontrado.");
+            return NotFound(new { message = _localizer["EmployeeNotFound"] });
 
-        return Created($"/api/v1/salarypayment/{result.Id}", result);
+        var message = _localizer["SalaryPaymentCreated"];
+        var resourceData = SalaryPaymentToResourceAssembler.ToResourceFromEntity(result);
+        return Created($"/api/v1/salarypayment/{resourceData.Id}", new { message, data = resourceData });
     }
     
     /// <summary>
@@ -83,7 +92,8 @@ public class SalaryPaymentController : ControllerBase
     {
         var payments = await _queryService.GetAllAsync();
         var resources = SalaryPaymentToResourceAssembler.ToResourceListFromEntityList(payments);
-        return Ok(resources);
+        var message = _localizer["SalaryPaymentsRetrieved"];
+        return Ok(new { message, data = resources });
     }
     
     /// <summary>
@@ -103,6 +113,7 @@ public class SalaryPaymentController : ControllerBase
     {
         var payments = await _queryService.GetByEmployeeIdAsync(employeeId);
         var resources = SalaryPaymentToResourceAssembler.ToResourceListFromEntityList(payments);
-        return Ok(resources);
+        var message = _localizer["SalaryPaymentsByEmployeeRetrieved"];
+        return Ok(new { message, data = resources });
     }
 }

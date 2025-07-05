@@ -9,6 +9,9 @@ using FitManager_Web_Services.Employees.Interfaces.REST.Transform; // Para los e
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 using Swashbuckle.AspNetCore.Annotations; // Para MediaTypeNames
+using Microsoft.Extensions.Localization;
+using FitManager_Web_Services.Resources;
+
 
 namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
 {
@@ -19,13 +22,17 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
     {
         private readonly ISpecialtyCommandService _specialtyCommandService;
         private readonly ISpecialtyQueryService _specialtyQueryService;
+        private readonly IStringLocalizer<SharedResource> _localizer;
+
 
         public SpecialtiesController(
             ISpecialtyCommandService specialtyCommandService,
-            ISpecialtyQueryService specialtyQueryService)
+            ISpecialtyQueryService specialtyQueryService,
+            IStringLocalizer<SharedResource> localizer)
         {
             _specialtyCommandService = specialtyCommandService;
             _specialtyQueryService = specialtyQueryService;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -44,11 +51,15 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
 
             if (specialty is null)
             {
-                return BadRequest("Unable to create specialty. Employee might not exist.");
+                return BadRequest(new { message = _localizer["UnableToCreateSpecialty"] });
             }
 
             var specialtyResource = SpecialtyResourceFromEntityAssembler.ToResourceFromEntity(specialty);
-            return CreatedAtAction(nameof(GetSpecialties), new { id = specialtyResource.Id }, specialtyResource);
+            return CreatedAtAction(nameof(GetSpecialties), new { id = specialtyResource.Id }, new
+            {
+                message = _localizer["SpecialtyCreated"],
+                data = specialtyResource
+            });
         }
 
         /// <summary>
@@ -64,7 +75,11 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
             var specialties = await _specialtyQueryService.Handle(getAllSpecialtiesQuery);
 
             var specialtyResources = specialties.Select(SpecialtyResourceFromEntityAssembler.ToResourceFromEntity);
-            return Ok(specialtyResources);
+            return Ok(new
+            {
+                message = _localizer["SpecialtiesRetrieved"],
+                data = specialtyResources
+            });
         }
 
         /// <summary>
@@ -83,7 +98,7 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
 
             if (!result)
             {
-                return NotFound("Specialty not found or could not be deleted.");
+                return NotFound(new { message = _localizer["SpecialtyNotFound"] });
             }
 
             return NoContent();

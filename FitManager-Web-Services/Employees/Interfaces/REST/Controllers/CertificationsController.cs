@@ -9,6 +9,8 @@ using FitManager_Web_Services.Employees.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 using Swashbuckle.AspNetCore.Annotations;
+using FitManager_Web_Services.Resources;
+using Microsoft.Extensions.Localization;
 
 namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
 {
@@ -19,13 +21,16 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
     {
         private readonly ICertificationCommandService _certificationCommandService;
         private readonly ICertificationQueryService _certificationQueryService;
+        private readonly IStringLocalizer<SharedResource> _localizer;
 
         public CertificationsController(
             ICertificationCommandService certificationCommandService,
-            ICertificationQueryService certificationQueryService)
+            ICertificationQueryService certificationQueryService,
+            IStringLocalizer<SharedResource> localizer)
         {
             _certificationCommandService = certificationCommandService;
             _certificationQueryService = certificationQueryService;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -37,18 +42,39 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
         [SwaggerOperation(Summary = "Creates a new Certification")]
         [SwaggerResponse(201, "The certification was created successfully", typeof(CertificationResource))]
         [SwaggerResponse(400, "Invalid input data")]
-        public async Task<ActionResult<CertificationResource>> CreateCertification(CreateCertificationResource resource)
+        public async Task<IActionResult> CreateCertification(CreateCertificationResource resource)
         {
-            var createCertificationCommand = CreateCertificationCommandFromResourceAssembler.ToCommandFromResource(resource);
-            var certification = await _certificationCommandService.Handle(createCertificationCommand);
+            var createCommand = CreateCertificationCommandFromResourceAssembler.ToCommandFromResource(resource);
+            var certification = await _certificationCommandService.Handle(createCommand);
 
             if (certification is null)
             {
-                return BadRequest("Unable to create certification. Employee might not exist.");
+                var message = _localizer["CertificationCreateFailed"];
+                return BadRequest(new
+                {
+                    message = new
+                    {
+                        name = "CertificationCreateFailed",
+                        value = message.Value,
+                        resourceNotFound = message.ResourceNotFound,
+                        searchedLocation = message.SearchedLocation
+                    }
+                });
             }
 
             var certificationResource = CertificationResourceFromEntityAssembler.ToResourceFromEntity(certification);
-            return CreatedAtAction(nameof(GetCertifications), new { id = certificationResource.Id }, certificationResource);
+            var msg = _localizer["CertificationCreated"];
+            return CreatedAtAction(nameof(GetCertifications), new { id = certificationResource.Id }, new
+            {
+                message = new
+                {
+                    name = "CertificationCreated",
+                    value = msg.Value,
+                    resourceNotFound = msg.ResourceNotFound,
+                    searchedLocation = msg.SearchedLocation
+                },
+                data = certificationResource
+            });
         }
 
         /// <summary>
@@ -58,13 +84,24 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
         [HttpGet]
         [SwaggerOperation(Summary = "Gets all Certifications")]
         [SwaggerResponse(200, "A list of certifications was retrieved successfully", typeof(IEnumerable<CertificationResource>))]
-        public async Task<ActionResult<IEnumerable<CertificationResource>>> GetCertifications()
+        public async Task<IActionResult> GetCertifications()
         {
-            var getAllCertificationsQuery = new GetAllCertificationsQuery();
-            var certifications = await _certificationQueryService.Handle(getAllCertificationsQuery);
+            var query = new GetAllCertificationsQuery();
+            var certifications = await _certificationQueryService.Handle(query);
+            var resources = certifications.Select(CertificationResourceFromEntityAssembler.ToResourceFromEntity);
 
-            var certificationResources = certifications.Select(CertificationResourceFromEntityAssembler.ToResourceFromEntity);
-            return Ok(certificationResources);
+            var msg = _localizer["CertificationsRetrieved"];
+            return Ok(new
+            {
+                message = new
+                {
+                    name = "CertificationsRetrieved",
+                    value = msg.Value,
+                    resourceNotFound = msg.ResourceNotFound,
+                    searchedLocation = msg.SearchedLocation
+                },
+                data = resources
+            });
         }
 
         /// <summary>
@@ -78,12 +115,22 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
         [SwaggerResponse(404, "Certification not found")]
         public async Task<IActionResult> DeleteCertification(int id)
         {
-            var deleteCertificationCommand = new DeleteCertificationCommand(id);
-            var result = await _certificationCommandService.Handle(deleteCertificationCommand);
+            var deleteCommand = new DeleteCertificationCommand(id);
+            var result = await _certificationCommandService.Handle(deleteCommand);
 
             if (!result)
             {
-                return NotFound("Certification not found or could not be deleted.");
+                var message = _localizer["CertificationNotFound"];
+                return NotFound(new
+                {
+                    message = new
+                    {
+                        name = "CertificationNotFound",
+                        value = message.Value,
+                        resourceNotFound = message.ResourceNotFound,
+                        searchedLocation = message.SearchedLocation
+                    }
+                });
             }
 
             return NoContent();

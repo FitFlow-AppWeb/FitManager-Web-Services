@@ -37,4 +37,13 @@
       <Folder Include="IAM\Interfaces\REST\Transform\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\SharedResource.en-US.resx">
+        <DependentUpon>SharedResource.cs</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\SharedResource.es-ES.resx">
+        <DependentUpon>SharedResource.cs</DependentUpon>
+      </EmbeddedResource>
+    </ItemGroup>
+
 </Project>
