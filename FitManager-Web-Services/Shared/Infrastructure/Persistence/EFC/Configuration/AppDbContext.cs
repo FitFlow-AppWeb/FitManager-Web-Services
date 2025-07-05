@@ -4,9 +4,9 @@ using FitManager_Web_Services.Employees.Domain.Model.Aggregates;
 using FitManager_Web_Services.Members.Domain.Model.Aggregates;
 using FitManager_Web_Services.Classes.Domain.Model.Aggregates;
 using FitManager_Web_Services.Finances.Domain.Model.Aggregates;
+using FitManager_Web_Services.IAM.Domain.Model;
 using FitManager_Web_Services.Inventory.Domain.Model.Aggregates;
 using FitManager_Web_Services.Notifications.Domain.Model.Aggregates;
-using FitManager_Web_Services.Users.Domain.Model;
 
 namespace FitManager_Web_Services.Shared.Infrastructure.Persistence.EFC.Configuration;
 

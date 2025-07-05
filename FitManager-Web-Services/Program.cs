@@ -59,12 +59,13 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddControllers(); 
 
 // Register IAM (Authentication) services
-builder.Services.Configure<FitManager_Web_Services.Users.Infrastructure.Tokens.TokenSettings>(
-    builder.Configuration.GetSection("Jwt"));
-builder.Services.AddScoped<FitManager_Web_Services.Users.Application.Internal.OutboundServices.IHashingService, FitManager_Web_Services.Users.Application.Internal.OutboundServices.HashingService>();
-builder.Services.AddScoped<FitManager_Web_Services.Users.Application.Internal.OutboundServices.ITokenService, FitManager_Web_Services.Users.Infrastructure.Tokens.TokenService>();
-builder.Services.AddScoped<FitManager_Web_Services.Users.Application.Internal.CommandServices.UserCommandService>();
-builder.Services.AddScoped<FitManager_Web_Services.Users.Application.Internal.QueryServices.UserQueryService>();
+builder.Services.Configure<FitManager_Web_Services.IAM.Infrastructure.Tokens.TokenSettings>(
+    builder.Configuration.GetSection("TokenSettings"));
+builder.Services.AddScoped<FitManager_Web_Services.IAM.Application.Internal.OutboundServices.IHashingService, FitManager_Web_Services.IAM.Application.Internal.OutboundServices.HashingService>();
+builder.Services.AddScoped<FitManager_Web_Services.IAM.Application.Internal.OutboundServices.ITokenService, FitManager_Web_Services.IAM.Infrastructure.Tokens.TokenService>();
+builder.Services.AddScoped<FitManager_Web_Services.IAM.Application.Internal.CommandServices.UserCommandService>();
+builder.Services.AddScoped<FitManager_Web_Services.IAM.Application.Internal.QueryServices.UserQueryService>();
+builder.Services.AddScoped<FitManager_Web_Services.IAM.Domain.Repositories.IUserRepository, FitManager_Web_Services.IAM.Infrastructure.Repositories.UserRepository>();
 // =====================================================================
 // Employee Bounded Context Registrations
 // =====================================================================
@@ -183,7 +184,7 @@ app.UseSwaggerUI();
 
 
 // Use custom JWT authorization middleware
-app.UseMiddleware<FitManager_Web_Services.Users.Infrastructure.Pipeline.Middleware.Components.RequestAuthorizationMiddleware>();
+app.UseMiddleware<FitManager_Web_Services.IAM.Infrastructure.Pipeline.Middleware.Components.RequestAuthorizationMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();
