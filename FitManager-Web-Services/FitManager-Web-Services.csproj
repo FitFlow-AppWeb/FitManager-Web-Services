@@ -10,6 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
         <PackageReference Include="EntityFrameworkCore.CreatedUpdatedDate" Version="8.0.0" />
         <PackageReference Include="MediatR" Version="12.5.0" />
 
@@ -24,6 +25,16 @@
 
         <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.4" />
         <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="8.1.4" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.31.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="IAM\Application\Internal\CommandServices\" />
+      <Folder Include="IAM\Application\Internal\QueryServices\" />
+      <Folder Include="IAM\Infrastructure\Repositories\" />
+      <Folder Include="IAM\Interfaces\REST\Controllers\" />
+      <Folder Include="IAM\Interfaces\REST\Resources\" />
+      <Folder Include="IAM\Interfaces\REST\Transform\" />
     </ItemGroup>
 
 </Project>
