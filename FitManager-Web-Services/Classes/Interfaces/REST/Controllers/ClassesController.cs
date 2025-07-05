@@ -4,6 +4,7 @@ using FitManager_Web_Services.Classes.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using FitManager_Web_Services.Resources;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Localization;
 
 namespace FitManager_Web_Services.Classes.Interfaces.REST.Controllers;
@@ -40,6 +41,7 @@ public class ClassesController : ControllerBase
     /// Returns 200 OK with the created class resource on success.
     /// </returns>
     [HttpPost]
+    [Authorize]
     [SwaggerOperation(
         Summary = "Create a New Class",
         Description = "Creates a new class with the provided details."
@@ -73,6 +75,7 @@ public class ClassesController : ControllerBase
     /// Returns 200 OK with the list of classes.
     /// </returns>
     [HttpGet]
+    [Authorize]
     [SwaggerOperation(
         Summary = "List All Classes",
         Description = "Retrieves a list of all available classes."
@@ -100,6 +103,7 @@ public class ClassesController : ControllerBase
     /// Returns 204 No Content on successful update.
     /// </returns>
     [HttpPut("{id}")]
+    [Authorize]
     [SwaggerOperation(
         Summary = "Update a Class",
         Description = "Updates the details of an existing class."
@@ -133,6 +137,7 @@ public class ClassesController : ControllerBase
     /// Returns 204 No Content on successful deletion.
     /// </returns>
     [HttpDelete("{id}")]
+    [Authorize]
     [SwaggerOperation(
         Summary = "Delete a Class",
         Description = "Deletes an existing class by its ID."

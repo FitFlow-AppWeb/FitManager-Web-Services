@@ -10,7 +10,12 @@ namespace FitManager_Web_Services.IAM.Interfaces.REST.Transform
     {
         public static SignUpCommand ToCommand(SignUpResource resource)
         {
-            return new SignUpCommand(resource.Email, resource.Password);
+            return new SignUpCommand(
+                resource.Email,
+                resource.Password,
+                resource.Icon,
+                resource.Subscription
+            );
         }
     }
 }

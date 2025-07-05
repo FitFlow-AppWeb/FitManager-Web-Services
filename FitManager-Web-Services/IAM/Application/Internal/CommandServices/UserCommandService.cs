@@ -38,7 +38,7 @@ namespace FitManager_Web_Services.IAM.Application.Internal.CommandServices
             if (_userRepository.ExistsByEmail(command.Email))
                 throw new InvalidOperationException("Email already in use.");
             var hash = _hashingService.HashPassword(command.Password);
-            var user = new User(0, command.Email, hash, string.Empty, string.Empty);
+            var user = new User(0, command.Email, hash, command.Icon, command.Subscription);
             await _userRepository.AddAsync(user);
             await _unitOfWork.CompleteAsync();
         }

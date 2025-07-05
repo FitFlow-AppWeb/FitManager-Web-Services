@@ -11,6 +11,7 @@ using System.Net.Mime;
 using Swashbuckle.AspNetCore.Annotations; // Para MediaTypeNames
 using Microsoft.Extensions.Localization;
 using FitManager_Web_Services.Resources;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
@@ -41,6 +42,7 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
         /// <param name="resource">The resource containing the new specialty data.</param>
         /// <returns>The created specialty resource if successful, otherwise BadRequest.</returns>
         [HttpPost]
+        [Authorize]
         [SwaggerOperation(Summary = "Creates a new Specialty")]
         [SwaggerResponse(201, "The specialty was created successfully", typeof(SpecialtyResource))]
         [SwaggerResponse(400, "Invalid input data")]
@@ -67,6 +69,7 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
         /// </summary>
         /// <returns>A list of specialty resources.</returns>
         [HttpGet]
+        [Authorize]
         [SwaggerOperation(Summary = "Gets all Specialties")]
         [SwaggerResponse(200, "A list of specialties was retrieved successfully", typeof(IEnumerable<SpecialtyResource>))]
         public async Task<ActionResult<IEnumerable<SpecialtyResource>>> GetSpecialties()
@@ -88,6 +91,7 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
         /// <param name="id">The ID of the specialty to delete.</param>
         /// <returns>NoContent if successful, otherwise NotFound.</returns>
         [HttpDelete("{id:int}")]
+        [Authorize]
         [SwaggerOperation(Summary = "Deletes a Specialty by ID")]
         [SwaggerResponse(204, "The specialty was deleted successfully")]
         [SwaggerResponse(404, "Specialty not found")]

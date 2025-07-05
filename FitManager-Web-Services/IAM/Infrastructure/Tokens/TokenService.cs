@@ -15,51 +15,59 @@ namespace FitManager_Web_Services.IAM.Infrastructure.Tokens
     /// </summary>
     public class TokenService : ITokenService
     {
-        private readonly TokenSettings _settings;
+        private readonly string _secret;
         private readonly byte[] _key;
 
-        public TokenService(IOptions<TokenSettings> options)
+        public TokenService(IOptions<TokenOptions> options)
         {
-            _settings = options.Value;
-            _key = Encoding.ASCII.GetBytes(_settings.Secret);
+            _secret = options.Value.Secret ?? throw new ArgumentNullException(nameof(options.Value.Secret));
+            _key = Encoding.ASCII.GetBytes(_secret);
         }
 
-        /// <inheritdoc />
         public string GenerateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
+
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Email)
             };
-            var creds = new SigningCredentials(new SymmetricSecurityKey(_key), SecurityAlgorithms.HmacSha256Signature);
+
+            var creds = new SigningCredentials(
+                new SymmetricSecurityKey(_key),
+                SecurityAlgorithms.HmacSha256Signature);
+
             var token = tokenHandler.CreateJwtSecurityToken(
                 subject: new ClaimsIdentity(claims),
-                expires: DateTime.UtcNow.AddHours(2),
+                expires: DateTime.UtcNow.AddHours(2), // Tiempo fijo
                 signingCredentials: creds
             );
+
             return tokenHandler.WriteToken(token);
         }
 
-        /// <inheritdoc />
         public Task<int?> ValidateToken(string token)
         {
-            if (string.IsNullOrWhiteSpace(token)) return Task.FromResult<int?>(null);
+            if (string.IsNullOrWhiteSpace(token))
+                return Task.FromResult<int?>(null);
 
             var tokenHandler = new JwtSecurityTokenHandler();
+
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(_key),
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+
             try
             {
-                var parameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(_key),
-                    ClockSkew = TimeSpan.Zero
-                };
+                var principal = tokenHandler.ValidateToken(token, validationParameters, out var validatedToken);
 
-                var principal = tokenHandler.ValidateToken(token, parameters, out var validatedToken);
                 if (validatedToken is JwtSecurityToken jwt &&
                     jwt.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -70,8 +78,9 @@ namespace FitManager_Web_Services.IAM.Infrastructure.Tokens
             }
             catch
             {
-                // invalid token
+                // Token inválido
             }
+
             return Task.FromResult<int?>(null);
         }
     }

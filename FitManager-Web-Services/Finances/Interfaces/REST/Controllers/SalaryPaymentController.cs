@@ -6,6 +6,7 @@ using FitManager_Web_Services.Finances.Interfaces.REST.Resources;
 using FitManager_Web_Services.Finances.Interfaces.REST.Transform;
 using Microsoft.Extensions.Localization;
 using FitManager_Web_Services.Resources;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitManager_Web_Services.Finances.Interfaces.REST.Controllers;
 
@@ -49,6 +50,7 @@ public class SalaryPaymentController : ControllerBase
     /// 400 BadRequest if validation fails, or 404 NotFound if the employee is not found.
     /// </returns>
     [HttpPost]
+    [Authorize]
     [SwaggerOperation(
         Summary = "Register Salary Payment",
         Description = "Registers a new salary payment to an employee."
@@ -84,6 +86,7 @@ public class SalaryPaymentController : ControllerBase
     /// Returns 200 OK with the list of salary payments.
     /// </returns>
     [HttpGet]
+    [Authorize]
     [SwaggerOperation(
         Summary = "List Salary Payments",
         Description = "Retrieves all payments made to employees."
@@ -105,6 +108,7 @@ public class SalaryPaymentController : ControllerBase
     /// for the specified employee. Returns 200 OK with the list.
     /// </returns>
     [HttpGet("by-employee/{employeeId}")]
+    [Authorize]
     [SwaggerOperation(
         Summary = "List Payments by Employee",
         Description = "Retrieves all salary payments made to a specific employee."

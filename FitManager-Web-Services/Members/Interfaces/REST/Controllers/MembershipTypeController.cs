@@ -14,6 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 using FitManager_Web_Services.Resources;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
 {
@@ -54,6 +55,7 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
         /// Returns 200 OK with the list of membership types.
         /// </returns>
         [HttpGet]
+        [Authorize]
         [SwaggerOperation(
             Summary = "List All Membership Types",
             Description = "Retrieves a list of all available membership types."
@@ -86,6 +88,7 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
         /// <param name="resource">The resource containing membership type details (Name, Description, Price, Duration, Benefits).</param>
         /// <returns>The created membership type resource with its ID and a 201 Created status.</returns>
         [HttpPost]
+        [Authorize]
         [SwaggerOperation(
             Summary = "Create Membership Type",
             Description = "Creates a new membership type in the system with its details."
@@ -132,6 +135,7 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
         /// <param name="resource">The resource containing updated membership type details.</param>
         /// <returns>The updated membership type resource with a 200 OK status, or 404 if not found.</returns>
         [HttpPut("{id:int}")]
+        [Authorize]
         [SwaggerOperation(
             Summary = "Update Membership Type",
             Description = "Updates the details of an existing membership type by its ID."
@@ -175,6 +179,7 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
         /// <param name="id">The ID of the membership type to delete.</param>
         /// <returns>A 204 No Content status if successful, or 404 if not found.</returns>
         [HttpDelete("{id:int}")]
+        [Authorize]
         [SwaggerOperation(
             Summary = "Delete Membership Type",
             Description = "Deletes an existing membership type from the system by its ID."

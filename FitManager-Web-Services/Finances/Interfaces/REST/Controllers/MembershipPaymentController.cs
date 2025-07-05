@@ -6,6 +6,7 @@ using FitManager_Web_Services.Finances.Application.Internal.CommandServices;
 using FitManager_Web_Services.Finances.Application.Internal.QueryServices;
 using Microsoft.Extensions.Localization;
 using FitManager_Web_Services.Resources;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitManager_Web_Services.Finances.Interfaces.REST.Controllers;
 
@@ -48,6 +49,7 @@ public class MembershipPaymentController : ControllerBase
     /// 400 BadRequest if validation fails, or 404 NotFound if the member is not found.
     /// </returns>
     [HttpPost]
+    [Authorize]
     [SwaggerOperation(
         Summary = "Register Membership Payment",
         Description = "Registers a new payment made by a member."
@@ -96,6 +98,7 @@ public class MembershipPaymentController : ControllerBase
     /// Returns 200 OK with the list of membership payments.
     /// </returns>
     [HttpGet]
+    [Authorize]
     [SwaggerOperation(
         Summary = "List Membership Payments",
         Description = "Retrieves all registered membership payments."

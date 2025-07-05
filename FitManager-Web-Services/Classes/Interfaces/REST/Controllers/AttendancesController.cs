@@ -2,6 +2,7 @@ using FitManager_Web_Services.Classes.Domain.Services;
 using FitManager_Web_Services.Classes.Interfaces.REST.Resources;
 using FitManager_Web_Services.Classes.Interfaces.REST.Transform;
 using FitManager_Web_Services.Resources;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Swashbuckle.AspNetCore.Annotations;
@@ -42,6 +43,7 @@ public class AttendancesController : ControllerBase
     /// Returns 200 OK with the created attendance resource on success.
     /// </returns>
     [HttpPost]
+    [Authorize]
     [SwaggerOperation(
         Summary = "Register Attendance",
         Description = "Registers a member's attendance for a specific class."
@@ -72,6 +74,7 @@ public class AttendancesController : ControllerBase
     /// Returns 200 OK with the list of attendances.
     /// </returns>
     [HttpGet("class/{classId}")]
+    [Authorize]
     [SwaggerOperation(
         Summary = "List Attendances by Class",
         Description = "Retrieves a list of all attendances registered for a specific class."

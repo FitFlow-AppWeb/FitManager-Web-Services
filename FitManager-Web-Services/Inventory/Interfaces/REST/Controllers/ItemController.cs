@@ -8,6 +8,7 @@ using FitManager_Web_Services.Inventory.Domain.Model.Queries;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.Extensions.Localization;
 using FitManager_Web_Services.Resources;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitManager_Web_Services.Inventory.Interfaces.REST.Controllers
 {
@@ -39,6 +40,7 @@ namespace FitManager_Web_Services.Inventory.Interfaces.REST.Controllers
         /// </summary>
         /// <returns>Returns 200 OK with the list of items.</returns>
         [HttpGet]
+        [Authorize]
         [SwaggerOperation(Summary = "Listar Ítems", Description = "Obtiene una lista de todos los ítems registrados en el inventario.")]
         public async Task<ActionResult<object>> GetAllItems()
         {
@@ -68,6 +70,7 @@ namespace FitManager_Web_Services.Inventory.Interfaces.REST.Controllers
         /// <param name="resource">The resource containing updated item data.</param>
         /// <returns>Returns 200 OK with the updated item; 400 Bad Request; 404 Not Found.</returns>
         [HttpPut("{id}")]
+        [Authorize]
         [SwaggerOperation(
             Summary = "Actualizar Ítem",
             Description = "Actualiza la información de un ítem existente en el inventario."
@@ -128,6 +131,7 @@ namespace FitManager_Web_Services.Inventory.Interfaces.REST.Controllers
         /// <param name="id">The ID of the item to delete.</param>
         /// <returns>Returns 204 No Content; 404 Not Found if the item does not exist.</returns>
         [HttpDelete("{id}")]
+        [Authorize]
         [SwaggerOperation(Summary = "Eliminar Ítem", Description = "Elimina un ítem del sistema de inventario mediante su ID.")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]

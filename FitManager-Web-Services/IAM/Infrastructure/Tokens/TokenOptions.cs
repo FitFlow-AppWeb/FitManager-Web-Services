@@ -1,9 +1,9 @@
 namespace FitManager_Web_Services.IAM.Infrastructure.Tokens;
 
 /// <summary>
-/// Holds JWT configuration values.
+/// Holds minimal JWT configuration values.
 /// </summary>
-public class TokenSettings
+public class TokenOptions
 {
     public string Secret { get; set; } = default!;
 }

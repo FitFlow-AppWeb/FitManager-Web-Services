@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FitManager_Web_Services.IAM.Interfaces.REST.Resources;
 using FitManager_Web_Services.IAM.Interfaces.REST.Transform;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitManager_Web_Services.IAM.Interfaces.REST.Controllers
 {
@@ -26,6 +27,7 @@ namespace FitManager_Web_Services.IAM.Interfaces.REST.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [SwaggerOperation(
             Summary = "Create user",
             Description = "Creates a new user in the system."
@@ -42,6 +44,7 @@ namespace FitManager_Web_Services.IAM.Interfaces.REST.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [SwaggerOperation(
             Summary = "List users",
             Description = "Retrieves a list of all existing users."
@@ -54,6 +57,7 @@ namespace FitManager_Web_Services.IAM.Interfaces.REST.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         [SwaggerOperation(
             Summary = "Get user",
             Description = "Retrieves the details of a user by their ID."

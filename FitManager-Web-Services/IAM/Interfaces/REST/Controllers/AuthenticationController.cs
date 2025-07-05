@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using FitManager_Web_Services.IAM.Application.Internal.CommandServices;
 using FitManager_Web_Services.IAM.Domain.Model;
 using FitManager_Web_Services.IAM.Domain.Model.Commands;
+using FitManager_Web_Services.IAM.Infrastructure.Pipeline.Middleware.Attributes;
 using FitManager_Web_Services.IAM.Interfaces.REST.Resources;
 using FitManager_Web_Services.IAM.Interfaces.REST.Transform;
 
@@ -20,6 +21,7 @@ namespace FitManager_Web_Services.IAM.Interfaces.REST.Controllers
         }
 
         [HttpPost("sign-up")]
+        [AllowAnonymous]
         public async Task<IActionResult> SignUp([FromBody] SignUpResource resource)
         {
             var command = SignUpCommandFromResourceAssembler.ToCommand(resource);
@@ -28,6 +30,7 @@ namespace FitManager_Web_Services.IAM.Interfaces.REST.Controllers
         }
 
         [HttpPost("sign-in")]
+        [AllowAnonymous]
         public async Task<IActionResult> SignIn([FromBody] SignInResource resource)
         {
             var command = SignInCommandFromResourceAssembler.ToCommand(resource);

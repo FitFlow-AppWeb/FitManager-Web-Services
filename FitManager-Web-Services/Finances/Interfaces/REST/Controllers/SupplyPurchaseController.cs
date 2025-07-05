@@ -8,6 +8,7 @@ using FitManager_Web_Services.Inventory.Application.Internal.CommandServices;
 using FitManager_Web_Services.Inventory.Domain.Model.Commands;
 using Microsoft.Extensions.Localization;
 using FitManager_Web_Services.Resources;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitManager_Web_Services.Finances.Interfaces.REST.Controllers
 {
@@ -59,6 +60,7 @@ namespace FitManager_Web_Services.Finances.Interfaces.REST.Controllers
         /// or 400 BadRequest if validation fails or the purchase cannot be registered.
         /// </returns>
         [HttpPost]
+        [Authorize]
         [SwaggerOperation(
             Summary = "Register Supply Purchase",
             Description = "Registers a new supply purchase, its details (PurchaseDetails), and creates the associated inventory items."
@@ -135,6 +137,7 @@ namespace FitManager_Web_Services.Finances.Interfaces.REST.Controllers
         /// Returns 200 OK with the list of supply purchases.
         /// </returns>
         [HttpGet]
+        [Authorize]
         [SwaggerOperation(
             Summary = "List Supply Purchases",
             Description = "Retrieves all supply purchases registered in the system."

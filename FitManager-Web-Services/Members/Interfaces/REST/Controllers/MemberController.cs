@@ -8,6 +8,7 @@ using FitManager_Web_Services.Members.Interfaces.REST.Transform;
 using FitManager_Web_Services.Members.Domain.Model.Commands;
 using FitManager_Web_Services.Members.Domain.Model.Queries;
 using FitManager_Web_Services.Resources;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Localization;
 using Swashbuckle.AspNetCore.Annotations; 
 
@@ -47,6 +48,7 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
         /// Returns 201 Created if successful, 400 Bad Request if validation fails or member creation fails.
         /// </returns>
         [HttpPost]
+        [Authorize]
         [SwaggerOperation(
             Summary = "Añadir Miembro",
             Description = "Crea un nuevo miembro en el sistema."
@@ -81,6 +83,7 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
         /// Returns 200 OK with the list of members.
         /// </returns>
         [HttpGet]
+        [Authorize]
         [SwaggerOperation(
             Summary = "Listar todos los Miembros",
             Description = "Obtiene una lista de todos los miembros registrados en el sistema."
@@ -106,6 +109,7 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
         /// Returns 200 OK if successful, 400 Bad Request if validation fails, 404 Not Found if the member does not exist.
         /// </returns>
         [HttpPut("{id}")]
+        [Authorize]
         [SwaggerOperation(
             Summary = "Actualizar Miembro",
             Description = "Actualiza los datos de un miembro existente, incluyendo su estado de membresía."
@@ -142,6 +146,7 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
         /// Returns 204 No Content if successful, 404 Not Found if the member does not exist.
         /// </returns>
         [HttpDelete("{id}")]
+        [Authorize]
         [SwaggerOperation(
             Summary = "Eliminar Miembro",
             Description = "Elimina un miembro existente del sistema por su ID."

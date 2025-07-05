@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 using Swashbuckle.AspNetCore.Annotations;
 using FitManager_Web_Services.Resources;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Localization;
 
 namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
@@ -39,6 +40,7 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
         /// <param name="resource">The resource containing the new certification data.</param>
         /// <returns>The created certification resource if successful, otherwise BadRequest.</returns>
         [HttpPost]
+        [Authorize]
         [SwaggerOperation(Summary = "Creates a new Certification")]
         [SwaggerResponse(201, "The certification was created successfully", typeof(CertificationResource))]
         [SwaggerResponse(400, "Invalid input data")]
@@ -82,6 +84,7 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
         /// </summary>
         /// <returns>A list of certification resources.</returns>
         [HttpGet]
+        [Authorize]
         [SwaggerOperation(Summary = "Gets all Certifications")]
         [SwaggerResponse(200, "A list of certifications was retrieved successfully", typeof(IEnumerable<CertificationResource>))]
         public async Task<IActionResult> GetCertifications()
@@ -110,6 +113,7 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
         /// <param name="id">The ID of the certification to delete.</param>
         /// <returns>NoContent if successful, otherwise NotFound.</returns>
         [HttpDelete("{id:int}")]
+        [Authorize]
         [SwaggerOperation(Summary = "Deletes a Certification by ID")]
         [SwaggerResponse(204, "The certification was deleted successfully")]
         [SwaggerResponse(404, "Certification not found")]

@@ -27,11 +27,15 @@ using FitManager_Web_Services.Notifications.Application.Internal.CommandServices
 using FitManager_Web_Services.Notifications.Application.Internal.QueryServices;
 using FitManager_Web_Services.Notifications.Domain.Repositories;
 using FitManager_Web_Services.Notifications.Infrastructure.Repositories;
+using FitManager_Web_Services.IAM.Infrastructure.Tokens;
+using FitManager_Web_Services.IAM.Application.Internal.OutboundServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
-
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +46,7 @@ if (string.IsNullOrEmpty(connectionString))
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL(connectionString));
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontendProd", policy =>
@@ -55,8 +60,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-
-
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddLocalization();
 var localizationOptions = new RequestLocalizationOptions();
@@ -65,15 +68,72 @@ builder.Services.AddControllers()
     .AddDataAnnotationsLocalization()
     .AddViewLocalization();
 
-
 // Register IAM (Authentication) services
-builder.Services.Configure<FitManager_Web_Services.IAM.Infrastructure.Tokens.TokenSettings>(
-    builder.Configuration.GetSection("TokenSettings"));
-builder.Services.AddScoped<FitManager_Web_Services.IAM.Application.Internal.OutboundServices.IHashingService, FitManager_Web_Services.IAM.Application.Internal.OutboundServices.HashingService>();
-builder.Services.AddScoped<FitManager_Web_Services.IAM.Application.Internal.OutboundServices.ITokenService, FitManager_Web_Services.IAM.Infrastructure.Tokens.TokenService>();
+builder.Services.Configure<TokenOptions>(
+    builder.Configuration.GetSection("TokenOptions"));
+builder.Services.AddScoped<IHashingService, HashingService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<FitManager_Web_Services.IAM.Application.Internal.CommandServices.UserCommandService>();
 builder.Services.AddScoped<FitManager_Web_Services.IAM.Application.Internal.QueryServices.UserQueryService>();
 builder.Services.AddScoped<FitManager_Web_Services.IAM.Domain.Repositories.IUserRepository, FitManager_Web_Services.IAM.Infrastructure.Repositories.UserRepository>();
+
+// Register JWT Authentication (basado solo en Secret)
+var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
+var key = Encoding.ASCII.GetBytes(tokenOptions.Secret);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.EnableAnnotations();
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "FitManager API",
+        Version = "v1",
+        Description = "API for Gym Member Management"
+    });
+
+    var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(System.IO.Path.Combine(System.AppContext.BaseDirectory, xmlFilename));
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter your JWT token like this: **Bearer &lt;token&gt;**"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+
 // =====================================================================
 // Employee Bounded Context Registrations
 // =====================================================================
@@ -161,22 +221,6 @@ builder.Services.AddScoped<IEmployeeNotificationQueryService, EmployeeNotificati
 // =====================================================================
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.EnableAnnotations();
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "FitManager API",
-        Version = "v1",
-        Description = "API for Gym Member Management"
-    });
-    
-    var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    options.IncludeXmlComments(System.IO.Path.Combine(System.AppContext.BaseDirectory, xmlFilename));
-});
-
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -208,10 +252,18 @@ app.UseSwaggerUI();
 
 app.UseRequestLocalization();
 
-// Use custom JWT authorization middleware
-app.UseMiddleware<FitManager_Web_Services.IAM.Infrastructure.Pipeline.Middleware.Components.RequestAuthorizationMiddleware>();
+// Autenticación y autorización
+app.UseAuthentication(); // <- ¡Middleware JWT!
 app.UseAuthorization();
+
+// Middleware personalizado para auth (si aún lo usas)
+app.UseMiddleware<FitManager_Web_Services.IAM.Infrastructure.Pipeline.Middleware.Components.RequestAuthorizationMiddleware>();
 
 app.MapControllers();
 
 app.Run();
+
+
+/*
+
+*/

@@ -8,6 +8,7 @@ using FitManager_Web_Services.Employees.Domain.Model.Queries;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.Extensions.Localization;
 using FitManager_Web_Services.Resources;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
 {
@@ -49,6 +50,7 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
         /// Returns 201 Created with the created employee resource on success, or 400 BadRequest if validation fails or employee creation encounters an issue.
         /// </returns>
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeResource resource)
         {
             if (!ModelState.IsValid)
@@ -88,6 +90,7 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
         /// Returns 200 OK with the list of employees.
         /// </returns>
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> GetAllEmployees()
         {
             var getAllQuery = new GetAllEmployeesQuery();
@@ -119,6 +122,7 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
         /// or 404 NotFound if the employee does not exist.
         /// </returns>
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateEmployee(int id, [FromBody] UpdateEmployeeResource resource)
         {
             if (!ModelState.IsValid)
@@ -166,6 +170,7 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
         /// Returns 204 No Content on successful deletion, or 404 NotFound if the employee does not exist.
         /// </returns>
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteEmployee(int id)
         {
             var deleteCommand = new DeleteEmployeeCommand(id);

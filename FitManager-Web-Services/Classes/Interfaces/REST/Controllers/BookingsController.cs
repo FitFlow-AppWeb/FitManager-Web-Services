@@ -2,6 +2,7 @@ using FitManager_Web_Services.Classes.Domain.Services;
 using FitManager_Web_Services.Classes.Interfaces.REST.Resources;
 using FitManager_Web_Services.Classes.Interfaces.REST.Transform;
 using FitManager_Web_Services.Resources;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.Extensions.Localization;
@@ -33,6 +34,7 @@ public class BookingsController : ControllerBase
         _localizer = localizer;
     }
     [HttpPost]
+    [Authorize]
     [SwaggerOperation(
         Summary = "Create Booking",
         Description = "Registers a new booking for a class by a member."
@@ -63,6 +65,7 @@ public class BookingsController : ControllerBase
     /// Returns 200 OK with the list of bookings.
     /// </returns>
     [HttpGet("class/{classId}")]
+    [Authorize]
     [SwaggerOperation(
         Summary = "List Bookings by Class",
         Description = "Retrieves a list of all bookings registered for a specific class."
