@@ -1,7 +1,7 @@
 using System;
 using System.Text.Json.Serialization;
 
-namespace FitManager_Web_Services.Users.Domain.Model
+namespace FitManager_Web_Services.IAM.Domain.Model.Aggregates
 {
     public class User
     {
