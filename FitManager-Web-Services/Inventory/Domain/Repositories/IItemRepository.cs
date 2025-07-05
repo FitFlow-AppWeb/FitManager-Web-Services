@@ -18,6 +18,7 @@ namespace FitManager_Web_Services.Inventory.Domain.Repositories
         /// A <see cref="Task"/> that represents the asynchronous operation.
         /// The task result contains the <see cref="Item"/> if found; otherwise, null.
         /// </returns>
-        Task<Item?> GetByIdAsync(int id);
+        /// <inheritdoc/>
+        new Task<Item?> GetByIdAsync(int id);
     }
 }

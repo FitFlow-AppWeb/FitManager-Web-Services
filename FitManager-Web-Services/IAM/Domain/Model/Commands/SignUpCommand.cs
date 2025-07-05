@@ -1,4 +1,4 @@
-namespace FitManager_Web_Services.Users.Domain.Model.Commands;
+namespace FitManager_Web_Services.IAM.Domain.Model.Commands;
 
 /// <summary>
 /// Represents a command to sign up a new user.

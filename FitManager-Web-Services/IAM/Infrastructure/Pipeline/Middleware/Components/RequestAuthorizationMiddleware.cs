@@ -1,11 +1,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using FitManager_Web_Services.Users.Infrastructure.Pipeline.Middleware.Attributes;
-using FitManager_Web_Services.Users.Domain.Repositories;
-using FitManager_Web_Services.Users.Application.Internal.OutboundServices;
+using FitManager_Web_Services.IAM.Infrastructure.Pipeline.Middleware.Attributes;
+using FitManager_Web_Services.IAM.Domain.Repositories;
+using FitManager_Web_Services.IAM.Application.Internal.OutboundServices;
 
-namespace FitManager_Web_Services.Users.Infrastructure.Pipeline.Middleware.Components
+namespace FitManager_Web_Services.IAM.Infrastructure.Pipeline.Middleware.Components
 {
     /// <summary>
     /// Middleware that checks for JWT in the Authorization header and sets the User in HttpContext.Items.

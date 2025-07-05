@@ -1,4 +1,4 @@
-namespace FitManager_Web_Services.Users.Interfaces.REST.Resources
+namespace FitManager_Web_Services.IAM.Interfaces.REST.Resources
 {
     /// <summary>
     /// Represents the data returned by the Users API for a user.

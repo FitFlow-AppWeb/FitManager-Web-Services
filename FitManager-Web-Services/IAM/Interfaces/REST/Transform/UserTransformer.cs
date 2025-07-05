@@ -1,7 +1,7 @@
-using FitManager_Web_Services.Users.Domain.Model;
-using FitManager_Web_Services.Users.Interfaces.REST.Resources;
+using FitManager_Web_Services.IAM.Domain.Model;
+using FitManager_Web_Services.IAM.Interfaces.REST.Resources;
 
-namespace FitManager_Web_Services.Users.Interfaces.REST.Transform
+namespace FitManager_Web_Services.IAM.Interfaces.REST.Transform
 {
     /// <summary>
     /// Provides transformation methods between User domain entities and User API resources.

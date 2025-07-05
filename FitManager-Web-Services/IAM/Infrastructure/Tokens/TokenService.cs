@@ -3,12 +3,12 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using FitManager_Web_Services.Users.Application.Internal.OutboundServices;
-using FitManager_Web_Services.Users.Domain.Model;
+using FitManager_Web_Services.IAM.Application.Internal.OutboundServices;
+using FitManager_Web_Services.IAM.Domain.Model;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace FitManager_Web_Services.Users.Infrastructure.Tokens
+namespace FitManager_Web_Services.IAM.Infrastructure.Tokens
 {
     /// <summary>
     /// Generates and validates JWT tokens for authentication.

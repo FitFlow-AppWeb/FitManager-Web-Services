@@ -1,7 +1,7 @@
-using FitManager_Web_Services.Users.Application.Internal.OutboundServices;
+using FitManager_Web_Services.IAM.Application.Internal.OutboundServices;
 using BCryptNet = BCrypt.Net.BCrypt;
 
-namespace FitManager_Web_Services.Users.Application.Internal.OutboundServices
+namespace FitManager_Web_Services.IAM.Application.Internal.OutboundServices
 {
     /// <summary>
     /// Implements password hashing and verification using BCrypt.

@@ -1,12 +1,12 @@
 using System;
 using System.Threading.Tasks;
 using FitManager_Web_Services.Shared.Domain.Repositories;
-using FitManager_Web_Services.Users.Application.Internal.OutboundServices;
-using FitManager_Web_Services.Users.Domain.Model;
-using FitManager_Web_Services.Users.Domain.Model.Commands;
-using FitManager_Web_Services.Users.Domain.Repositories;
+using FitManager_Web_Services.IAM.Application.Internal.OutboundServices;
+using FitManager_Web_Services.IAM.Domain.Model;
+using FitManager_Web_Services.IAM.Domain.Model.Commands;
+using FitManager_Web_Services.IAM.Domain.Repositories;
 
-namespace FitManager_Web_Services.Users.Application.Internal.CommandServices
+namespace FitManager_Web_Services.IAM.Application.Internal.CommandServices
 {
     /// <summary>
     /// Handles user commands (authentication + CRUD).
@@ -61,7 +61,7 @@ namespace FitManager_Web_Services.Users.Application.Internal.CommandServices
         public async Task<User?> Handle(CreateUserCommand command)
         {
             // Ensure email is unique
-            var existing = await _userRepository.GetByEmailAsync(command.Email);
+            var existing = await _userRepository.FindByEmailAsync(command.Email);
             if (existing != null) return null;
 
             var user = new User(0, command.Email, command.Password, command.Icon, command.Subscription);

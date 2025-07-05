@@ -1,4 +1,4 @@
-namespace FitManager_Web_Services.Users.Infrastructure.Tokens;
+namespace FitManager_Web_Services.IAM.Infrastructure.Tokens;
 
 /// <summary>
 /// Holds JWT configuration values.

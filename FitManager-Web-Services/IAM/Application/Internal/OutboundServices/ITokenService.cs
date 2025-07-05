@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using FitManager_Web_Services.Users.Domain.Model;
+using FitManager_Web_Services.IAM.Domain.Model;
 
-namespace FitManager_Web_Services.Users.Application.Internal.OutboundServices
+namespace FitManager_Web_Services.IAM.Application.Internal.OutboundServices
 {
     /// <summary>
     /// Interface for JWT token generation and validation.

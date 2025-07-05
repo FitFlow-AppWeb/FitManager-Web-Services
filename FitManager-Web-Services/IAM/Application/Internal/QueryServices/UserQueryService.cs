@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FitManager_Web_Services.Users.Domain.Model;
-using FitManager_Web_Services.Users.Domain.Model.Queries;
-using FitManager_Web_Services.Users.Domain.Repositories;
+using FitManager_Web_Services.IAM.Domain.Model;
+using FitManager_Web_Services.IAM.Domain.Model.Queries;
+using FitManager_Web_Services.IAM.Domain.Repositories;
 
-namespace FitManager_Web_Services.Users.Application.Internal.QueryServices
+namespace FitManager_Web_Services.IAM.Application.Internal.QueryServices
 {
     /// <summary>
     /// Handles queries related to User aggregate, such as retrieval.

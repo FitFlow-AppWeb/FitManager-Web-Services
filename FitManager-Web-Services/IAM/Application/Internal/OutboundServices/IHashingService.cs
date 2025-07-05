@@ -1,4 +1,4 @@
-namespace FitManager_Web_Services.Users.Application.Internal.OutboundServices
+namespace FitManager_Web_Services.IAM.Application.Internal.OutboundServices
 {
     /// <summary>
     /// Interface for hashing service that computes and verifies password hashes.

@@ -1,12 +1,12 @@
 using FitManager_Web_Services.Shared.Infrastructure.Persistence.EFC.Configuration;
 using FitManager_Web_Services.Shared.Infrastructure.Persistence.EFC.Repositories;
-using FitManager_Web_Services.Users.Domain.Model;
-using FitManager_Web_Services.Users.Domain.Repositories;
+using FitManager_Web_Services.IAM.Domain.Model;
+using FitManager_Web_Services.IAM.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FitManager_Web_Services.Users.Infrastructure.Repositories
+namespace FitManager_Web_Services.IAM.Infrastructure.Repositories
 {
     /// <summary>
     /// Implements the <see cref="IUserRepository"/>, providing data access for <see cref="User"/> aggregates.

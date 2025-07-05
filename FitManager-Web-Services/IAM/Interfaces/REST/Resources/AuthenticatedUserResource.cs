@@ -1,4 +1,4 @@
-namespace FitManager_Web_Services.Users.Interfaces.REST.Resources
+namespace FitManager_Web_Services.IAM.Interfaces.REST.Resources
 {
     /// <summary>
     /// Resource returned after successful authentication.

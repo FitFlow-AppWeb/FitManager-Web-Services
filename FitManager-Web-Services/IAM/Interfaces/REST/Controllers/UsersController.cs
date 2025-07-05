@@ -1,16 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using FitManager_Web_Services.Users.Domain.Model.Commands;
-using FitManager_Web_Services.Users.Domain.Model.Queries;
-using FitManager_Web_Services.Users.Application.Internal.CommandServices;
-using FitManager_Web_Services.Users.Application.Internal.QueryServices;
+using FitManager_Web_Services.IAM.Domain.Model.Commands;
+using FitManager_Web_Services.IAM.Domain.Model.Queries;
+using FitManager_Web_Services.IAM.Application.Internal.CommandServices;
+using FitManager_Web_Services.IAM.Application.Internal.QueryServices;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
-using FitManager_Web_Services.Users.Interfaces.REST.Resources;
-using FitManager_Web_Services.Users.Interfaces.REST.Transform;
+using FitManager_Web_Services.IAM.Interfaces.REST.Resources;
+using FitManager_Web_Services.IAM.Interfaces.REST.Transform;
 
-namespace FitManager_Web_Services.Users.Interfaces.REST.Controllers
+namespace FitManager_Web_Services.IAM.Interfaces.REST.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]

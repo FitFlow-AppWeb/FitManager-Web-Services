@@ -1,4 +1,4 @@
-namespace FitManager_Web_Services.Users.Domain.Model.Queries;
+namespace FitManager_Web_Services.IAM.Domain.Model.Queries;
 
 /// <summary>
 /// Represents a query to retrieve a user by email.

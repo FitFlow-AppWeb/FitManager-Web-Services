@@ -1,4 +1,4 @@
-namespace FitManager_Web_Services.Users.Interfaces.REST.Resources
+namespace FitManager_Web_Services.IAM.Interfaces.REST.Resources
 {
     /// <summary>
     /// Represents the resource for creating a new user via the REST API.

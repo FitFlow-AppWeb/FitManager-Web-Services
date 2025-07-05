@@ -1,8 +1,8 @@
-using FitManager_Web_Services.Users.Domain.Model;
+using FitManager_Web_Services.IAM.Domain.Model;
 using FitManager_Web_Services.Shared.Domain.Repositories;
 using System.Threading.Tasks;
 
-namespace FitManager_Web_Services.Users.Domain.Repositories;
+namespace FitManager_Web_Services.IAM.Domain.Repositories;
 
 /// <summary>
 /// Defines the contract for a repository that manages <see cref="User"/> aggregates.

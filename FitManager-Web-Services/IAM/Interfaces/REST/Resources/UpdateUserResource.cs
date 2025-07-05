@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace FitManager_Web_Services.Users.Interfaces.REST.Resources
+namespace FitManager_Web_Services.IAM.Interfaces.REST.Resources
 {
     /// <summary>
     /// Represents the resource for updating an existing user via the REST API.
