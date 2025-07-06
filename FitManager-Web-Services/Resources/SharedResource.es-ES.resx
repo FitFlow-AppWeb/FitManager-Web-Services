@@ -257,6 +257,10 @@
   <data name="UserSignedIn" xml:space="preserve">
   <value>Usuario inició sesión correctamente.</value>
 </data>
-
-
+  <data name="AttendancesRetrievedSuccessfully" xml:space="preserve">
+    <value>Asistencias recuperadas correctamente</value>
+  </data>
+  <data name="NoAttendancesToday" xml:space="preserve">
+    <value>No hay asistencias hoy.</value>
+  </data>
 </root>

@@ -257,8 +257,10 @@
   <data name="UserSignedIn" xml:space="preserve">
   <value>User signed in successfully.</value>
 </data>
-
-
-
-
+  <data name="AttendancesRetrievedSuccessfully" xml:space="preserve">
+    <value>Attendances retrieved successfully</value>
+  </data>
+  <data name="NoAttendancesToday" xml:space="preserve">
+    <value>No attendances today.</value>
+  </data>
 </root>

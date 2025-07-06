@@ -101,5 +101,17 @@ namespace FitManager_Web_Services.Classes.Domain.Services
         {
             return await _attendanceRepository.GetByIdAsync(id);
         }
+        
+        /// <summary>
+        /// Asynchronously retrieves all attendance records from the repository.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="Task"/> that represents the asynchronous operation.
+        /// The task result contains an enumerable collection of all <see cref="Attendance"/> objects.
+        /// </returns>
+        public async Task<IEnumerable<Attendance>> GetAllAttendancesAsync() 
+        {
+            return await _attendanceRepository.GetAllAsync();
+        }
     }
 }

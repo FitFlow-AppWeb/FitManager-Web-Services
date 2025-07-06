@@ -114,4 +114,20 @@ public class AttendanceRepository : IAttendanceRepository
         _context.Attendances.Remove(attendance);
         await _context.SaveChangesAsync();
     }
+    
+    /// <summary>
+    /// Asynchronously retrieves all attendance records from the repository.
+    /// Includes associated member and class details for comprehensive data.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="Task"/> that represents the asynchronous operation.
+    /// The task result contains an <see cref="IEnumerable{T}"/> of all <see cref="Attendance"/> objects.
+    /// </returns>
+    public async Task<IEnumerable<Attendance>> GetAllAsync() 
+    {
+        return await _context.Attendances
+            .Include(a => a.Member) 
+            .Include(a => a.Class)   
+            .ToListAsync();
+    }
 }
