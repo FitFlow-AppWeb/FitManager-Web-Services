@@ -228,21 +228,6 @@ builder.Services.AddScoped<IEmployeeNotificationQueryService, EmployeeNotificati
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.EnableAnnotations();
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "FitManager API",
-        Version = "v1",
-        Description = "API for Gym Member Management"
-    });
-    
-    var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    options.IncludeXmlComments(System.IO.Path.Combine(System.AppContext.BaseDirectory, xmlFilename));
-});
-
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
