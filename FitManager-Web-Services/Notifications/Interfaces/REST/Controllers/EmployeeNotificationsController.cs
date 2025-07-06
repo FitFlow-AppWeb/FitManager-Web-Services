@@ -8,6 +8,9 @@ using FitManager_Web_Services.Notifications.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime; 
 using Swashbuckle.AspNetCore.Annotations; 
+using Microsoft.Extensions.Localization;
+using FitManager_Web_Services.Resources;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitManager_Web_Services.Notifications.Interfaces.REST.Controllers
 {
@@ -18,13 +21,16 @@ namespace FitManager_Web_Services.Notifications.Interfaces.REST.Controllers
     {
         private readonly IEmployeeNotificationCommandService _employeeNotificationCommandService;
         private readonly IEmployeeNotificationQueryService _employeeNotificationQueryService;
+        private readonly IStringLocalizer<SharedResource> _localizer;
 
         public EmployeeNotificationsController(
             IEmployeeNotificationCommandService employeeNotificationCommandService,
-            IEmployeeNotificationQueryService employeeNotificationQueryService)
+            IEmployeeNotificationQueryService employeeNotificationQueryService,
+            IStringLocalizer<SharedResource> localizer)
         {
             _employeeNotificationCommandService = employeeNotificationCommandService;
             _employeeNotificationQueryService = employeeNotificationQueryService;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -33,6 +39,7 @@ namespace FitManager_Web_Services.Notifications.Interfaces.REST.Controllers
         /// <param name="resource">The resource containing notification details and employee IDs.</param>
         /// <returns>A status indicating success or failure of the operation.</returns>
         [HttpPost]
+        [Authorize]
         [SwaggerOperation(
             Summary = "Create Employee Notification",
             Description = "Creates a new notification and associates it with a list of employees."
@@ -51,19 +58,42 @@ namespace FitManager_Web_Services.Notifications.Interfaces.REST.Controllers
             {
                 var command = CreateEmployeeNotificationCommandFromResourceAssembler.ToCommandFromResource(resource);
                 await _employeeNotificationCommandService.Handle(command);
-                return StatusCode(201); 
+
+                var localizedMessage = _localizer["EmployeeNotificationCreated"];
+                return Ok(new
+                {
+                    message = new
+                    {
+                        name = "EmployeeNotificationCreated",
+                        value = localizedMessage.Value,
+                        resourceNotFound = localizedMessage.ResourceNotFound,
+                        searchedLocation = localizedMessage.SearchedLocation
+                    }
+                });
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred: {ex.Message}");
+                // Puedes devolver un mensaje localizado de error si quieres
+                var errorMessage = _localizer["EmployeeNotificationCreationFailed"];
+                return StatusCode(500, new
+                {
+                    message = new
+                    {
+                        name = "EmployeeNotificationCreationFailed",
+                        value = errorMessage.Value,
+                        details = ex.Message
+                    }
+                });
             }
         }
+
 
         /// <summary>
         /// Gets all notifications sent to employees.
         /// </summary>
         /// <returns>A list of employee notification resources.</returns>
         [HttpGet]
+        [Authorize]
         [SwaggerOperation(
             Summary = "Get All Employee Notifications",
             Description = "Retrieves a list of all notifications that have been sent to employees, including their associated details."
@@ -77,11 +107,32 @@ namespace FitManager_Web_Services.Notifications.Interfaces.REST.Controllers
                 var query = new GetAllEmployeeNotificationsQuery();
                 var employeeNotifications = await _employeeNotificationQueryService.Handle(query);
                 var resources = employeeNotifications.Select(EmployeeNotificationResourceFromEntityAssembler.ToResourceFromEntity);
-                return Ok(resources);
+
+                var localizedMessage = _localizer["EmployeeNotificationsRetrieved"];
+                return Ok(new
+                {
+                    message = new
+                    {
+                        name = "EmployeeNotificationsRetrieved",
+                        value = localizedMessage.Value,
+                        resourceNotFound = localizedMessage.ResourceNotFound,
+                        searchedLocation = localizedMessage.SearchedLocation
+                    },
+                    data = resources
+                });
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred: {ex.Message}");
+                var errorMessage = _localizer["EmployeeNotificationsRetrievalFailed"];
+                return StatusCode(500, new
+                {
+                    message = new
+                    {
+                        name = "EmployeeNotificationsRetrievalFailed",
+                        value = errorMessage.Value,
+                        details = ex.Message
+                    }
+                });
             }
         }
     }

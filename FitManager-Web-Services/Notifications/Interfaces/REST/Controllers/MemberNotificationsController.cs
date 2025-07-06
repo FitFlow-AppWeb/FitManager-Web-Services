@@ -8,6 +8,9 @@ using FitManager_Web_Services.Notifications.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime; 
 using Swashbuckle.AspNetCore.Annotations; 
+using Microsoft.Extensions.Localization;
+using FitManager_Web_Services.Resources;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitManager_Web_Services.Notifications.Interfaces.REST.Controllers
 {
@@ -18,13 +21,16 @@ namespace FitManager_Web_Services.Notifications.Interfaces.REST.Controllers
     {
         private readonly IMemberNotificationCommandService _memberNotificationCommandService;
         private readonly IMemberNotificationQueryService _memberNotificationQueryService;
+        private readonly IStringLocalizer<SharedResource> _localizer;
 
         public MemberNotificationsController(
             IMemberNotificationCommandService memberNotificationCommandService,
-            IMemberNotificationQueryService memberNotificationQueryService)
+            IMemberNotificationQueryService memberNotificationQueryService,
+            IStringLocalizer<SharedResource> localizer)
         {
             _memberNotificationCommandService = memberNotificationCommandService;
             _memberNotificationQueryService = memberNotificationQueryService;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -33,6 +39,7 @@ namespace FitManager_Web_Services.Notifications.Interfaces.REST.Controllers
         /// <param name="resource">The resource containing notification details and member IDs.</param>
         /// <returns>A status indicating success or failure of the operation.</returns>
         [HttpPost]
+        [Authorize]
         [SwaggerOperation(
             Summary = "Create Member Notification",
             Description = "Creates a new notification and associates it with a list of members."
@@ -44,18 +51,21 @@ namespace FitManager_Web_Services.Notifications.Interfaces.REST.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                var validationMessage = _localizer["InvalidData"];
+                return BadRequest(new { message = validationMessage });
             }
 
             try
             {
                 var command = CreateMemberNotificationCommandFromResourceAssembler.ToCommandFromResource(resource);
                 await _memberNotificationCommandService.Handle(command);
-                return StatusCode(201); 
+                var message = _localizer["MemberNotificationCreated"];
+                return StatusCode(201, new { message });
             }
             catch (System.Exception ex)
             {
-                return StatusCode(500, $"An error occurred: {ex.Message}");
+                var errorMessage = _localizer["InternalServerError"];
+                return StatusCode(500, new { message = errorMessage, detail = ex.Message });
             }
         }
 
@@ -64,6 +74,7 @@ namespace FitManager_Web_Services.Notifications.Interfaces.REST.Controllers
         /// </summary>
         /// <returns>A list of member notification resources.</returns>
         [HttpGet]
+        [Authorize]
         [SwaggerOperation(
             Summary = "Get All Member Notifications",
             Description = "Retrieves a list of all notifications that have been sent to members, including their associated details."
@@ -77,11 +88,13 @@ namespace FitManager_Web_Services.Notifications.Interfaces.REST.Controllers
                 var query = new GetAllMemberNotificationsQuery();
                 var memberNotifications = await _memberNotificationQueryService.Handle(query);
                 var resources = memberNotifications.Select(MemberNotificationResourceFromEntityAssembler.ToResourceFromEntity);
-                return Ok(resources);
+                var message = _localizer["MemberNotificationsRetrieved"];
+                return Ok(new { message, data = resources });
             }
             catch (System.Exception ex)
             {
-                return StatusCode(500, $"An error occurred: {ex.Message}");
+                var errorMessage = _localizer["InternalServerError"];
+                return StatusCode(500, new { message = errorMessage, detail = ex.Message });
             }
         }
     }

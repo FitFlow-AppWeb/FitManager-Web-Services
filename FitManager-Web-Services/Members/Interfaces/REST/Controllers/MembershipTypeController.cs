@@ -12,6 +12,9 @@ using System.Collections.Generic;
 using System.Net.Mime;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Localization;
+using FitManager_Web_Services.Resources;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
 {
@@ -27,6 +30,7 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
     {
         private readonly MembershipTypeQueryService _membershipTypeQueryService;
         private readonly IMembershipTypeCommandService _membershipTypeCommandService;
+        private readonly IStringLocalizer<SharedResource> _localizer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MembershipTypeController"/> class.
@@ -35,10 +39,12 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
         /// <param name="membershipTypeCommandService">The command service for membership type operations.</param>
         public MembershipTypeController(
             MembershipTypeQueryService membershipTypeQueryService,
-            IMembershipTypeCommandService membershipTypeCommandService)
+            IMembershipTypeCommandService membershipTypeCommandService,
+            IStringLocalizer<SharedResource> localizer)
         {
             _membershipTypeQueryService = membershipTypeQueryService;
             _membershipTypeCommandService = membershipTypeCommandService;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -49,6 +55,7 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
         /// Returns 200 OK with the list of membership types.
         /// </returns>
         [HttpGet]
+        [Authorize]
         [SwaggerOperation(
             Summary = "List All Membership Types",
             Description = "Retrieves a list of all available membership types."
@@ -61,17 +68,19 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
             {
                 var getAllQuery = new GetAllMembershipTypesQuery(); 
                 var membershipTypes = await _membershipTypeQueryService.Handle(getAllQuery);
-                
+    
                 var membershipTypeResources = MembershipTypeResourceFromEntityAssembler.ToResourceFromEntities(membershipTypes);
-                return Ok(membershipTypeResources);
+                var message = _localizer["MembershipTypesRetrieved"];
+                return Ok(new { message, data = membershipTypeResources });
             }
             catch (System.Exception ex)
             {
-                return StatusCode(500, $"An error occurred while retrieving membership types: {ex.Message}");
+                var error = _localizer["ErrorRetrievingMembershipTypes"];
+                return StatusCode(500, new { message = $"{error}: {ex.Message}" });
             }
         }
 
-    
+
 
         /// <summary>
         /// Creates a new membership type.
@@ -79,6 +88,7 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
         /// <param name="resource">The resource containing membership type details (Name, Description, Price, Duration, Benefits).</param>
         /// <returns>The created membership type resource with its ID and a 201 Created status.</returns>
         [HttpPost]
+        [Authorize]
         [SwaggerOperation(
             Summary = "Create Membership Type",
             Description = "Creates a new membership type in the system with its details."
@@ -86,43 +96,46 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
         [ProducesResponseType(typeof(MembershipTypeResource), 201)]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [ProducesResponseType(typeof(string), 500)]
+        [HttpPost]
         public async Task<IActionResult> CreateMembershipType([FromBody] CreateMembershipTypeResource resource)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                var error = _localizer["InvalidData"];
+                return BadRequest(new { message = error });
             }
 
             try
             {
-                // N: Tipado explícito de la variable command para resolver ambigüedad
-                CreateMembershipTypeCommand command = CreateMembershipTypeCommandFromResourceAssembler.ToCommandFromResource(resource);
-                var createdMembershipType = await _membershipTypeCommandService.Handle(command);
+                var command = CreateMembershipTypeCommandFromResourceAssembler.ToCommandFromResource(resource);
+                var created = await _membershipTypeCommandService.Handle(command);
 
-                if (createdMembershipType == null)
+                if (created == null)
                 {
-                    return BadRequest("Unable to create membership type. Please check the provided data.");
+                    var error = _localizer["MembershipTypeCreationFailed"];
+                    return BadRequest(new { message = error });
                 }
 
-                var membershipTypeResource = MembershipTypeResourceFromEntityAssembler.ToResourceFromEntity(createdMembershipType);
-                // NOTA: Si eliminamos GetMembershipTypeById, CreatedAtAction ya no es válido para apuntar a ese método.
-                // Podríamos usar CreatedAtRoute si tenemos una ruta nombrada, o simplemente Ok(resource) con status 201.
-                // Para simplificar, si no hay un endpoint GetById, podemos retornar un 201 OK con el recurso.
-                return StatusCode(201, membershipTypeResource); // Retorna 201 Created con el recurso en el cuerpo
+                var membershipTypeResource = MembershipTypeResourceFromEntityAssembler.ToResourceFromEntity(created);
+                var message = _localizer["MembershipTypeCreated"];
+                return StatusCode(201, new { message, data = membershipTypeResource });
             }
             catch (System.Exception ex)
             {
-                return StatusCode(500, $"An error occurred while creating membership type: {ex.Message}");
+                var error = _localizer["ErrorCreatingMembershipType"];
+                return StatusCode(500, new { message = $"{error}: {ex.Message}" });
             }
         }
 
-        /// <summary>
+
+    /// <summary>
         /// Updates an existing membership type.
         /// </summary>
         /// <param name="id">The ID of the membership type to update.</param>
         /// <param name="resource">The resource containing updated membership type details.</param>
         /// <returns>The updated membership type resource with a 200 OK status, or 404 if not found.</returns>
         [HttpPut("{id:int}")]
+        [Authorize]
         [SwaggerOperation(
             Summary = "Update Membership Type",
             Description = "Updates the details of an existing membership type by its ID."
@@ -135,26 +148,28 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                var error = _localizer["InvalidData"];
+                return BadRequest(new { message = error });
             }
 
             try
             {
-                
-                UpdateMembershipTypeCommand command = UpdateMembershipTypeCommandFromResourceAssembler.ToCommandFromResource(id, resource);
-                var updatedMembershipType = await _membershipTypeCommandService.Handle(command);
+                var command = UpdateMembershipTypeCommandFromResourceAssembler.ToCommandFromResource(id, resource);
+                var updated = await _membershipTypeCommandService.Handle(command);
 
-                if (updatedMembershipType == null)
+                if (updated == null)
                 {
-                    return NotFound();
+                    return NotFound(new { message = _localizer["MembershipTypeNotFound"] });
                 }
 
-                var membershipTypeResource = MembershipTypeResourceFromEntityAssembler.ToResourceFromEntity(updatedMembershipType);
-                return Ok(membershipTypeResource);
+                var membershipTypeResource = MembershipTypeResourceFromEntityAssembler.ToResourceFromEntity(updated);
+                var message = _localizer["MembershipTypeUpdated"];
+                return Ok(new { message, data = membershipTypeResource });
             }
             catch (System.Exception ex)
             {
-                return StatusCode(500, $"An error occurred while updating membership type: {ex.Message}");
+                var error = _localizer["ErrorUpdatingMembershipType"];
+                return StatusCode(500, new { message = $"{error}: {ex.Message}" });
             }
         }
 
@@ -164,6 +179,7 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
         /// <param name="id">The ID of the membership type to delete.</param>
         /// <returns>A 204 No Content status if successful, or 404 if not found.</returns>
         [HttpDelete("{id:int}")]
+        [Authorize]
         [SwaggerOperation(
             Summary = "Delete Membership Type",
             Description = "Deletes an existing membership type from the system by its ID."
@@ -175,18 +191,20 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Controllers
         {
             try
             {
-                DeleteMembershipTypeCommand command = new DeleteMembershipTypeCommand(id);
+                var command = new DeleteMembershipTypeCommand(id);
                 var result = await _membershipTypeCommandService.Handle(command);
 
                 if (!result)
                 {
-                    return NotFound();
+                    return NotFound(new { message = _localizer["MembershipTypeNotFound"] });
                 }
+
                 return NoContent();
             }
             catch (System.Exception ex)
             {
-                return StatusCode(500, $"An error occurred while deleting membership type: {ex.Message}");
+                var error = _localizer["ErrorDeletingMembershipType"];
+                return StatusCode(500, new { message = $"{error}: {ex.Message}" });
             }
         }
     }

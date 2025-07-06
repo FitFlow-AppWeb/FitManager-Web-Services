@@ -9,6 +9,10 @@ using FitManager_Web_Services.Employees.Interfaces.REST.Transform; // Para los e
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 using Swashbuckle.AspNetCore.Annotations; // Para MediaTypeNames
+using Microsoft.Extensions.Localization;
+using FitManager_Web_Services.Resources;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
 {
@@ -19,13 +23,17 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
     {
         private readonly ISpecialtyCommandService _specialtyCommandService;
         private readonly ISpecialtyQueryService _specialtyQueryService;
+        private readonly IStringLocalizer<SharedResource> _localizer;
+
 
         public SpecialtiesController(
             ISpecialtyCommandService specialtyCommandService,
-            ISpecialtyQueryService specialtyQueryService)
+            ISpecialtyQueryService specialtyQueryService,
+            IStringLocalizer<SharedResource> localizer)
         {
             _specialtyCommandService = specialtyCommandService;
             _specialtyQueryService = specialtyQueryService;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -34,6 +42,7 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
         /// <param name="resource">The resource containing the new specialty data.</param>
         /// <returns>The created specialty resource if successful, otherwise BadRequest.</returns>
         [HttpPost]
+        [Authorize]
         [SwaggerOperation(Summary = "Creates a new Specialty")]
         [SwaggerResponse(201, "The specialty was created successfully", typeof(SpecialtyResource))]
         [SwaggerResponse(400, "Invalid input data")]
@@ -44,11 +53,15 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
 
             if (specialty is null)
             {
-                return BadRequest("Unable to create specialty. Employee might not exist.");
+                return BadRequest(new { message = _localizer["UnableToCreateSpecialty"] });
             }
 
             var specialtyResource = SpecialtyResourceFromEntityAssembler.ToResourceFromEntity(specialty);
-            return CreatedAtAction(nameof(GetSpecialties), new { id = specialtyResource.Id }, specialtyResource);
+            return CreatedAtAction(nameof(GetSpecialties), new { id = specialtyResource.Id }, new
+            {
+                message = _localizer["SpecialtyCreated"],
+                data = specialtyResource
+            });
         }
 
         /// <summary>
@@ -56,6 +69,7 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
         /// </summary>
         /// <returns>A list of specialty resources.</returns>
         [HttpGet]
+        [Authorize]
         [SwaggerOperation(Summary = "Gets all Specialties")]
         [SwaggerResponse(200, "A list of specialties was retrieved successfully", typeof(IEnumerable<SpecialtyResource>))]
         public async Task<ActionResult<IEnumerable<SpecialtyResource>>> GetSpecialties()
@@ -64,7 +78,11 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
             var specialties = await _specialtyQueryService.Handle(getAllSpecialtiesQuery);
 
             var specialtyResources = specialties.Select(SpecialtyResourceFromEntityAssembler.ToResourceFromEntity);
-            return Ok(specialtyResources);
+            return Ok(new
+            {
+                message = _localizer["SpecialtiesRetrieved"],
+                data = specialtyResources
+            });
         }
 
         /// <summary>
@@ -73,6 +91,7 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
         /// <param name="id">The ID of the specialty to delete.</param>
         /// <returns>NoContent if successful, otherwise NotFound.</returns>
         [HttpDelete("{id:int}")]
+        [Authorize]
         [SwaggerOperation(Summary = "Deletes a Specialty by ID")]
         [SwaggerResponse(204, "The specialty was deleted successfully")]
         [SwaggerResponse(404, "Specialty not found")]
@@ -83,7 +102,7 @@ namespace FitManager_Web_Services.Employees.Interfaces.REST.Controllers
 
             if (!result)
             {
-                return NotFound("Specialty not found or could not be deleted.");
+                return NotFound(new { message = _localizer["SpecialtyNotFound"] });
             }
 
             return NoContent();

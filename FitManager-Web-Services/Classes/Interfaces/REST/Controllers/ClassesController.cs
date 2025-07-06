@@ -3,6 +3,10 @@ using FitManager_Web_Services.Classes.Interfaces.REST.Resources;
 using FitManager_Web_Services.Classes.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using FitManager_Web_Services.Resources;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Localization;
+using FitManager_Web_Services.Resources;
 
 namespace FitManager_Web_Services.Classes.Interfaces.REST.Controllers;
 
@@ -17,14 +21,17 @@ namespace FitManager_Web_Services.Classes.Interfaces.REST.Controllers;
 public class ClassesController : ControllerBase
 {
     private readonly IClassService _classService;
+    private readonly IStringLocalizer<SharedResource> _localizer;
+    
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ClassesController"/> class.
     /// </summary>
     /// <param name="classService">The class domain service.</param>
-    public ClassesController(IClassService classService)
+    public ClassesController(IClassService classService, IStringLocalizer<SharedResource> localizer)
     {
         _classService = classService;
+        _localizer = localizer;
     }
 
     /// <summary>
@@ -36,6 +43,7 @@ public class ClassesController : ControllerBase
     /// Returns 200 OK with the created class resource on success.
     /// </returns>
     [HttpPost]
+    [Authorize]
     [SwaggerOperation(
         Summary = "Create a New Class",
         Description = "Creates a new class with the provided details."
@@ -54,7 +62,11 @@ public class ClassesController : ControllerBase
             command.EmployeeId);
         
         var classResource = ClassResourceFromEntityAssembler.ToResource(result);
-        return  Ok(classResource);
+        return Ok(new
+        {
+            message = _localizer["ClassCreated"],
+            data = classResource
+        });
     }
     
     /// <summary>
@@ -65,6 +77,7 @@ public class ClassesController : ControllerBase
     /// Returns 200 OK with the list of classes.
     /// </returns>
     [HttpGet]
+    [Authorize]
     [SwaggerOperation(
         Summary = "List All Classes",
         Description = "Retrieves a list of all available classes."
@@ -73,8 +86,14 @@ public class ClassesController : ControllerBase
     {
         var results = await _classService.GetAllClassesAsync();
         var resources = results.Select(ClassResourceFromEntityAssembler.ToResource);
-        return Ok(resources);
+
+        return Ok(new
+        {
+            message = _localizer["ClassesRetrieved"],
+            data = resources
+        });
     }
+
 
     /// <summary>
     /// Updates the details of an existing class.
@@ -86,6 +105,7 @@ public class ClassesController : ControllerBase
     /// Returns 204 No Content on successful update.
     /// </returns>
     [HttpPut("{id}")]
+    [Authorize]
     [SwaggerOperation(
         Summary = "Update a Class",
         Description = "Updates the details of an existing class."
@@ -102,9 +122,13 @@ public class ClassesController : ControllerBase
             resource.Duration,
             resource.Status,
             resource.EmployeeId);
-        
-        return NoContent();
+
+        return Ok(new
+        {
+            message = _localizer["ClassUpdated"]
+        });
     }
+
 
     /// <summary>
     /// Deletes an existing class by its ID.
@@ -115,14 +139,30 @@ public class ClassesController : ControllerBase
     /// Returns 204 No Content on successful deletion.
     /// </returns>
     [HttpDelete("{id}")]
+    [Authorize]
     [SwaggerOperation(
         Summary = "Delete a Class",
         Description = "Deletes an existing class by its ID."
     )]
     public async Task<IActionResult> DeleteClass(int id)
     {
-        await _classService.DeleteClassAsync(id);
-        return NoContent();
+        try
+        {
+            await _classService.DeleteClassAsync(id);
+
+            return Ok(new
+            {
+                message = _localizer["ClassDeleted"]
+            });
+        }
+        catch (Exception ex) when (ex.Message == "Class not found")
+        {
+            return NotFound(new
+            {
+                message = _localizer["ClassNotFound"]
+            });
+        }
     }
+
     
 }

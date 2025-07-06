@@ -27,9 +27,16 @@ using FitManager_Web_Services.Notifications.Application.Internal.CommandServices
 using FitManager_Web_Services.Notifications.Application.Internal.QueryServices;
 using FitManager_Web_Services.Notifications.Domain.Repositories;
 using FitManager_Web_Services.Notifications.Infrastructure.Repositories;
+using FitManager_Web_Services.IAM.Infrastructure.Tokens;
+using FitManager_Web_Services.IAM.Application.Internal.OutboundServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
+using System.Text;
+using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,19 +48,94 @@ if (string.IsNullOrEmpty(connectionString))
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL(connectionString));
 
-
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AnyOrigin", policy =>
+    options.AddPolicy("AllowFrontendLocalhost", policy =>
     {
-        policy.AllowAnyOrigin() // Permite cualquier origen
-            .AllowAnyHeader()  // Permite cualquier cabecera
-            .AllowAnyMethod(); // Permite cualquier método (GET, POST, PUT, DELETE, OPTIONS)
+        policy.WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddControllers(); 
+builder.Services.AddLocalization();
+var localizationOptions = new RequestLocalizationOptions();
+
+builder.Services.AddControllers()
+    .AddDataAnnotationsLocalization()
+    .AddViewLocalization();
+
+// Register IAM (Authentication) services
+builder.Services.Configure<TokenOptions>(
+    builder.Configuration.GetSection("TokenOptions"));
+builder.Services.AddScoped<IHashingService, HashingService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<FitManager_Web_Services.IAM.Application.Internal.CommandServices.UserCommandService>();
+builder.Services.AddScoped<FitManager_Web_Services.IAM.Application.Internal.QueryServices.UserQueryService>();
+builder.Services.AddScoped<FitManager_Web_Services.IAM.Domain.Repositories.IUserRepository, FitManager_Web_Services.IAM.Infrastructure.Repositories.UserRepository>();
+
+// Register JWT Authentication (basado solo en Secret)
+var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
+var key = Encoding.ASCII.GetBytes(tokenOptions.Secret);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.EnableAnnotations();
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "FitManager API",
+        Version = "v1",
+        Description = "API for Gym Member Management"
+    });
+
+    var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(System.IO.Path.Combine(System.AppContext.BaseDirectory, xmlFilename));
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter your JWT token like this: **Bearer &lt;token&gt;**"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
 
 // =====================================================================
 // Employee Bounded Context Registrations
@@ -169,13 +251,36 @@ using (var scope = app.Services.CreateScope())
     dbContext.Database.EnsureCreated();
 }
 
+var supportedCultures = new[]
+{
+    new CultureInfo("en"),
+    new CultureInfo("es"),
+};
+localizationOptions.SupportedCultures = supportedCultures;
+localizationOptions.SupportedUICultures = supportedCultures;
+localizationOptions.SetDefaultCulture("en-US");
+localizationOptions.ApplyCurrentCultureToResponseHeaders = true;
+
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("en"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+});
+
+app.UseCors("AllowFrontendLocalhost");
 app.UseRouting();
 app.UseCors("AnyOrigin");
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseRequestLocalization();
 
+// Autenticación y autorización
+app.UseAuthentication(); 
 app.UseAuthorization();
+
+//app.UseMiddleware<FitManager_Web_Services.IAM.Infrastructure.Pipeline.Middleware.Components.RequestAuthorizationMiddleware>();
 
 app.MapControllers();
 

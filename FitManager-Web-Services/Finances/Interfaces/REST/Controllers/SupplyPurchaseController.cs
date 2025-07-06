@@ -6,6 +6,9 @@ using FitManager_Web_Services.Finances.Interfaces.REST.Resources;
 using FitManager_Web_Services.Finances.Interfaces.REST.Transform;
 using FitManager_Web_Services.Inventory.Application.Internal.CommandServices;
 using FitManager_Web_Services.Inventory.Domain.Model.Commands;
+using Microsoft.Extensions.Localization;
+using FitManager_Web_Services.Resources;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitManager_Web_Services.Finances.Interfaces.REST.Controllers
 {
@@ -24,6 +27,7 @@ namespace FitManager_Web_Services.Finances.Interfaces.REST.Controllers
         private readonly SupplyPurchaseQueryService _supplyPurchaseQueryService;
         private readonly PurchaseDetailCommandService _purchaseDetailCommandService;
         private readonly ItemCommandService _itemCommandService;
+        private readonly IStringLocalizer<SharedResource> _localizer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SupplyPurchaseController"/> class.
@@ -36,12 +40,14 @@ namespace FitManager_Web_Services.Finances.Interfaces.REST.Controllers
             SupplyPurchaseCommandService supplyPurchaseCommandService,
             SupplyPurchaseQueryService supplyPurchaseQueryService,
             PurchaseDetailCommandService purchaseDetailCommandService,
-            ItemCommandService itemCommandService)
+            ItemCommandService itemCommandService,
+            IStringLocalizer<SharedResource> localizer)
         {
             _supplyPurchaseCommandService = supplyPurchaseCommandService;
             _supplyPurchaseQueryService = supplyPurchaseQueryService;
             _purchaseDetailCommandService = purchaseDetailCommandService;
             _itemCommandService = itemCommandService;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -54,6 +60,7 @@ namespace FitManager_Web_Services.Finances.Interfaces.REST.Controllers
         /// or 400 BadRequest if validation fails or the purchase cannot be registered.
         /// </returns>
         [HttpPost]
+        [Authorize]
         [SwaggerOperation(
             Summary = "Register Supply Purchase",
             Description = "Registers a new supply purchase, its details (PurchaseDetails), and creates the associated inventory items."
@@ -61,63 +68,66 @@ namespace FitManager_Web_Services.Finances.Interfaces.REST.Controllers
         [SwaggerResponse(201, "The supply purchase was registered successfully.", typeof(SupplyPurchaseResource))]
         [SwaggerResponse(400, "Invalid input data or an internal error prevented the purchase registration.")]
         public async Task<IActionResult> Create([FromBody] CreateSupplyPurchaseResource resource)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+{
+    if (!ModelState.IsValid)
+        return BadRequest(ModelState);
 
-            var entity = SupplyPurchaseFromResourceAssembler.ToEntityFromResource(resource); 
-            var supplyPurchase = await _supplyPurchaseCommandService.CreateAsync( 
-                entity.Date,
-                entity.Amount,
-                entity.Method,
-                entity.Currency,
-                entity.VendorName
+    var entity = SupplyPurchaseFromResourceAssembler.ToEntityFromResource(resource); 
+    var supplyPurchase = await _supplyPurchaseCommandService.CreateAsync( 
+        entity.Date,
+        entity.Amount,
+        entity.Method,
+        entity.Currency,
+        entity.VendorName
+    );
+
+    if (supplyPurchase == null)
+        return BadRequest(new { message = _localizer["SupplyPurchaseCreationFailed"] });
+
+    if (resource.PurchaseDetails != null && resource.PurchaseDetails.Any())
+    {
+        foreach (var detailResource in resource.PurchaseDetails)
+        {
+            var purchaseDetail = await _purchaseDetailCommandService.CreateAsync( 
+                supplyPurchase.Id,
+                detailResource.ItemTypeId,
+                detailResource.UnitPrice,
+                detailResource.Quantity
             );
 
-            if (supplyPurchase == null)
-                return BadRequest("No se pudo registrar la compra de suministros debido a un error interno.");
-
-            if (resource.PurchaseDetails != null && resource.PurchaseDetails.Any())
+            if (purchaseDetail == null)
             {
-                foreach (var detailResource in resource.PurchaseDetails)
-                {
-                    var purchaseDetail = await _purchaseDetailCommandService.CreateAsync( 
-                        supplyPurchase.Id,          
-                        detailResource.ItemTypeId,
-                        detailResource.UnitPrice,
-                        detailResource.Quantity
-                    );
-
-                    if (purchaseDetail == null)
-                    {
-                        Console.WriteLine($"Advertencia: No se pudo crear el detalle de compra para ItemType {detailResource.ItemTypeId}. La compra continúa, pero este detalle y sus ítems no se registrarán.");
-                        continue; 
-                    }
-
-                    for (int i = 0; i < detailResource.Quantity; i++)
-                    {
-                        var createItemCommand = new CreateItemCommand(
-                            detailResource.LastMaintenanceDate,
-                            detailResource.NextMaintenanceDate,
-                            detailResource.Status,    
-                            detailResource.ItemTypeId,
-                            detailResource.EmployeeId
-                        );
-                        
-                        var createdItem = await _itemCommandService.Handle(createItemCommand);
-
-                        if (createdItem == null)
-                        {
-                            Console.WriteLine($"Advertencia: No se pudo crear el ítem (unidad {i+1}) de tipo {detailResource.ItemTypeId} " +
-                                              $"para la compra {supplyPurchase.Id}.");
-                        }
-                    }
-                }
+                Console.WriteLine(_localizer["PurchaseDetailCreationWarning"], detailResource.ItemTypeId);
+                continue;
             }
 
-            var supplyPurchaseResource = SupplyPurchaseToResourceAssembler.ToResourceFromEntity(supplyPurchase);
-            return Created($"api/v1/supplypurchase/{supplyPurchase.Id}", supplyPurchaseResource);
+            for (int i = 0; i < detailResource.Quantity; i++)
+            {
+                var createItemCommand = new CreateItemCommand(
+                    detailResource.LastMaintenanceDate,
+                    detailResource.NextMaintenanceDate,
+                    detailResource.Status,
+                    detailResource.ItemTypeId,
+                    detailResource.EmployeeId
+                );
+
+                var createdItem = await _itemCommandService.Handle(createItemCommand);
+
+                if (createdItem == null)
+                {
+                    Console.WriteLine(_localizer["ItemCreationWarning"], i + 1, detailResource.ItemTypeId, supplyPurchase.Id);
+                }
+            }
         }
+    }
+
+    var supplyPurchaseResource = SupplyPurchaseToResourceAssembler.ToResourceFromEntity(supplyPurchase);
+    return Created($"api/v1/supplypurchase/{supplyPurchase.Id}", new
+    {
+        message = _localizer["SupplyPurchaseCreated"],
+        data = supplyPurchaseResource
+    });
+}
         
         /// <summary>
         /// Retrieves all supply purchases registered in the system.
@@ -127,6 +137,7 @@ namespace FitManager_Web_Services.Finances.Interfaces.REST.Controllers
         /// Returns 200 OK with the list of supply purchases.
         /// </returns>
         [HttpGet]
+        [Authorize]
         [SwaggerOperation(
             Summary = "List Supply Purchases",
             Description = "Retrieves all supply purchases registered in the system."
@@ -136,7 +147,11 @@ namespace FitManager_Web_Services.Finances.Interfaces.REST.Controllers
         {
             var purchases = await _supplyPurchaseQueryService.GetAllAsync();
             var resources = SupplyPurchaseToResourceAssembler.ToResourceListFromEntityList(purchases);
-            return Ok(resources);
+            return Ok(new
+            {
+                message = _localizer["SupplyPurchasesRetrieved"],
+                data = resources
+            });
         }
     }
 }

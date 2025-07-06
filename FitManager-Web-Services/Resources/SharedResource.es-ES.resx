@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AttendanceCreated" xml:space="preserve">
+    <value>Asistencia registrada correctamente</value>
+  </data>
+    <data name="AttendanceNotFound" xml:space="preserve">
+    <value>No se encontraron asistencias</value>
+  </data>
+    <data name="AttendancesRetrieved" xml:space="preserve">
+  <value>Asistencias recuperadas correctamente</value>
+</data>
+    <data name="AttendanceNotFound" xml:space="preserve">
+  <value>No se encontraron asistencias</value>
+</data>
+    <data name="BookingsRetrieved" xml:space="preserve">
+  <value>Reservas recuperadas correctamente</value>
+</data>
+    <data name="CertificationCreated" xml:space="preserve">
+  <value>Certificación creada correctamente</value>
+</data>
+    <data name="CertificationCreateFailed" xml:space="preserve">
+  <value>No se pudo crear la certificación. El empleado podría no existir.</value>
+</data>
+    <data name="CertificationNotFound" xml:space="preserve">
+  <value>No se encontró la certificación</value>
+</data>
+    <data name="CertificationsRetrieved" xml:space="preserve">
+  <value>Certificaciones recuperadas correctamente</value>
+</data>
+    <data name="ClassCreated" xml:space="preserve">
+  <value>Clase creada exitosamente.</value>
+</data>
+    <data name="ClassesRetrieved" xml:space="preserve">
+  <value>Clases recuperadas correctamente.</value>
+</data>
+    <data name="ClassUpdated" xml:space="preserve">
+  <value>Clase actualizada correctamente.</value>
+</data>
+    <data name="ClassDeleted" xml:space="preserve">
+  <value>Clase eliminada correctamente.</value>
+</data>
+    <data name="ClassNotFound" xml:space="preserve">
+  <value>Clase no encontrada.</value>
+</data>
+    <data name="ClassesRetrieved" xml:space="preserve">
+  <value>Clases obtenidas correctamente</value>
+</data>
+    <data name="ClassCreated" xml:space="preserve">
+  <value>Clase creada correctamente</value>
+</data>
+    <data name="ClassUpdated" xml:space="preserve">
+  <value>Clase actualizada correctamente</value>
+</data>
+    <data name="ClassDeleted" xml:space="preserve">
+  <value>Clase eliminada correctamente</value>
+</data>
+  <data name="ClassNotFound" xml:space="preserve">
+  <value>Clase no encontrada</value>
+</data>
+  <data name="EmployeeCreated" xml:space="preserve">
+  <value>Empleado creado correctamente.</value>
+</data>
+  <data name="EmployeeCreationFailed" xml:space="preserve">
+  <value>No se pudo crear el empleado.</value>
+</data>
+  <data name="EmployeesRetrieved" xml:space="preserve">
+  <value>Empleados recuperados correctamente.</value>
+</data>
+  <data name="EmployeeUpdated" xml:space="preserve">
+  <value>Empleado actualizado correctamente.</value>
+</data>
+  <data name="EmployeeNotFound" xml:space="preserve">
+  <value>Empleado no encontrado.</value>
+</data>
+  <data name="EmployeeDeleted" xml:space="preserve">
+  <value>Empleado eliminado correctamente.</value>
+</data>
+  <data name="EmployeeNotificationCreated" xml:space="preserve">
+  <value>Notificación al empleado creada correctamente</value>
+</data>
+  <data name="EmployeeNotificationsRetrieved" xml:space="preserve">
+  <value>Notificaciones a empleados recuperadas correctamente</value>
+</data>
+  <data name="EmployeeNotificationCreationFailed" xml:space="preserve">
+  <value>Error al crear la notificación para el empleado</value>
+</data><data name="EmployeeNotificationsRetrieved" xml:space="preserve">
+  <value>Notificaciones para empleados recuperadas exitosamente</value>
+</data>
+  <data name="EmployeeNotificationsRetrievalFailed" xml:space="preserve">
+  <value>Error al recuperar notificaciones para empleados</value>
+</data>
+  <data name="ItemsRetrieved" xml:space="preserve">
+  <value>Ítems del inventario recuperados correctamente</value>
+</data>
+  <data name="InvalidItemData" xml:space="preserve">
+  <value>Los datos del ítem no son válidos.</value>
+</data>
+  <data name="ItemNotFound" xml:space="preserve">
+  <value>Ítem no encontrado.</value>
+</data>
+  <data name="ItemUpdated" xml:space="preserve">
+  <value>Ítem actualizado correctamente.</value>
+</data>
+  <data name="ItemNotFound" xml:space="preserve">
+  <value>Ítem no encontrado.</value>
+</data>
+  <data name="MemberCreatedSuccessfully" xml:space="preserve">
+  <value>Miembro creado correctamente.</value>
+</data>
+  <data name="MemberCreationFailed" xml:space="preserve">
+  <value>Error al crear el miembro.</value>
+</data>
+  <data name="MembersRetrievedSuccessfully" xml:space="preserve">
+  <value>Miembros recuperados correctamente.</value>
+</data>
+  <data name="MemberUpdatedSuccessfully" xml:space="preserve">
+  <value>Miembro actualizado correctamente.</value>
+</data>
+  <data name="MemberDeletedSuccessfully" xml:space="preserve">
+  <value>Miembro eliminado correctamente.</value>
+</data>
+  <data name="MemberNotFound" xml:space="preserve">
+  <value>Miembro no encontrado.</value>
+</data>
+  <data name="MemberNotificationCreated" xml:space="preserve">
+  <value>Notificación para miembro creada exitosamente.</value>
+</data>
+  <data name="MemberNotificationsRetrieved" xml:space="preserve">
+  <value>Notificaciones para miembros recuperadas correctamente.</value>
+</data>
+  <data name="InvalidData" xml:space="preserve">
+  <value>Datos inválidos. Por favor, verifica los valores enviados.</value>
+</data>
+  <data name="InternalServerError" xml:space="preserve">
+  <value>Ocurrió un error inesperado al procesar la solicitud.</value>
+</data>
+  <data name="InvalidData" xml:space="preserve">
+  <value>Datos inválidos. Por favor, verifica los valores enviados.</value>
+</data>
+  <data name="MemberNotFound" xml:space="preserve">
+  <value>Miembro no encontrado.</value>
+</data>
+  <data name="MembershipPaymentCreated" xml:space="preserve">
+  <value>Pago de membresía registrado exitosamente.</value>
+</data>
+  <data name="MembershipPaymentsRetrieved" xml:space="preserve">
+  <value>Pagos de membresía recuperados exitosamente.</value>
+</data>
+  <data name="InvalidData" xml:space="preserve">
+<value>Datos inválidos. Por favor verifica el formulario.</value>
+</data>
+  <data name="MembershipTypesRetrieved" xml:space="preserve">
+<value>Tipos de membresía recuperados exitosamente.</value>
+</data>
+  <data name="ErrorRetrievingMembershipTypes" xml:space="preserve">
+<value>Error al recuperar tipos de membresía</value>
+</data>
+  <data name="MembershipTypeCreated" xml:space="preserve">
+<value>Tipo de membresía creado exitosamente.</value>
+</data>
+  <data name="MembershipTypeCreationFailed" xml:space="preserve">
+<value>No se pudo crear el tipo de membresía.</value>
+</data>
+  <data name="ErrorCreatingMembershipType" xml:space="preserve">
+<value>Error al crear tipo de membresía</value>
+</data>
+  <data name="MembershipTypeUpdated" xml:space="preserve">
+<value>Tipo de membresía actualizado exitosamente.</value>
+</data>
+  <data name="ErrorUpdatingMembershipType" xml:space="preserve">
+<value>Error al actualizar tipo de membresía</value>
+</data>
+  <data name="MembershipTypeNotFound" xml:space="preserve">
+<value>Tipo de membresía no encontrado.</value>
+</data>
+  <data name="ErrorDeletingMembershipType" xml:space="preserve">
+<value>Error al eliminar tipo de membresía</value>
+</data>
+  <data name="InvalidData" xml:space="preserve">
+<value>Datos inválidos. Por favor verifica el formulario.</value>
+</data>
+  <data name="EmployeeNotFound" xml:space="preserve">
+<value>Empleado no encontrado.</value>
+</data>
+  <data name="SalaryPaymentCreated" xml:space="preserve">
+<value>Pago de salario registrado exitosamente.</value>
+</data>
+  <data name="SalaryPaymentsRetrieved" xml:space="preserve">
+<value>Todos los pagos de salario recuperados exitosamente.</value>
+</data>
+  <data name="SalaryPaymentsByEmployeeRetrieved" xml:space="preserve">
+<value>Pagos de salario del empleado recuperados exitosamente.</value>
+</data>
+  <data name="UnableToCreateSpecialty" xml:space="preserve">
+<value>No se pudo crear la especialidad. Verifica que el empleado exista.</value>
+</data>
+  <data name="SpecialtyCreated" xml:space="preserve">
+<value>Especialidad creada exitosamente.</value>
+</data>
+  <data name="SpecialtiesRetrieved" xml:space="preserve">
+<value>Especialidades recuperadas correctamente.</value>
+</data>
+  <data name="SpecialtyNotFound" xml:space="preserve">
+<value>Especialidad no encontrada o no se pudo eliminar.</value>
+</data>
+  <data name="SupplyPurchaseCreationFailed" xml:space="preserve">
+<value>No se pudo registrar la compra de suministros debido a un error interno.</value>
+</data>
+  <data name="SupplyPurchaseCreated" xml:space="preserve">
+<value>Compra de suministros registrada exitosamente.</value>
+</data>
+  <data name="SupplyPurchasesRetrieved" xml:space="preserve">
+<value>Compras de suministros recuperadas correctamente.</value>
+</data>
+  <data name="PurchaseDetailCreationWarning" xml:space="preserve">
+<value>Advertencia: No se pudo crear el detalle de compra para ItemType {0}. Se omite.</value>
+</data>
+  <data name="ItemCreationWarning" xml:space="preserve">
+<value>Advertencia: No se pudo crear el ítem (unidad {0}) de tipo {1} para la compra {2}.</value>
+</data>
+  <data name="BookingFailed" xml:space="preserve">
+  <value>No se pudo completar la reserva. Verifique que el miembro y la clase existan.</value>
+</data>
+  <data name="UserAlreadyExists" xml:space="preserve">
+  <value>Ya existe un usuario con este correo.</value>
+</data>
+  <data name="UserCreated" xml:space="preserve">
+  <value>Usuario creado correctamente.</value>
+</data>
+  <data name="UsersRetrieved" xml:space="preserve">
+  <value>Usuarios recuperados correctamente.</value>
+</data>
+  <data name="UserNotFound" xml:space="preserve">
+  <value>Usuario no encontrado.</value>
+</data>
+  <data name="UserRetrieved" xml:space="preserve">
+  <value>Usuario recuperado correctamente.</value>
+</data>
+  <data name="UserSignedUp" xml:space="preserve">
+  <value>Usuario registrado correctamente.</value>
+</data>
+  <data name="InvalidCredentials" xml:space="preserve">
+  <value>Correo o contraseña inválidos.</value>
+</data>
+  <data name="UserSignedIn" xml:space="preserve">
+  <value>Usuario inició sesión correctamente.</value>
+</data>
+
+
+</root>

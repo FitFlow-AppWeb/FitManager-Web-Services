@@ -1,7 +1,10 @@
 using FitManager_Web_Services.Classes.Domain.Services;
 using FitManager_Web_Services.Classes.Interfaces.REST.Resources;
 using FitManager_Web_Services.Classes.Interfaces.REST.Transform;
+using FitManager_Web_Services.Resources;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace FitManager_Web_Services.Classes.Interfaces.REST.Controllers;
@@ -17,14 +20,18 @@ namespace FitManager_Web_Services.Classes.Interfaces.REST.Controllers;
 public class AttendancesController : ControllerBase
 {
     private readonly IAttendanceService _attendanceService;
+    private readonly IStringLocalizer<SharedResource> _localizer;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AttendancesController"/> class.
     /// </summary>
     /// <param name="attendanceService">The attendance domain service.</param>
-    public AttendancesController(IAttendanceService attendanceService)
+    public AttendancesController(
+        IAttendanceService attendanceService,
+        IStringLocalizer<SharedResource> localizer)
     {
         _attendanceService = attendanceService;
+        _localizer = localizer;
     }
 
     /// <summary>
@@ -36,6 +43,7 @@ public class AttendancesController : ControllerBase
     /// Returns 200 OK with the created attendance resource on success.
     /// </returns>
     [HttpPost]
+    [Authorize]
     [SwaggerOperation(
         Summary = "Register Attendance",
         Description = "Registers a member's attendance for a specific class."
@@ -49,7 +57,12 @@ public class AttendancesController : ControllerBase
             resource.ClassId);
 
         var attendanceResource = AttendanceResourceFromEntityAssembler.ToResource(result);
-        return Ok(attendanceResource);
+
+        return Ok(new
+        {
+            message = _localizer["AttendanceCreated"],
+            data = attendanceResource
+        });
     }
     
     /// <summary>
@@ -61,6 +74,7 @@ public class AttendancesController : ControllerBase
     /// Returns 200 OK with the list of attendances.
     /// </returns>
     [HttpGet("class/{classId}")]
+    [Authorize]
     [SwaggerOperation(
         Summary = "List Attendances by Class",
         Description = "Retrieves a list of all attendances registered for a specific class."
@@ -68,7 +82,22 @@ public class AttendancesController : ControllerBase
     public async Task<IActionResult> GetAttendancesByClass(int classId)
     {
         var results = await _attendanceService.GetAttendancesByClassAsync(classId);
-        var resources = results.Select(AttendanceResourceFromEntityAssembler.ToResource);
-        return Ok(resources);
+        var resources = results.Select(AttendanceResourceFromEntityAssembler.ToResource).ToList();
+
+        var message = resources.Any()
+            ? _localizer["AttendancesRetrieved"]
+            : _localizer["AttendanceNotFound"];
+
+        return Ok(new
+        {
+            message = new
+            {
+                name = message.Name,
+                value = message.Value,
+                resourceNotFound = message.ResourceNotFound,
+                searchedLocation = message.SearchedLocation
+            },
+            data = resources
+        });
     }
 }

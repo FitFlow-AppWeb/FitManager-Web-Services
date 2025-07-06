@@ -4,6 +4,9 @@ using FitManager_Web_Services.Finances.Interfaces.REST.Resources;
 using FitManager_Web_Services.Finances.Interfaces.REST.Transform;
 using FitManager_Web_Services.Finances.Application.Internal.CommandServices;
 using FitManager_Web_Services.Finances.Application.Internal.QueryServices;
+using Microsoft.Extensions.Localization;
+using FitManager_Web_Services.Resources;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitManager_Web_Services.Finances.Interfaces.REST.Controllers;
 
@@ -19,6 +22,7 @@ public class MembershipPaymentController : ControllerBase
 {
     private readonly MembershipPaymentCommandService _commandService;
     private readonly MembershipPaymentQueryService _queryService;
+    private readonly IStringLocalizer<SharedResource> _localizer;
     
     /// <summary>
     /// Initializes a new instance of the <see cref="MembershipPaymentController"/> class.
@@ -27,11 +31,12 @@ public class MembershipPaymentController : ControllerBase
     /// <param name="queryService">The query service for membership payment retrieval.</param>
     public MembershipPaymentController(
         MembershipPaymentCommandService commandService,
-        MembershipPaymentQueryService queryService
-        )
+        MembershipPaymentQueryService queryService,
+        IStringLocalizer<SharedResource> localizer)
     {
         _commandService = commandService;
         _queryService = queryService;
+        _localizer = localizer;
     }
 
     /// <summary>
@@ -44,6 +49,7 @@ public class MembershipPaymentController : ControllerBase
     /// 400 BadRequest if validation fails, or 404 NotFound if the member is not found.
     /// </returns>
     [HttpPost]
+    [Authorize]
     [SwaggerOperation(
         Summary = "Register Membership Payment",
         Description = "Registers a new payment made by a member."
@@ -55,11 +61,12 @@ public class MembershipPaymentController : ControllerBase
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest(ModelState);
+            var validationMessage = _localizer["InvalidData"];
+            return BadRequest(new { message = validationMessage });
         }
-        
-        var entity = MembershipPaymentFromResourceAssembler.ToEntityFromResource(resource); 
-        
+
+        var entity = MembershipPaymentFromResourceAssembler.ToEntityFromResource(resource);
+
         var result = await _commandService.CreateAsync(
             entity.Date,
             entity.Amount,
@@ -69,13 +76,18 @@ public class MembershipPaymentController : ControllerBase
         );
 
         if (result == null)
-            return NotFound("Miembro no encontrado."); 
-        
+        {
+            var notFoundMessage = _localizer["MemberNotFound"];
+            return NotFound(new { message = notFoundMessage });
+        }
+
         var createdPaymentResource = MembershipPaymentToResourceAssembler.ToResourceFromEntity(result);
-        
+
         var resourceUri = Url.Action(null, "MembershipPayment", new { id = createdPaymentResource.Id }, Request.Scheme);
-        
-        return Created(resourceUri ?? $"api/v1/membershippayment/{createdPaymentResource.Id}", createdPaymentResource);
+        var successMessage = _localizer["MembershipPaymentCreated"];
+
+        return Created(resourceUri ?? $"api/v1/membershippayment/{createdPaymentResource.Id}",
+            new { message = successMessage, data = createdPaymentResource });
     }
     
     /// <summary>
@@ -86,6 +98,7 @@ public class MembershipPaymentController : ControllerBase
     /// Returns 200 OK with the list of membership payments.
     /// </returns>
     [HttpGet]
+    [Authorize]
     [SwaggerOperation(
         Summary = "List Membership Payments",
         Description = "Retrieves all registered membership payments."
@@ -95,6 +108,7 @@ public class MembershipPaymentController : ControllerBase
     {
         var payments = await _queryService.GetAllAsync();
         var resources = MembershipPaymentToResourceAssembler.ToResourceListFromEntityList(payments);
-        return Ok(resources);
+        var successMessage = _localizer["MembershipPaymentsRetrieved"];
+        return Ok(new { message = successMessage, data = resources });
     }
 }
