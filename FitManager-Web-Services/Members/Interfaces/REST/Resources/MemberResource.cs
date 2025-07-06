@@ -1,6 +1,6 @@
 // Members/Interfaces/REST/Resources/MemberResource.cs
-using System.Text.Json.Serialization; // <--- AÑADE ESTA LÍNEA
-using FitManager_Web_Services.Members.Interfaces.REST.Resources; // Mantén esta línea si MembershipStatusResource está aquí
+using System.Text.Json.Serialization; 
+using FitManager_Web_Services.Members.Interfaces.REST.Resources; 
 
 
 

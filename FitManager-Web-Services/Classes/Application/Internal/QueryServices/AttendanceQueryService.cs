@@ -2,7 +2,8 @@ using FitManager_Web_Services.Classes.Domain.Model.Aggregates;
 using FitManager_Web_Services.Classes.Domain.Repositories; 
 
 using System.Collections.Generic;
-using System.Threading.Tasks; 
+using System.Threading.Tasks;
+using FitManager_Web_Services.Classes.Domain.Queries;
 
 namespace FitManager_Web_Services.Classes.Application.Internal.QueryServices
 {
@@ -51,6 +52,17 @@ namespace FitManager_Web_Services.Classes.Application.Internal.QueryServices
         public async Task<IEnumerable<Attendance>> GetAttendancesByMemberAsync(int memberId)
         {
             return await _attendanceRepository.FindByMemberAsync(memberId);
+        }
+        
+        /// <summary>
+        /// Handles the <see cref="GetAllAttendancesQuery"/> to retrieve all attendance records.
+        /// </summary>
+        /// <param name="query">The query object requesting all attendance records.</param>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous operation. The task result
+        /// contains an enumerable collection of all <see cref="Attendance"/> objects.</returns>
+        public async Task<IEnumerable<Attendance>> Handle(GetAllAttendancesQuery query) 
+        {
+            return await _attendanceRepository.GetAllAsync();
         }
     }
 }

@@ -65,5 +65,14 @@ namespace FitManager_Web_Services.Classes.Domain.Services
         /// The task result contains the <see cref="Attendance"/> if found, otherwise <c>null</c>.
         /// </returns>
         Task<Attendance?> GetAttendanceByIdAsync(int id);
+        
+        /// <summary>
+        /// Asynchronously retrieves all attendance records from the system.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="Task"/> that represents the asynchronous operation.
+        /// The task result contains an enumerable collection of all <see cref="Attendance"/> objects.
+        /// </returns>
+        Task<IEnumerable<Attendance>> GetAllAttendancesAsync();
     }
 }

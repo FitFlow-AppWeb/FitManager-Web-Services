@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Swashbuckle.AspNetCore.Annotations;
+using FitManager_Web_Services.Classes.Application.Internal.QueryServices; 
+using FitManager_Web_Services.Classes.Domain.Queries; 
+using System; 
+using System.Linq; 
+
 
 namespace FitManager_Web_Services.Classes.Interfaces.REST.Controllers;
 
@@ -21,6 +26,9 @@ public class AttendancesController : ControllerBase
 {
     private readonly IAttendanceService _attendanceService;
     private readonly IStringLocalizer<SharedResource> _localizer;
+    private readonly AttendanceQueryService _attendanceQueryService; 
+    private readonly RawAttendanceResourceFromEntityAssembler _rawAttendanceResourceAssembler; 
+
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AttendancesController"/> class.
@@ -28,10 +36,13 @@ public class AttendancesController : ControllerBase
     /// <param name="attendanceService">The attendance domain service.</param>
     public AttendancesController(
         IAttendanceService attendanceService,
-        IStringLocalizer<SharedResource> localizer)
+        IStringLocalizer<SharedResource> localizer,
+        AttendanceQueryService attendanceQueryService) 
     {
         _attendanceService = attendanceService;
         _localizer = localizer;
+        _attendanceQueryService = attendanceQueryService; 
+        _rawAttendanceResourceAssembler = new RawAttendanceResourceFromEntityAssembler(); 
     }
 
     /// <summary>
@@ -100,4 +111,45 @@ public class AttendancesController : ControllerBase
             data = resources
         });
     }
+    
+    /// <summary>
+    /// Gets all raw attendance records (with entry and exit times) that occurred today.
+    /// This endpoint is used for dashboard occupancy visualization.
+    /// </summary>
+    /// <returns>A list of raw attendance records for today.</returns>
+    [HttpGet("raw-today")] // <<-- ¡NUEVO ENDPOINT!
+    [Authorize] 
+    [ProducesResponseType(typeof(IEnumerable<RawAttendanceResource>), 200)]
+    [ProducesResponseType(401)] // Unauthorized
+    [ProducesResponseType(500)] // Internal Server Error
+    [SwaggerOperation(
+        Summary = "Get Today's Raw Attendances",
+        Description = "Retrieves all raw attendance records (including entry/exit times) for the current day for occupancy calculations."
+    )]
+    public async Task<IActionResult> GetRawAttendancesForToday()
+    {
+        var query = new GetAllAttendancesQuery(); 
+        var allAttendances = await _attendanceQueryService.Handle(query); 
+
+        
+        var today = DateTime.Today; 
+        var todayAttendances = allAttendances.Where(a =>
+                a.EntryTime.Date == today || a.ExitTime.Date == today 
+        ).ToList();
+
+        var resources = _rawAttendanceResourceAssembler.ToResourcesFromEntities(todayAttendances);
+
+        
+        var message = todayAttendances.Any()
+            ? _localizer["AttendancesRetrievedSuccessfully"] 
+            : _localizer["NoAttendancesToday"]; 
+
+
+        return Ok(new
+        {
+            message = message.Value, 
+            data = resources
+        });
+    }
+    
 }

@@ -65,5 +65,14 @@ namespace FitManager_Web_Services.Classes.Domain.Repositories
         /// <param name="attendance">The <see cref="Attendance"/> entity to delete.</param>
         /// <returns>A <see cref="Task"/> that represents the asynchronous operation.</returns>
         Task DeleteAsync(Attendance attendance);
+        
+        /// <summary>
+        /// Asynchronously retrieves all attendance records from the repository.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="Task"/> that represents the asynchronous operation.
+        /// The task result contains an <see cref="IEnumerable{T}"/> of all <see cref="Attendance"/> objects.
+        /// </returns>
+        Task<IEnumerable<Attendance>> GetAllAsync(); 
     }
 }
