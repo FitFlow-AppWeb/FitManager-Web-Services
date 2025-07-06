@@ -1,6 +1,5 @@
 using FitManager_Web_Services.Classes.Domain.Model.Aggregates;
 using FitManager_Web_Services.Classes.Interfaces.REST.Resources;
-using FitManager_Web_Services.Members.Interfaces.REST.Transform;
 
 namespace FitManager_Web_Services.Classes.Interfaces.REST.Transform;
 
@@ -29,7 +28,17 @@ public static class ClassResourceFromEntityAssembler
         if (entity.ClassMembers != null && entity.ClassMembers.Any())
         {
             enrolledMembers = entity.ClassMembers
-                .Select(cm => MemberResourceFromEntityAssembler.ToResourceFromEntity(cm.Member));
+                .Select(cm => new MemberResource( // <-- ¡CAMBIO AQUÍ! Construimos MemberResource directamente
+                    cm.Member.Id,
+                    cm.Member.FirstName,
+                    cm.Member.LastName,
+                    cm.Member.Age,
+                    cm.Member.Dni,
+                    cm.Member.PhoneNumber,
+                    cm.Member.Address,
+                    cm.Member.Email,
+                    null // <-- ¡CAMBIO AQUÍ! Establecemos MembershipStatus a null
+                ));
         }
 
         return new ClassResource(

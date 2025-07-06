@@ -1,4 +1,8 @@
 // Members/Interfaces/REST/Resources/MemberResource.cs
+using System.Text.Json.Serialization; // <--- AÑADE ESTA LÍNEA
+using FitManager_Web_Services.Members.Interfaces.REST.Resources; // Mantén esta línea si MembershipStatusResource está aquí
+
+
 
 namespace FitManager_Web_Services.Members.Interfaces.REST.Resources
 {
@@ -26,6 +30,7 @@ namespace FitManager_Web_Services.Members.Interfaces.REST.Resources
         int PhoneNumber,
         string Address,
         string Email,
+        [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] 
         MembershipStatusResource? MembershipStatus
     );
 }

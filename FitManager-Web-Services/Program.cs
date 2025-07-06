@@ -36,6 +36,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
 using System.Text;
+using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,14 +50,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontendProd", policy =>
+    options.AddPolicy("AllowFrontendLocalhost", policy =>
     {
-        policy.WithOrigins(
-                "https://fitmanager-f6e6e.firebaseapp.com",
-                "https://fitmanager-f6e6e.web.app"
-            )
+        policy.WithOrigins("http://localhost:5173")
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 
@@ -133,6 +132,10 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
+
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
 
 // =====================================================================
 // Employee Bounded Context Registrations
@@ -246,18 +249,17 @@ app.UseRequestLocalization(new RequestLocalizationOptions
     SupportedUICultures = supportedCultures
 });
 
-app.UseCors("AllowFrontendProd");
+app.UseCors("AllowFrontendLocalhost");
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseRequestLocalization();
 
 // Autenticación y autorización
-app.UseAuthentication(); // <- ¡Middleware JWT!
+app.UseAuthentication(); 
 app.UseAuthorization();
 
-// Middleware personalizado para auth (si aún lo usas)
-app.UseMiddleware<FitManager_Web_Services.IAM.Infrastructure.Pipeline.Middleware.Components.RequestAuthorizationMiddleware>();
+//app.UseMiddleware<FitManager_Web_Services.IAM.Infrastructure.Pipeline.Middleware.Components.RequestAuthorizationMiddleware>();
 
 app.MapControllers();
 
