@@ -221,4 +221,19 @@
     <data name="NoAttendancesToday" xml:space="preserve">
         <value>No hay asistencias hoy.</value>
     </data>
+    <data name="InvalidCredentials" xml:space="preserve">
+        <value>Correo o contraseña inválidos.</value>
+    </data>
+    <data name="ItemTypesRetrievedSuccessfully" xml:space="preserve">
+        <value>Tipos de objetos recuperados con éxito.</value>
+    </data>
+    <data name="InvalidItemTypeData" xml:space="preserve">
+        <value>Tipo de dato de item inválido.</value>
+    </data>
+    <data name="FailedToCreateItemType" xml:space="preserve">
+        <value>Error al crear los tipos de objetos.</value>
+    </data>
+    <data name="ItemTypeCreatedSuccessfully" xml:space="preserve">
+        <value>Tipo de objeto creado con éxito.</value>
+    </data>
 </root>

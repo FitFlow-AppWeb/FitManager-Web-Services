@@ -263,4 +263,16 @@
   <data name="NoAttendancesToday" xml:space="preserve">
     <value>No attendances today.</value>
   </data>
+  <data name="ItemTypesRetrievedSuccessfully" xml:space="preserve">
+    <value>Item types retrieved successfully.</value>
+  </data>
+  <data name="InvalidItemTypeData" xml:space="preserve">
+    <value>Invalid item type data.</value>
+  </data>
+  <data name="FailedToCreateItemType" xml:space="preserve">
+    <value>Failed to create item type.</value>
+  </data>
+  <data name="ItemTypeCreatedSuccessfully" xml:space="preserve">
+    <value>Item type created successfully.</value>
+  </data>
 </root>
