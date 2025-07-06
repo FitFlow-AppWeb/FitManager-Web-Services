@@ -99,9 +99,9 @@ namespace FitManager_Web_Services.Finances.Interfaces.REST.Controllers
                         var createItemCommand = new CreateItemCommand(
                             detailResource.LastMaintenanceDate,
                             detailResource.NextMaintenanceDate,
-                            detailResource.Status,            
-                            detailResource.EmployeeId,        
-                            detailResource.ItemTypeId 
+                            detailResource.Status,    
+                            detailResource.ItemTypeId,
+                            detailResource.EmployeeId
                         );
                         
                         var createdItem = await _itemCommandService.Handle(createItemCommand);

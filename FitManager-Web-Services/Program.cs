@@ -40,20 +40,17 @@ if (string.IsNullOrEmpty(connectionString))
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL(connectionString));
+
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontendProd", policy =>
+    options.AddPolicy("AnyOrigin", policy =>
     {
-        policy.WithOrigins(
-                "https://fitmanager-f6e6e.firebaseapp.com",
-                "https://fitmanager-f6e6e.web.app"
-            )
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+        policy.AllowAnyOrigin() // Permite cualquier origen
+            .AllowAnyHeader()  // Permite cualquier cabecera
+            .AllowAnyMethod(); // Permite cualquier método (GET, POST, PUT, DELETE, OPTIONS)
     });
 });
-
-
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddControllers(); 
@@ -68,6 +65,9 @@ builder.Services.AddScoped<IItemTypeRepository, ItemTypeRepository>();
 
 builder.Services.AddScoped<ItemCommandService>();
 builder.Services.AddScoped<ItemQueryService>();
+
+builder.Services.AddScoped<ItemTypeCommandService>();
+builder.Services.AddScoped<ItemTypeQueryService>();
 
 // Employees
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
@@ -166,11 +166,11 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    dbContext.Database.EnsureCreated(); 
+    dbContext.Database.EnsureCreated();
 }
 
-
-app.UseCors("AllowFrontendProd");
+app.UseRouting();
+app.UseCors("AnyOrigin");
 app.UseSwagger();
 app.UseSwaggerUI();
 
