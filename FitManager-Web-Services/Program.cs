@@ -274,8 +274,6 @@ app.UseCors("AnyOrigin");
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseRequestLocalization();
-
 // Autenticación y autorización
 app.UseAuthentication(); 
 app.UseAuthorization();
