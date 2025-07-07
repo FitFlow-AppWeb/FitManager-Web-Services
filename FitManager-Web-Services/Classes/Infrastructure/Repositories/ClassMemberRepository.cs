@@ -37,7 +37,6 @@ public class ClassMemberRepository : IClassMemberRepository
     public async Task AddAsync(ClassMember classMember)
     {
         await _context.ClassMembers.AddAsync(classMember);
-        await _context.SaveChangesAsync();
     }
 
     /// <summary>
