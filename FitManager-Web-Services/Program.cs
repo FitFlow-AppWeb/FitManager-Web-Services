@@ -59,8 +59,6 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod()
             .AllowCredentials(); 
     });
-
-
 });
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -273,9 +271,8 @@ using (var scope = app.Services.CreateScope())
 
 app.UseRequestLocalization();
 
-app.UseCors("AllowFrontendLocalhost");
+app.UseCors("AllowSpecificOrigins");
 app.UseRouting();
-app.UseCors("AnyOrigin");
 app.UseSwagger();
 app.UseSwaggerUI();
 
