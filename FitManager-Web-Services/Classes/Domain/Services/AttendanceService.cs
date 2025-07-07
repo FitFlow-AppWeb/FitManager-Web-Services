@@ -1,16 +1,20 @@
 using FitManager_Web_Services.Classes.Domain.Model.Aggregates;
 using FitManager_Web_Services.Classes.Domain.Repositories;
+using System; // Required for DateTime
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FitManager_Web_Services.Classes.Domain.Services
 {
     /// <summary>
     /// Implements the <see cref="IAttendanceService"/> contract, providing concrete business logic
-    /// for managing <see cref="Attendance"/> records.
+    /// for querying <see cref="Attendance"/> records.
     /// </summary>
     /// <remarks>
-    /// This service acts as a mediator for attendance-related operations, handling the creation,
-    /// updating, and retrieval of attendance records. It interacts with <see cref="IAttendanceRepository"/>
-    /// for data persistence.
+    /// This service acts as a mediator for attendance-related query operations.
+    /// It interacts with <see cref="IAttendanceRepository"/> for data persistence.
+    /// Operations that modify state (e.g., Register, Update) are intentionally
+    /// excluded from this service, as they should be handled by Command Services/Handlers.
     /// </remarks>
     public class AttendanceService : IAttendanceService
     {
@@ -25,45 +29,7 @@ namespace FitManager_Web_Services.Classes.Domain.Services
             _attendanceRepository = attendanceRepository;
         }
 
-        /// <summary>
-        /// Asynchronously registers a new attendance record for a member in a class.
-        /// </summary>
-        /// <param name="entryTime">The precise date and time when the member entered the class.</param>
-        /// <param name="exitTime">The precise date and time when the member exited the class.</param>
-        /// <param name="memberId">The unique identifier of the member whose attendance is being registered.</param>
-        /// <param name="classId">The unique identifier of the class for which the attendance is being recorded.</param>
-        /// <returns>
-        /// A <see cref="Task"/> that represents the asynchronous operation.
-        /// The task result contains the newly created <see cref="Attendance"/> object.
-        /// </returns>
-        public async Task<Attendance> RegisterAttendanceAsync(DateTime entryTime, DateTime exitTime, int memberId, int classId)
-        {
-            var attendance = new Attendance(entryTime, exitTime, memberId, classId);
-            await _attendanceRepository.AddAsync(attendance);
-            return attendance;
-        }
-
-        /// <summary>
-        /// Asynchronously updates the entry and exit times of an existing attendance record.
-        /// </summary>
-        /// <param name="id">The unique identifier of the attendance record to update.</param>
-        /// <param name="entryTime">The updated entry time for the attendance record.</param>
-        /// <param name="exitTime">The updated exit time for the attendance record.</param>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous operation.</returns>
-        /// <exception cref="Exception">Thrown if the attendance record with the specified ID is not found.</exception>
-        public async Task UpdateAttendanceAsync(int id, DateTime entryTime, DateTime exitTime)
-        {
-            var attendance = await _attendanceRepository.GetByIdAsync(id);
-            if (attendance == null)
-            {
-                throw new Exception("Attendance not found");
-            }
-            
-            attendance.EntryTime = entryTime;
-            attendance.ExitTime = exitTime;
-            
-            await _attendanceRepository.UpdateAsync(attendance);
-        }
+        // --- QUERY METHODS (Keeping these as is) ---
 
         /// <summary>
         /// Asynchronously retrieves all attendance records for a specific class.
@@ -74,7 +40,7 @@ namespace FitManager_Web_Services.Classes.Domain.Services
         /// The task result contains an enumerable collection of <see cref="Attendance"/> objects
         /// associated with the specified class.
         /// </returns>
-        public async Task<IEnumerable<Attendance>> GetAttendancesByClassAsync(int classId) => 
+        public async Task<IEnumerable<Attendance>> GetAttendancesByClassAsync(int classId) =>
             await _attendanceRepository.FindByClassAsync(classId);
 
         /// <summary>
@@ -86,9 +52,9 @@ namespace FitManager_Web_Services.Classes.Domain.Services
         /// The task result contains an enumerable collection of <see cref="Attendance"/> objects
         /// associated with the specified member.
         /// </returns>
-        public async Task<IEnumerable<Attendance>> GetAttendancesByMemberAsync(int memberId) => 
+        public async Task<IEnumerable<Attendance>> GetAttendancesByMemberAsync(int memberId) =>
             await _attendanceRepository.FindByMemberAsync(memberId);
-        
+
         /// <summary>
         /// Asynchronously retrieves a single attendance record by its unique identifier.
         /// </summary>
@@ -101,7 +67,7 @@ namespace FitManager_Web_Services.Classes.Domain.Services
         {
             return await _attendanceRepository.GetByIdAsync(id);
         }
-        
+
         /// <summary>
         /// Asynchronously retrieves all attendance records from the repository.
         /// </summary>
@@ -109,9 +75,28 @@ namespace FitManager_Web_Services.Classes.Domain.Services
         /// A <see cref="Task"/> that represents the asynchronous operation.
         /// The task result contains an enumerable collection of all <see cref="Attendance"/> objects.
         /// </returns>
-        public async Task<IEnumerable<Attendance>> GetAllAttendancesAsync() 
+        public async Task<IEnumerable<Attendance>> GetAllAttendancesAsync()
         {
             return await _attendanceRepository.GetAllAsync();
         }
+
+        /// <summary>
+        /// Asynchronously checks if an attendance record already exists for a specific member, class, and date.
+        /// </summary>
+        /// <param name="memberId">The unique identifier of the member.</param>
+        /// <param name="classId">The unique identifier of the class.</param>
+        /// <param name="attendanceDate">The specific date to check for attendance.</param>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous operation.
+        /// The task result contains <c>true</c> if an attendance record exists, otherwise <c>false</c>.</returns>
+        public async Task<bool> DoesAttendanceExistForMemberClassAndDateAsync(int memberId, int classId, DateTime attendanceDate)
+        {
+            // We use .Date to compare only the date part, ignoring the time
+            var existingAttendance = await _attendanceRepository.GetByMemberClassAndDateAsync(memberId, classId, attendanceDate.Date);
+            return existingAttendance != null;
+        }
+
+        // --- REMOVED METHODS (These methods should be handled by AttendanceCommandService) ---
+        // public async Task<Attendance> RegisterAttendanceAsync(DateTime entryTime, DateTime exitTime, int memberId, int classId) { ... }
+        // public async Task UpdateAttendanceAsync(int id, DateTime entryTime, DateTime exitTime) { ... }
     }
 }

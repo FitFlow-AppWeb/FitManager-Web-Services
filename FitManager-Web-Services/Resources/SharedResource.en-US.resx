@@ -275,4 +275,7 @@
   <data name="ItemTypeCreatedSuccessfully" xml:space="preserve">
     <value>Item type created successfully.</value>
   </data>
+  <data name="UserUpdated" xml:space="preserve">
+    <value>User updated successfully.</value>
+  </data>
 </root>

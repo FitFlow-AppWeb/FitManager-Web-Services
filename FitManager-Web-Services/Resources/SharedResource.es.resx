@@ -236,4 +236,7 @@
     <data name="ItemTypeCreatedSuccessfully" xml:space="preserve">
         <value>Tipo de objeto creado con éxito.</value>
     </data>
+    <data name="UserUpdated" xml:space="preserve">
+        <value>Usuario actualizado exitosamente.</value>
+    </data>
 </root>

@@ -1,3 +1,4 @@
+using FitManager_Web_Services.Classes.Application.Internal.CommandServices;
 using FitManager_Web_Services.Classes.Domain.Commands;
 using FitManager_Web_Services.Classes.Interfaces.REST.Resources;
 

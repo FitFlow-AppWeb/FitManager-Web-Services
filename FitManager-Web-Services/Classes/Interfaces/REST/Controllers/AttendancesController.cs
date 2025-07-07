@@ -1,16 +1,16 @@
-using FitManager_Web_Services.Classes.Domain.Services;
-using FitManager_Web_Services.Classes.Interfaces.REST.Resources;
-using FitManager_Web_Services.Classes.Interfaces.REST.Transform;
+using FitManager_Web_Services.Classes.Domain.Services; 
+using FitManager_Web_Services.Classes.Interfaces.REST.Resources; 
+using FitManager_Web_Services.Classes.Interfaces.REST.Transform; 
 using FitManager_Web_Services.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Swashbuckle.AspNetCore.Annotations;
-using FitManager_Web_Services.Classes.Application.Internal.QueryServices; 
-using FitManager_Web_Services.Classes.Domain.Queries; 
-using System; 
-using System.Linq; 
+using FitManager_Web_Services.Classes.Application.Internal.QueryServices;
+using FitManager_Web_Services.Classes.Domain.Queries;
 
+using FitManager_Web_Services.Classes.Application.Internal.CommandServices;
+using MediatR; 
 
 namespace FitManager_Web_Services.Classes.Interfaces.REST.Controllers;
 
@@ -24,25 +24,30 @@ namespace FitManager_Web_Services.Classes.Interfaces.REST.Controllers;
 [Route("api/v1/[controller]")]
 public class AttendancesController : ControllerBase
 {
-    private readonly IAttendanceService _attendanceService;
+    private readonly IAttendanceService _attendanceService; 
     private readonly IStringLocalizer<SharedResource> _localizer;
-    private readonly AttendanceQueryService _attendanceQueryService; 
-    private readonly RawAttendanceResourceFromEntityAssembler _rawAttendanceResourceAssembler; 
-
+    private readonly AttendanceQueryService _attendanceQueryService;
+    private readonly RawAttendanceResourceFromEntityAssembler _rawAttendanceResourceAssembler;
+    private readonly IMediator _mediator; 
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AttendancesController"/> class.
     /// </summary>
     /// <param name="attendanceService">The attendance domain service.</param>
+    /// <param name="localizer">The string localizer.</param>
+    /// <param name="attendanceQueryService">The attendance query service.</param>
+    /// <param name="mediator">The MediatR mediator for sending commands and queries.</param> 
     public AttendancesController(
         IAttendanceService attendanceService,
         IStringLocalizer<SharedResource> localizer,
-        AttendanceQueryService attendanceQueryService) 
+        AttendanceQueryService attendanceQueryService,
+        IMediator mediator) // <-- Añadir IMediator al constructor
     {
         _attendanceService = attendanceService;
         _localizer = localizer;
-        _attendanceQueryService = attendanceQueryService; 
-        _rawAttendanceResourceAssembler = new RawAttendanceResourceFromEntityAssembler(); 
+        _attendanceQueryService = attendanceQueryService;
+        _rawAttendanceResourceAssembler = new RawAttendanceResourceFromEntityAssembler();
+        _mediator = mediator; // <-- Asignar IMediator
     }
 
     /// <summary>
@@ -59,23 +64,34 @@ public class AttendancesController : ControllerBase
         Summary = "Register Attendance",
         Description = "Registers a member's attendance for a specific class."
     )]
+    [ProducesResponseType(typeof(AttendanceResource), 200)] 
+    [ProducesResponseType(400)] 
+    [ProducesResponseType(401)] 
     public async Task<IActionResult> RegisterAttendance([FromBody] CreateAttendanceResource resource)
     {
-        var result = await _attendanceService.RegisterAttendanceAsync(
+        
+        var command = new RegisterAttendanceCommand(
             resource.EntryTime,
             resource.ExitTime,
             resource.MemberId,
             resource.ClassId);
 
+        
+        var result = await _mediator.Send(command); 
+
+        
         var attendanceResource = AttendanceResourceFromEntityAssembler.ToResource(result);
+
+ 
+        var message = _localizer["AttendanceRetrievedSuccessfully"]; 
 
         return Ok(new
         {
-            message = _localizer["AttendanceCreated"],
+            message = message.Value, // Acceder directamente al valor localizado
             data = attendanceResource
         });
     }
-    
+
     /// <summary>
     /// Retrieves a list of all attendances registered for a specific class.
     /// </summary>
@@ -151,5 +167,26 @@ public class AttendancesController : ControllerBase
             data = resources
         });
     }
-    
+
+    /// <summary>
+    /// Checks if an attendance record already exists for a specific member, class, and date.
+    /// </summary>
+    /// <param name="memberId">The unique identifier of the member.</param>
+    /// <param name="classId">The unique identifier of the class.</param>
+    /// <param name="date">The specific date to check for attendance (format YYYY-MM-DD).</param>
+    /// <returns>A JSON object with a boolean 'exists' indicating if the attendance was found.</returns>
+    [HttpGet("exists")] 
+    [Authorize]
+    [SwaggerOperation(
+        Summary = "Check if Attendance Exists",
+        Description = "Checks if an attendance record already exists for a specific member, class, and date."
+    )]
+    [ProducesResponseType(typeof(object), 200)] 
+    [ProducesResponseType(400)]  
+    [ProducesResponseType(401)] 
+    public async Task<IActionResult> CheckAttendanceExists([FromQuery] int memberId, [FromQuery] int classId, [FromQuery] DateTime date)
+    {
+        var exists = await _attendanceService.DoesAttendanceExistForMemberClassAndDateAsync(memberId, classId, date.Date);
+        return Ok(new { exists = exists });
+    }
 }

@@ -2,6 +2,9 @@ using FitManager_Web_Services.Classes.Domain.Model.Aggregates;
 using FitManager_Web_Services.Classes.Domain.Repositories;
 using FitManager_Web_Services.Shared.Infrastructure.Persistence.EFC.Configuration;
 using Microsoft.EntityFrameworkCore;
+using System; // Necesario para DateTime
+using System.Collections.Generic; // Necesario para IEnumerable
+using System.Threading.Tasks;
 
 namespace FitManager_Web_Services.Classes.Infrastructure.Repositories;
 
@@ -28,16 +31,8 @@ public class AttendanceRepository : IAttendanceRepository
         _context = context;
     }
 
-    /// <summary>
-    /// Asynchronously retrieves an attendance record by its unique identifier,
-    /// including its associated member and class details.
-    /// </summary>
-    /// <param name="id">The unique identifier of the attendance record.</param>
-    /// <returns>
-    /// A <see cref="Task"/> that represents the asynchronous operation.
-    /// The task result contains the <see cref="Attendance"/> if found (with related data included),
-    /// otherwise <c>null</c>.
-    /// </returns>
+    // ... (Métodos GetByIdAsync, FindByClassAsync, FindByMemberAsync, y GetAllAsync sin cambios, están bien) ...
+
     public async Task<Attendance?> GetByIdAsync(int id)
     {
         return await _context.Attendances
@@ -46,16 +41,6 @@ public class AttendanceRepository : IAttendanceRepository
             .FirstOrDefaultAsync(a => a.Id == id);
     }
 
-    /// <summary>
-    /// Asynchronously retrieves all attendance records for a specific class,
-    /// including associated member details.
-    /// </summary>
-    /// <param name="classId">The unique identifier of the class.</param>
-    /// <returns>
-    /// A <see cref="Task"/> that represents the asynchronous operation.
-    /// The task result contains an <see cref="IEnumerable{T}"/> of <see cref="Attendance"/> objects
-    /// associated with the specified <paramref name="classId"/> (with member details included).
-    /// </returns>
     public async Task<IEnumerable<Attendance>> FindByClassAsync(int classId)
     {
         return await _context.Attendances
@@ -64,21 +49,19 @@ public class AttendanceRepository : IAttendanceRepository
             .ToListAsync();
     }
 
-    /// <summary>
-    /// Asynchronously retrieves all attendance records for a specific member,
-    /// including associated class details.
-    /// </summary>
-    /// <param name="memberId">The unique identifier of the member.</param>
-    /// <returns>
-    /// A <see cref="Task"/> that represents the asynchronous operation.
-    /// The task result contains an <see cref="IEnumerable{T}"/> of <see cref="Attendance"/> objects
-    /// associated with the specified <paramref name="memberId"/> (with class details included).
-    /// </returns>
     public async Task<IEnumerable<Attendance>> FindByMemberAsync(int memberId)
     {
         return await _context.Attendances
             .Where(a => a.MemberId == memberId)
             .Include(a => a.Class)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Attendance>> GetAllAsync()
+    {
+        return await _context.Attendances
+            .Include(a => a.Member) 
+            .Include(a => a.Class)   
             .ToListAsync();
     }
 
@@ -90,7 +73,6 @@ public class AttendanceRepository : IAttendanceRepository
     public async Task AddAsync(Attendance attendance)
     {
         await _context.Attendances.AddAsync(attendance);
-        await _context.SaveChangesAsync();
     }
 
     /// <summary>
@@ -101,7 +83,6 @@ public class AttendanceRepository : IAttendanceRepository
     public async Task UpdateAsync(Attendance attendance)
     {
         _context.Attendances.Update(attendance);
-        await _context.SaveChangesAsync();
     }
 
     /// <summary>
@@ -112,22 +93,22 @@ public class AttendanceRepository : IAttendanceRepository
     public async Task DeleteAsync(Attendance attendance)
     {
         _context.Attendances.Remove(attendance);
-        await _context.SaveChangesAsync();
     }
     
     /// <summary>
-    /// Asynchronously retrieves all attendance records from the repository.
-    /// Includes associated member and class details for comprehensive data.
+    /// Asynchronously retrieves an attendance record for a specific member, class, and date.
     /// </summary>
-    /// <returns>
-    /// A <see cref="Task"/> that represents the asynchronous operation.
-    /// The task result contains an <see cref="IEnumerable{T}"/> of all <see cref="Attendance"/> objects.
-    /// </returns>
-    public async Task<IEnumerable<Attendance>> GetAllAsync() 
+    /// <param name="memberId">The unique identifier of the member.</param>
+    /// <param name="classId">The unique identifier of the class.</param>
+    /// <param name="attendanceDate">The specific date to check for attendance (time part will be ignored).</param>
+    /// <returns>A <see cref="Task"/> that represents the asynchronous operation.
+    /// The task result contains the <see cref="Attendance"/> if found, otherwise null.</returns>
+    public async Task<Attendance?> GetByMemberClassAndDateAsync(int memberId, int classId, DateTime attendanceDate)
     {
+        // Importante: Usamos .Date para comparar solo la parte de la fecha, ignorando la hora
         return await _context.Attendances
-            .Include(a => a.Member) 
-            .Include(a => a.Class)   
-            .ToListAsync();
+            .FirstOrDefaultAsync(a => a.MemberId == memberId &&
+                                     a.ClassId == classId &&
+                                     a.EntryTime.Date == attendanceDate.Date);
     }
 }
