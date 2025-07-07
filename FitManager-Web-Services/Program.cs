@@ -93,8 +93,6 @@ builder.Services.AddRequestLocalization(x =>
     x.RequestCultureProviders.Add(new CookieRequestCultureProvider()); 
 });
 
-var localizationOptions = new RequestLocalizationOptions();
-
 builder.Services.AddControllers()
     .AddDataAnnotationsLocalization()
     .AddViewLocalization();
@@ -275,6 +273,8 @@ app.UseRouting();
 app.UseCors("AnyOrigin");
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseRequestLocalization();
 
 // Autenticación y autorización
 app.UseAuthentication(); 
