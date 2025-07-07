@@ -359,9 +359,6 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Item>().Property(i => i.Status)
             .IsRequired()
             .HasMaxLength(50);
-        
-        builder.Entity<Item>().Property(i => i.EmployeeId)
-            .IsRequired();
 
         builder.Entity<Item>()
             .HasOne(i => i.Employee)

@@ -24,8 +24,8 @@ namespace FitManager_Web_Services.Inventory.Interfaces.REST.Transform
                 resource.LastMaintenanceDate,
                 resource.NextMaintenanceDate,
                 resource.Status,
-                resource.EmployeeId, 
-                resource.ItemTypeId
+                resource.ItemTypeId,
+                resource.EmployeeId
             );
         }
     }

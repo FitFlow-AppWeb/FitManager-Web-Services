@@ -15,7 +15,7 @@ namespace FitManager_Web_Services.Inventory.Interfaces.REST.Resources
         [Required] DateTime LastMaintenanceDate,
         [Required] DateTime NextMaintenanceDate,
         [Required] string Status, 
-        [Required] int EmployeeId,
-        [Required] int ItemTypeId
+        [Required] int ItemTypeId,
+        [Required] int EmployeeId
     );
 }
