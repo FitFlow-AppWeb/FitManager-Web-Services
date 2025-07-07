@@ -11,7 +11,7 @@ namespace FitManager_Web_Services.IAM.Interfaces.REST.Resources
     /// <param name="Subscription">The new subscription plan for the user.</param>
     public record UpdateUserResource(
         [Required] string Email,
-        [Required] string Password,
+        string? Password, 
         [Required] string Icon,
         [Required] string Subscription
     );

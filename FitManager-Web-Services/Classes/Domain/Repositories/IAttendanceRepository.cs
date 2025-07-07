@@ -1,4 +1,7 @@
 using FitManager_Web_Services.Classes.Domain.Model.Aggregates;
+using System; // Necesario para DateTime
+using System.Collections.Generic; // Necesario para IEnumerable
+using System.Threading.Tasks;
 
 namespace FitManager_Web_Services.Classes.Domain.Repositories
 {
@@ -73,6 +76,16 @@ namespace FitManager_Web_Services.Classes.Domain.Repositories
         /// A <see cref="Task"/> that represents the asynchronous operation.
         /// The task result contains an <see cref="IEnumerable{T}"/> of all <see cref="Attendance"/> objects.
         /// </returns>
-        Task<IEnumerable<Attendance>> GetAllAsync(); 
+        Task<IEnumerable<Attendance>> GetAllAsync();
+
+        /// <summary>
+        /// Asynchronously retrieves an attendance record for a specific member, class, and date.
+        /// </summary>
+        /// <param name="memberId">The unique identifier of the member.</param>
+        /// <param name="classId">The unique identifier of the class.</param>
+        /// <param name="attendanceDate">The specific date to check for attendance (time part will be ignored).</param>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous operation.
+        /// The task result contains the <see cref="Attendance"/> if found, otherwise null.</returns>
+        Task<Attendance?> GetByMemberClassAndDateAsync(int memberId, int classId, DateTime attendanceDate); // AÑADIR ESTA LÍNEA
     }
 }

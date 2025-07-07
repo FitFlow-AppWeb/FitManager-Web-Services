@@ -4,9 +4,6 @@ using FitManager_Web_Services.IAM.Domain.Model.Commands;
 using FitManager_Web_Services.IAM.Domain.Model.Queries;
 using FitManager_Web_Services.IAM.Application.Internal.CommandServices;
 using FitManager_Web_Services.IAM.Application.Internal.QueryServices;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
 using FitManager_Web_Services.IAM.Interfaces.REST.Resources;
 using FitManager_Web_Services.IAM.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Authorization;
@@ -99,5 +96,6 @@ namespace FitManager_Web_Services.IAM.Interfaces.REST.Controllers
                 data = resource
             });
         }
+        
     }
 }
