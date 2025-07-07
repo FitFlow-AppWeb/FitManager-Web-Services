@@ -60,7 +60,39 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 builder.Services.AddLocalization();
+builder.Services.AddRequestLocalization(x =>
+{
+    x.DefaultRequestCulture = new RequestCulture("en");
+    x.ApplyCurrentCultureToResponseHeaders = true;
+    x.SupportedCultures = new List<CultureInfo>
+    {
+        new("es"),
+        new("es-ES"),
+        new("en"),
+        new("en-US")
+    };
+    x.SupportedUICultures = new List<CultureInfo>
+    {
+        new("es"),
+        new("es-ES"),
+        new("en"),
+        new("en-US") 
+    };
+    
+    x.RequestCultureProviders.Clear(); 
+    
+    x.RequestCultureProviders.Add(new QueryStringRequestCultureProvider
+    {
+        QueryStringKey = "locale",   
+        UIQueryStringKey = "locale"  
+    });
+    
+    x.RequestCultureProviders.Add(new AcceptLanguageHeaderRequestCultureProvider());
+    x.RequestCultureProviders.Add(new CookieRequestCultureProvider()); 
+});
+
 var localizationOptions = new RequestLocalizationOptions();
 
 builder.Services.AddControllers()
@@ -236,30 +268,13 @@ using (var scope = app.Services.CreateScope())
     dbContext.Database.EnsureCreated();
 }
 
-var supportedCultures = new[]
-{
-    new CultureInfo("en"),
-    new CultureInfo("es"),
-};
-localizationOptions.SupportedCultures = supportedCultures;
-localizationOptions.SupportedUICultures = supportedCultures;
-localizationOptions.SetDefaultCulture("en-US");
-localizationOptions.ApplyCurrentCultureToResponseHeaders = true;
-
-app.UseRequestLocalization(new RequestLocalizationOptions
-{
-    DefaultRequestCulture = new RequestCulture("en"),
-    SupportedCultures = supportedCultures,
-    SupportedUICultures = supportedCultures
-});
+app.UseRequestLocalization();
 
 app.UseCors("AllowFrontendLocalhost");
 app.UseRouting();
 app.UseCors("AnyOrigin");
 app.UseSwagger();
 app.UseSwaggerUI();
-
-app.UseRequestLocalization();
 
 // Autenticación y autorización
 app.UseAuthentication(); 
