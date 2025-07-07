@@ -129,15 +129,49 @@ public class AttendancesController : ControllerBase
     }
     
     /// <summary>
+    /// Retrieves a list of all attendance records.
+    /// </summary>
+    /// <returns>
+    /// An <see cref="IActionResult"/> containing a list of <see cref="AttendanceResource"/> objects.
+    /// Returns 200 OK with the list of all attendances.
+    /// </returns>
+    [HttpGet] 
+    [Authorize]
+    [SwaggerOperation(
+        Summary = "List All Attendances",
+        Description = "Retrieves a list of all attendance records."
+    )]
+    [ProducesResponseType(typeof(IEnumerable<AttendanceResource>), 200)]
+    [ProducesResponseType(401)]
+    public async Task<IActionResult> GetAllAttendances()
+    {
+        var query = new GetAllAttendancesQuery();
+        var attendances = await _attendanceQueryService.Handle(query);
+
+        var resources = attendances.Select(AttendanceResourceFromEntityAssembler.ToResource).ToList();
+
+        var message = resources.Any()
+            ? _localizer["AttendancesRetrievedSuccessfully"]
+            : _localizer["AttendanceNotFound"];
+
+        return Ok(new
+        {
+            message = message.Value,
+            data = resources
+        });
+    }
+
+    
+    /// <summary>
     /// Gets all raw attendance records (with entry and exit times) that occurred today.
     /// This endpoint is used for dashboard occupancy visualization.
     /// </summary>
     /// <returns>A list of raw attendance records for today.</returns>
-    [HttpGet("raw-today")] // <<-- ¡NUEVO ENDPOINT!
+    [HttpGet("raw-today")] 
     [Authorize] 
     [ProducesResponseType(typeof(IEnumerable<RawAttendanceResource>), 200)]
-    [ProducesResponseType(401)] // Unauthorized
-    [ProducesResponseType(500)] // Internal Server Error
+    [ProducesResponseType(401)] 
+    [ProducesResponseType(500)] 
     [SwaggerOperation(
         Summary = "Get Today's Raw Attendances",
         Description = "Retrieves all raw attendance records (including entry/exit times) for the current day for occupancy calculations."
