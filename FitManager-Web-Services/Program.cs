@@ -51,12 +51,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontendLocalhost", policy =>
+    options.AddPolicy("AllowSpecificOrigins", policy => 
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins("http://localhost:5173", 
+                "https://fitmanager-f6e6e.web.app") 
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .AllowCredentials();
+            .AllowCredentials(); 
     });
 });
 
@@ -270,9 +271,8 @@ using (var scope = app.Services.CreateScope())
 
 app.UseRequestLocalization();
 
-app.UseCors("AllowFrontendLocalhost");
+app.UseCors("AllowSpecificOrigins");
 app.UseRouting();
-app.UseCors("AnyOrigin");
 app.UseSwagger();
 app.UseSwaggerUI();
 
